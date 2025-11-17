@@ -7,24 +7,32 @@ import { useRef } from 'react'
 
 const features = [
   {
-    title: 'Boot Smile',
+    title: 'The smile sequence',
     prefix: 'maclock_boot_smile_feature_grid_apple_style',
-    description: 'Every morning begins with a moment of delight. The Maclock greets you with the iconic smiling Macintosh face, a brief but meaningful ritual that connects you to computing history. This isn\'t just a startup sequence—it\'s a daily reminder of the joy and optimism that defined early personal computing.',
+    alt: 'Maclock smiling face animation with "hello" glyph on screen',
+    description:
+      'Maclock wakes with the smile and floppy disk dance in under seven seconds, matched frame-for-frame to the original Macintosh hello.',
   },
   {
-    title: 'System Disk',
+    title: 'System disk ceremony',
     prefix: 'maclock_boot_ceremony_apple_style',
-    description: 'Watch the classic floppy disk icon animate as the system initializes, just like the original Macintosh 128K. This carefully recreated animation honors the heritage of the platform while running on modern, reliable hardware. The ceremony takes only seconds, but the attention to detail lasts a lifetime.',
+    alt: 'Maclock displaying the retro system disk animation during boot',
+    description:
+      'The disk icon glides in, hands off to the clock, and plays a warm chime that has been remastered for today’s speakers.',
   },
   {
-    title: 'Brightness Control',
+    title: 'Analog brightness dial',
     prefix: 'maclock_backlight_adjust_apple_style',
-    description: 'Adjust the display brightness to match your environment, from a soft glow perfect for late-night reading to full brightness for daytime clarity. The smooth, analog-style control gives you precise command over the display, ensuring comfortable viewing in any lighting condition.',
+    alt: 'Maclock brightness adjustment graphic with glowing slider',
+    description:
+      'A tactile side dial gives you ten detented steps of glow—late-night dim or daylight bright—without menus or apps.',
   },
   {
-    title: 'Alarm Modes',
+    title: 'Alarm studio',
     prefix: 'maclock_alarm_modes_apple_style',
-    description: 'Set multiple alarms with different tones and schedules to match your daily rhythm. Whether you need a gentle wake-up for weekdays or a different routine for weekends, the Maclock adapts to your life. Each alarm can be customized independently, giving you complete control over your schedule.',
+    alt: 'Maclock showing multiple alarm modes on the display',
+    description:
+      "Set weekday alarms, weekend slow starts, or focus timers with their own tones. Every schedule lives on-device, so Wi-Fi never matters.",
   },
 ]
 
@@ -37,7 +45,7 @@ export function FeaturesGrid() {
     <section
       ref={sectionRef}
       id="features"
-      className="py-24 px-4 sm:px-6 lg:px-8 bg-white"
+      className="py-20 px-4 sm:px-6 lg:px-8 bg-white"
     >
       <div className="max-w-7xl mx-auto">
         <motion.div
@@ -46,11 +54,11 @@ export function FeaturesGrid() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-gray-900">
-            Thoughtfully Designed Features
+          <h2 className="text-4xl sm:text-5xl font-bold mb-6 text-gray-900">
+            Built like a tiny computer.
           </h2>
           <p className="text-lg text-gray-700 max-w-2xl mx-auto leading-relaxed">
-            Every detail of the Maclock has been carefully considered, from the startup ritual to daily interactions. These aren't just features—they're experiences that connect you to computing history while serving modern needs.
+            A precise LCD grid, dependable internals, and interactions that feel analog even though they’re digital.
           </p>
         </motion.div>
 
@@ -89,13 +97,13 @@ function FeatureCard({
       whileHover={prefersReducedMotion ? {} : { y: -8 }}
       className="glass-card rounded-2xl p-6 lg:p-8 overflow-hidden"
     >
-      <div className="relative aspect-[3/4] mb-6 rounded-lg overflow-hidden image-container-text">
+      <div className="relative aspect-[3/4] mb-6 rounded-[1.75rem] overflow-hidden image-container-text">
         <OptimizedImage
           prefix={feature.prefix}
           fill
           fit="contain"
           sizes="(max-width: 768px) 100vw, 50vw"
-          alt={`Maclock ${feature.title.toLowerCase()} feature`}
+          alt={feature.alt}
         />
       </div>
       <h3 className="text-2xl font-semibold mb-3 text-gray-900">{feature.title}</h3>

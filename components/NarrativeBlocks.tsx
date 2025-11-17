@@ -7,15 +7,19 @@ import { useRef } from 'react'
 
 const narratives = [
   {
-    title: 'Pixel-Perfect Nostalgia',
-    description: 'Every pixel has been carefully placed to recreate the authentic look and feel of early Macintosh displays. The Maclock doesn\'t just mimic retro aesthetics—it captures the spirit of an era when computing felt personal, approachable, and full of possibility. The warm glow of the display, the precise typography, and the thoughtful animations all work together to create an experience that feels both familiar and fresh.',
-    prefix: 'maclock_pixel_perfect_detail_apple_clean.jpg.webp',
+    title: 'The startup ritual returns.',
+    description:
+      'Maclock still greets you with the smiling face, floppy disk, and gentle fade that made the first Macintosh feel alive—now tuned to modern hardware so it happens in seconds.',
+    prefix: 'maclock_boot_smile_feature_grid_apple_style',
+    alt: 'Maclock showing the smiling Macintosh boot screen beside the system disk animation',
     imageLeft: true,
   },
   {
-    title: '1984 Reimagined',
-    description: 'The original Macintosh 128K changed how people thought about personal computing. It wasn\'t just a machine—it was a statement about making technology accessible and delightful. The Maclock carries forward this philosophy, reimagining the iconic design language for a new generation. Built with modern components and thoughtful engineering, it honors the past while meeting today\'s standards for reliability and performance.',
+    title: 'Industrial warmth for 2025 desks.',
+    description:
+      'A bead-blasted shell, satin lens, and USB-C core feel intentional alongside modern tablets and notebooks while keeping the original Macintosh proportions intact.',
     prefix: 'maclock_1984_design_reimagined_apple_style',
+    alt: 'Maclock hardware profile highlighting the vented rear case and curved display glass',
     imageLeft: false,
   },
 ]
@@ -24,7 +28,7 @@ export function NarrativeBlocks() {
   const prefersReducedMotion = useReducedMotion()
 
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
+    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-[#f8f9fb]">
       <div className="max-w-7xl mx-auto space-y-24">
         {narratives.map((narrative, index) => (
           <NarrativeBlock
@@ -57,7 +61,7 @@ function NarrativeBlock({
       initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 40 }}
       animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
-      className={`flex flex-col ${narrative.imageLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-8 lg:gap-12 items-center`}
+      className={`flex flex-col ${narrative.imageLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-10 lg:gap-16 items-center`}
     >
       <div className="flex-1 relative aspect-[3/4] image-container-text">
         <OptimizedImage
@@ -65,14 +69,14 @@ function NarrativeBlock({
           fill
           fit="contain"
           sizes="(max-width: 1024px) 100vw, 50vw"
-          alt={`Maclock ${narrative.title.toLowerCase()}`}
+          alt={narrative.alt}
         />
       </div>
-      <div className="flex-1 space-y-6 lg:px-8">
+      <div className="flex-1 space-y-6 lg:px-6">
+        <p className="text-sm uppercase tracking-[0.2em] text-gray-500">Chapter {index + 1}</p>
         <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">{narrative.title}</h2>
         <p className="text-lg sm:text-xl text-gray-700 leading-relaxed">{narrative.description}</p>
       </div>
     </motion.div>
   )
 }
-
