@@ -21,9 +21,9 @@ export function Navigation() {
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-white/90 backdrop-blur-md shadow-sm'
+          ? 'bg-white/95 backdrop-blur-md shadow-sm'
           : 'bg-transparent'
       }`}
     >
@@ -31,17 +31,47 @@ export function Navigation() {
         <div className="flex items-center justify-between h-16">
           <Link
             href="/"
-            className="text-xl font-semibold text-foreground hover:opacity-80 transition-opacity"
+            className={`text-xl font-semibold hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-offset-2 rounded ${
+              scrolled
+                ? 'text-gray-900 focus:ring-gray-900'
+                : 'text-white focus:ring-white'
+            }`}
             aria-label="Maclock Home"
           >
             Maclock
           </Link>
-          <Link
-            href="/#features"
-            className="hidden sm:inline-block text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
-          >
-            Features
-          </Link>
+          <nav className="flex items-center gap-6" aria-label="Main navigation">
+            <Link
+              href="/#features"
+              className={`hidden sm:inline-block text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 rounded ${
+                scrolled
+                  ? 'text-gray-700 hover:text-gray-900 focus:ring-gray-900'
+                  : 'text-gray-200 hover:text-white focus:ring-white'
+              }`}
+            >
+              Features
+            </Link>
+            <Link
+              href="/#faq"
+              className={`hidden sm:inline-block text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 rounded ${
+                scrolled
+                  ? 'text-gray-700 hover:text-gray-900 focus:ring-gray-900'
+                  : 'text-gray-200 hover:text-white focus:ring-white'
+              }`}
+            >
+              FAQ
+            </Link>
+            <Link
+              href="/contact"
+              className={`hidden sm:inline-block text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 rounded ${
+                scrolled
+                  ? 'text-gray-700 hover:text-gray-900 focus:ring-gray-900'
+                  : 'text-gray-200 hover:text-white focus:ring-white'
+              }`}
+            >
+              Contact
+            </Link>
+          </nav>
         </div>
       </div>
     </motion.nav>

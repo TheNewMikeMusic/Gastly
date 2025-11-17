@@ -1,7 +1,8 @@
 import { Navigation } from '@/components/Navigation'
 import { Hero } from '@/components/Hero'
-import { FeaturesGrid } from '@/components/FeaturesGrid'
+import { TrustStrip } from '@/components/TrustStrip'
 import { NarrativeBlocks } from '@/components/NarrativeBlocks'
+import { FeaturesGrid } from '@/components/FeaturesGrid'
 import { Gallery } from '@/components/Gallery'
 import { SpecStrip } from '@/components/SpecStrip'
 import { FAQ } from '@/components/FAQ'
@@ -42,8 +43,9 @@ export default function HomePage() {
       <Navigation />
       <main>
         <Hero />
-        <FeaturesGrid />
+        <TrustStrip />
         <NarrativeBlocks />
+        <FeaturesGrid />
         <Gallery />
         <SpecStrip />
         <FAQ />

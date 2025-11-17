@@ -13,6 +13,7 @@ interface OptimizedImageProps {
   fill?: boolean
   width?: number
   height?: number
+  fit?: 'contain' | 'cover'
 }
 
 export function OptimizedImage({
@@ -24,6 +25,7 @@ export function OptimizedImage({
   fill,
   width,
   height,
+  fit = 'contain',
 }: OptimizedImageProps) {
   const prefersReducedMotion = useReducedMotion()
   const [imageSrc, setImageSrc] = useState<string>('')
@@ -87,7 +89,7 @@ export function OptimizedImage({
           style={fill ? { 
             width: '100%', 
             height: '100%', 
-            objectFit: 'cover',
+            objectFit: fit,
             objectPosition: 'center'
           } : {}}
           loading={priority ? 'eager' : 'lazy'}

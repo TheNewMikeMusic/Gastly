@@ -8,13 +8,13 @@ import { useRef } from 'react'
 const narratives = [
   {
     title: 'Pixel-Perfect Nostalgia',
-    description: 'Every pixel carefully crafted to evoke the warmth of classic computing. The Maclock brings back the charm of 1980s design with modern precision and reliability.',
+    description: 'Every pixel has been carefully placed to recreate the authentic look and feel of early Macintosh displays. The Maclock doesn\'t just mimic retro aesthetics—it captures the spirit of an era when computing felt personal, approachable, and full of possibility. The warm glow of the display, the precise typography, and the thoughtful animations all work together to create an experience that feels both familiar and fresh.',
     prefix: 'maclock_pixel_perfect_detail_apple_clean.jpg.webp',
     imageLeft: true,
   },
   {
     title: '1984 Reimagined',
-    description: 'Inspired by the revolutionary Macintosh 128K, reimagined for today. A timeless design that honors the past while embracing the future.',
+    description: 'The original Macintosh 128K changed how people thought about personal computing. It wasn\'t just a machine—it was a statement about making technology accessible and delightful. The Maclock carries forward this philosophy, reimagining the iconic design language for a new generation. Built with modern components and thoughtful engineering, it honors the past while meeting today\'s standards for reliability and performance.',
     prefix: 'maclock_1984_design_reimagined_apple_style',
     imageLeft: false,
   },
@@ -24,7 +24,7 @@ export function NarrativeBlocks() {
   const prefersReducedMotion = useReducedMotion()
 
   return (
-    <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gray-50/50">
+    <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-7xl mx-auto space-y-24">
         {narratives.map((narrative, index) => (
           <NarrativeBlock
@@ -59,17 +59,18 @@ function NarrativeBlock({
       transition={{ duration: 0.8 }}
       className={`flex flex-col ${narrative.imageLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-8 lg:gap-12 items-center`}
     >
-      <div className="flex-1 relative aspect-[3/4] rounded-2xl overflow-hidden shadow-xl border border-black/5 image-container">
+      <div className="flex-1 relative aspect-[3/4] image-container-text">
         <OptimizedImage
           prefix={narrative.prefix}
           fill
+          fit="contain"
           sizes="(max-width: 1024px) 100vw, 50vw"
-          className=""
+          alt={`Maclock ${narrative.title.toLowerCase()}`}
         />
       </div>
-      <div className="flex-1 space-y-4">
-        <h2 className="text-3xl sm:text-4xl font-bold text-foreground">{narrative.title}</h2>
-        <p className="text-lg text-foreground/80 leading-relaxed">{narrative.description}</p>
+      <div className="flex-1 space-y-6 lg:px-8">
+        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">{narrative.title}</h2>
+        <p className="text-lg sm:text-xl text-gray-700 leading-relaxed">{narrative.description}</p>
       </div>
     </motion.div>
   )

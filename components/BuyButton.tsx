@@ -40,7 +40,7 @@ export function BuyButton({ className = '', variant = 'primary', size = 'md' }: 
 
   const variantClasses = {
     primary: 'bg-foreground text-background hover:opacity-90',
-    secondary: 'bg-background text-foreground border-2 border-foreground hover:bg-foreground hover:text-background',
+    secondary: 'bg-white text-gray-900 border-2 border-white/20 hover:bg-gray-100 hover:border-white/40',
   }
 
   return (
