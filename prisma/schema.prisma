@@ -1,0 +1,50 @@
+// Prisma schema for database models
+// Note: User IDs come from Clerk and are stored as strings
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Order {
+  id              String   @id @default(cuid())
+  userId          String   // Clerk user ID
+  amount          Int      // in cents
+  currency        String   @default("usd")
+  status          String   @default("pending") // pending, paid, cancelled, refunded
+  stripeSessionId String? @unique
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Thread {
+  id        String   @id @default(cuid())
+  buyerId   String   // Clerk user ID
+  staffId   String?  // admin/staff Clerk user ID
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  messages Message[]
+
+  @@index([buyerId])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  threadId  String
+  authorId  String   // Clerk user ID
+  body      String   @db.Text
+  createdAt DateTime @default(now())
+
+  thread Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+
+  @@index([threadId])
+  @@index([authorId])
+}
+
