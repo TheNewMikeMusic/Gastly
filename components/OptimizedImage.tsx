@@ -70,13 +70,13 @@ export function OptimizedImage({
       initial={prefersReducedMotion ? {} : { opacity: 0 }}
       animate={prefersReducedMotion ? {} : { opacity: 1 }}
       transition={{ duration: 0.3 }}
-      className="relative overflow-hidden"
-      style={fill ? { width: '100%', height: '100%' } : {}}
+      className="relative overflow-hidden w-full h-full"
+      style={fill ? { width: '100%', height: '100%', borderRadius: 'inherit' } : { borderRadius: 'inherit' }}
     >
       {imageError ? (
         <div
-          className={`bg-gray-200 flex items-center justify-center ${className}`}
-          style={fill ? { width: '100%', height: '100%' } : { width, height }}
+          className="bg-gray-200 flex items-center justify-center w-full h-full"
+          style={fill ? { width: '100%', height: '100%', borderRadius: 'inherit' } : { width, height, borderRadius: 'inherit' }}
           aria-label={alt || 'Maclock product image'}
         >
           <span className="text-gray-400 text-sm">Image not found</span>
@@ -85,13 +85,13 @@ export function OptimizedImage({
         <img
           src={imageSrc}
           alt={alt || 'Maclock product image'}
-          className={`${className}`}
-          style={fill ? { 
-            width: '100%', 
-            height: '100%', 
+          className={`w-full h-full ${className}`}
+          style={{ 
             objectFit: fit,
-            objectPosition: 'center'
-          } : {}}
+            objectPosition: 'center',
+            borderRadius: 'inherit',
+            display: 'block'
+          }}
           loading={priority ? 'eager' : 'lazy'}
           onError={handleError}
         />

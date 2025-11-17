@@ -65,27 +65,47 @@ export function FAQ() {
         </motion.div>
 
         <div className="space-y-4">
-          {faqs.map((faq, index) => (
-            <motion.details
-              key={index}
-              initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 20 }}
-              animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
-              open={openIndex === index}
-              onToggle={(e) => {
-                setOpenIndex(e.currentTarget.open ? index : null)
-              }}
-              className="glass-card rounded-2xl p-6 cursor-pointer focus-within:ring-2 focus-within:ring-gray-900 focus-within:ring-offset-2"
-            >
-              <summary className="font-semibold text-lg text-gray-900 list-none flex items-center justify-between hover:text-gray-700 transition-colors">
-                <span>{faq.question}</span>
-                <span className="text-gray-600 text-2xl leading-none" aria-hidden="true">
-                  {openIndex === index ? '\u2212' : '+'}
-                </span>
-              </summary>
-              <p className="mt-4 text-gray-700 leading-relaxed">{faq.answer}</p>
-            </motion.details>
-          ))}
+          {faqs.map((faq, index) => {
+            const isOpen = openIndex === index
+            return (
+              <motion.div
+                key={faq.question}
+                initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 20 }}
+                animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+                className="glass-card rounded-2xl px-6 py-4"
+              >
+                <button
+                  type="button"
+                  className="w-full flex items-center justify-between gap-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 rounded-xl py-2"
+                  onClick={() => setOpenIndex(isOpen ? null : index)}
+                  aria-expanded={isOpen}
+                >
+                  <span className="text-lg font-semibold text-gray-900">{faq.question}</span>
+                  <span
+                    className={`h-6 w-6 flex items-center justify-center rounded-full border text-sm font-bold transition-transform ${
+                      isOpen ? 'rotate-45 border-gray-400 text-gray-500' : 'border-gray-300 text-gray-600'
+                    }`}
+                    aria-hidden="true"
+                  >
+                    +
+                  </span>
+                </button>
+                <motion.div
+                  initial={false}
+                  animate={isOpen ? 'open' : 'collapsed'}
+                  variants={{
+                    open: { height: 'auto', opacity: 1, marginTop: '0.75rem' },
+                    collapsed: { height: 0, opacity: 0, marginTop: '0rem' },
+                  }}
+                  transition={{ duration: 0.35, ease: 'easeInOut' }}
+                  className="overflow-hidden"
+                >
+                  <p className="text-gray-700 leading-relaxed pb-2">{faq.answer}</p>
+                </motion.div>
+              </motion.div>
+            )
+          })}
         </div>
       </div>
     </section>

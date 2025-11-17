@@ -60,10 +60,10 @@ function NarrativeBlock({
       ref={ref}
       initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 40 }}
       animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
+      transition={{ duration: 0.5, delay: index * 0.1, ease: [0.4, 0, 0.2, 1] }}
       className={`flex flex-col ${narrative.imageLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-10 lg:gap-16 items-center`}
     >
-      <div className="flex-1 relative aspect-[3/4] image-container-text">
+      <div className="flex-1 relative aspect-[3/4] image-container-text rounded-[1.75rem] overflow-hidden">
         <OptimizedImage
           prefix={narrative.prefix}
           fill

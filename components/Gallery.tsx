@@ -75,7 +75,7 @@ export function Gallery() {
                   whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
                   whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
                 >
-                  <div className="relative aspect-[3/4] image-container-text">
+                  <div className="relative aspect-[3/4] image-container-text rounded-[1.75rem] overflow-hidden">
                     <OptimizedImage
                       prefix={image.prefix}
                       fill

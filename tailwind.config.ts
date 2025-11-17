@@ -35,12 +35,19 @@ const config: Config = {
         '3xl': '1.5rem',
       },
       boxShadow: {
-        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.1), 0 2px 8px 0 rgba(0, 0, 0, 0.05)',
-        'glass-hover': '0 12px 48px 0 rgba(0, 0, 0, 0.15), 0 4px 12px 0 rgba(0, 0, 0, 0.08)',
+        'shallow': '0 1px 3px rgba(0, 0, 0, 0.1)',
+        'medium': '0 4px 12px rgba(0, 0, 0, 0.08)',
+        'deep': '0 12px 40px rgba(0, 0, 0, 0.12)',
+        'glass': '0 4px 12px rgba(0, 0, 0, 0.08)',
+        'glass-hover': '0 12px 40px rgba(0, 0, 0, 0.12)',
         'inner-glass': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.5)',
         'glass-dark': '0 8px 32px 0 rgba(0, 0, 0, 0.4), 0 2px 8px 0 rgba(0, 0, 0, 0.2)',
         'glass-dark-hover': '0 12px 48px 0 rgba(0, 0, 0, 0.5), 0 4px 12px 0 rgba(0, 0, 0, 0.3)',
         'light-bloom': '0 0 60px rgba(255, 255, 255, 0.1), 0 0 120px rgba(255, 255, 255, 0.05)',
+      },
+      transitionTimingFunction: {
+        'apple-standard': 'cubic-bezier(0.4, 0, 0.2, 1)',
+        'apple-smooth': 'cubic-bezier(0.25, 0.1, 0.25, 1)',
       },
       transitionDuration: {
         '400': '400ms',

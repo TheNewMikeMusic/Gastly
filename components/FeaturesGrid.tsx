@@ -51,7 +51,7 @@ export function FeaturesGrid() {
         <motion.div
           initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 20 }}
           animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
           className="text-center mb-16"
         >
           <h2 className="text-4xl sm:text-5xl font-bold mb-6 text-gray-900">
@@ -93,8 +93,8 @@ function FeatureCard({
     <motion.div
       initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 30 }}
       animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      whileHover={prefersReducedMotion ? {} : { y: -8 }}
+      transition={{ duration: 0.5, delay: index * 0.08, ease: [0.4, 0, 0.2, 1] }}
+      whileHover={prefersReducedMotion ? {} : { y: -6 }}
       className="glass-card rounded-2xl p-6 lg:p-8 overflow-hidden"
     >
       <div className="relative aspect-[3/4] mb-6 rounded-[1.75rem] overflow-hidden image-container-text">

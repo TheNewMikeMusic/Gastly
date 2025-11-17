@@ -3,19 +3,27 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
+  /* Apple standard colors */
+  --background: #fbfbfd;
   --foreground: #1d1d1f;
-  --text-muted: #8d93a7;
-  --text-soft: #b8bdc9;
+  --text-muted: #86868b;
+  --text-soft: #a1a1a6;
   --surface-hero: #04050f;
   --surface-hero-secondary: #111432;
   --surface-light: rgba(255, 255, 255, 0.9);
-  --surface-glass-border: rgba(255, 255, 255, 0.65);
+  --surface-glass-border: rgba(0, 0, 0, 0.1);
   --surface-glass-border-dark: rgba(255, 255, 255, 0.15);
   --surface-glow-purple: #a855f7;
   --surface-glow-cyan: #38bdf8;
-  --surface-shadow: 0 30px 120px rgba(5, 8, 20, 0.55);
-  --surface-shadow-soft: 0 16px 50px rgba(15, 23, 42, 0.15);
+  /* Apple standard shadows */
+  --shadow-shallow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-deep: 0 12px 40px rgba(0, 0, 0, 0.12);
+  --surface-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  --surface-shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
+  /* Apple standard easing */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -79,10 +87,11 @@ body {
   }
 }
 
-/* Focus styles for accessibility */
+/* Focus styles for accessibility - Apple standard */
 :focus-visible {
   outline: 2px solid #007aff;
   outline-offset: 2px;
+  transition: outline-offset 0.2s var(--ease-standard);
 }
 
 /* Minimum touch target size */
@@ -110,11 +119,11 @@ button, a {
 
 .glass {
   background: linear-gradient(155deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.72) 100%);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-top-color: rgba(255, 255, 255, 0.7);
-  box-shadow: var(--surface-shadow-soft);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--surface-glass-border);
+  box-shadow: var(--shadow-medium);
+  transition: all 0.3s var(--ease-standard);
 }
 
 .glass-subtle {
@@ -137,15 +146,12 @@ button, a {
 
 .glass-card {
   background: linear-gradient(165deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 255, 255, 0.85) 60%, rgba(248, 248, 255, 0.78) 100%);
-  backdrop-filter: blur(24px) saturate(190%);
-  -webkit-backdrop-filter: blur(24px) saturate(190%);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-top-color: rgba(255, 255, 255, 0.75);
-  border-right-color: rgba(255, 255, 255, 0.6);
-  border-bottom-color: rgba(15, 23, 42, 0.15);
-  box-shadow: var(--surface-shadow-soft);
+  backdrop-filter: blur(30px) saturate(190%);
+  -webkit-backdrop-filter: blur(30px) saturate(190%);
+  border: 1px solid var(--surface-glass-border);
+  box-shadow: var(--shadow-medium);
   isolation: isolate;
-  transition: transform 0.45s ease, box-shadow 0.45s ease;
+  transition: transform 0.3s var(--ease-standard), box-shadow 0.3s var(--ease-standard);
 }
 
 .glass-card::after {
@@ -161,8 +167,8 @@ button, a {
 }
 
 .glass-card:hover {
-  transform: translateY(-8px) scale(1.01);
-  box-shadow: var(--surface-shadow);
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: var(--shadow-deep);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -213,12 +219,11 @@ button, a {
 
 .glass-panel {
   background: linear-gradient(150deg, rgba(255, 255, 255, 0.94), rgba(246, 248, 255, 0.82));
-  backdrop-filter: blur(26px) saturate(185%);
-  -webkit-backdrop-filter: blur(26px) saturate(185%);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-top-color: rgba(255, 255, 255, 0.8);
-  border-bottom-color: rgba(15, 23, 42, 0.12);
-  box-shadow: var(--surface-shadow-soft);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border: 1px solid var(--surface-glass-border);
+  box-shadow: var(--shadow-medium);
+  transition: all 0.3s var(--ease-standard);
 }
 
 .glass-panel-dark {
@@ -269,7 +274,7 @@ button, a {
   position: relative;
   width: 100%;
   overflow: hidden;
-  background: linear-gradient(180deg, #f6f6f8 0%, #eceef2 100%);
+  background: var(--background);
 }
 
 .hero-banner::after {
@@ -349,14 +354,24 @@ button, a {
 }
 
 .hero-panel {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border: 1px solid var(--surface-glass-border);
   border-radius: 1.75rem;
   padding: clamp(1.5rem, 4vw, 2.8rem);
-  color: #1f1f23;
-  box-shadow: 0 40px 80px rgba(15, 16, 21, 0.08);
+  color: var(--foreground);
+  box-shadow: var(--shadow-deep);
+  transition: all 0.3s var(--ease-standard);
+}
+
+.hero-panel h1 {
+  color: #1d1d1f;
+  font-weight: 700;
+}
+
+.hero-panel p {
+  color: #1d1d1f;
 }
 
 .hero-panel::before {
@@ -369,13 +384,14 @@ button, a {
 }
 
 .hero-product-frame {
-  background: #fdfdfd;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  background: #ffffff;
+  border: 1px solid var(--surface-glass-border);
   border-radius: 2rem;
   padding: clamp(1.25rem, 3vw, 2rem);
-  box-shadow: 0 35px 80px rgba(15, 23, 42, 0.15);
+  box-shadow: var(--shadow-deep);
   position: relative;
   overflow: hidden;
+  transition: all 0.3s var(--ease-standard);
 }
 
 .hero-stage-floor {
@@ -480,11 +496,10 @@ button, a {
   position: relative;
   padding: 1.25rem;
   border-radius: 1.5rem;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-top-color: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--surface-glass-border);
   background: linear-gradient(150deg, rgba(255, 255, 255, 0.96), rgba(246, 248, 255, 0.8));
-  box-shadow: var(--surface-shadow-soft);
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  box-shadow: var(--shadow-medium);
+  transition: transform 0.3s var(--ease-standard), box-shadow 0.3s var(--ease-standard);
 }
 
 .image-container::after {
@@ -498,8 +513,8 @@ button, a {
 }
 
 .image-container:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--surface-shadow);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-deep);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -516,10 +531,75 @@ button, a {
   position: relative;
   padding: 1.75rem;
   border-radius: 1.75rem;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-top-color: rgba(255, 255, 255, 0.75);
+  border: 1px solid var(--surface-glass-border);
   background: linear-gradient(170deg, rgba(255, 255, 255, 0.98), rgba(244, 247, 255, 0.86));
-  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.15);
+  box-shadow: var(--shadow-medium);
+  transition: all 0.3s var(--ease-standard);
+  overflow: hidden;
+}
+
+/* Image container without border when nested inside glass-card */
+.glass-card .image-container-text {
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  padding: 0;
+}
+
+/* Ensure images inside containers have rounded corners */
+.image-container-text {
+  border-radius: 1.75rem !important;
+  overflow: hidden !important;
+}
+
+/* Force rounded corners on all nested elements inside image containers */
+.image-container-text > *,
+.image-container-text > div,
+.image-container-text > div > div,
+.image-container-text > div > div > div,
+.glass-card .image-container-text > div,
+.glass-card .image-container-text > div > div,
+.glass-card .image-container-text > div > div > div {
+  border-radius: inherit !important;
+  overflow: hidden !important;
+}
+
+/* Force rounded corners on all images */
+.image-container-text img,
+.image-container img,
+.glass-card .image-container-text img,
+.image-container-text > div img,
+.image-container-text > div > div img,
+.image-container-text > div > div > div img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  border-radius: inherit !important;
+  display: block !important;
+}
+
+/* Ensure aspect ratio containers with images have rounded corners */
+.relative.aspect-\[3\/4\],
+.relative.aspect-\[4\/3\] {
+  border-radius: 1.75rem !important;
+  overflow: hidden !important;
+}
+
+.relative.aspect-\[3\/4\] > div,
+.relative.aspect-\[3\/4\] > div > div,
+.relative.aspect-\[4\/3\] > div,
+.relative.aspect-\[4\/3\] > div > div {
+  border-radius: inherit !important;
+  overflow: hidden !important;
+}
+
+.relative.aspect-\[3\/4\] img,
+.relative.aspect-\[3\/4\] > div img,
+.relative.aspect-\[3\/4\] > div > div img,
+.relative.aspect-\[4\/3\] img,
+.relative.aspect-\[4\/3\] > div img,
+.relative.aspect-\[4\/3\] > div > div img {
+  border-radius: inherit !important;
 }
 
 .image-container-text::after {
@@ -549,28 +629,34 @@ button, a {
   pointer-events: none;
 }
 
-/* Typography improvements */
+/* Typography improvements - Apple standard */
 h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--foreground);
 }
 
 h1 {
-  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-size: clamp(2.75rem, 5.5vw, 5rem);
+  font-weight: 700;
 }
 
 h2 {
-  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-size: clamp(2.25rem, 4.5vw, 4rem);
+  font-weight: 700;
 }
 
 h3 {
-  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 600;
 }
 
 p {
-  line-height: 1.7;
+  line-height: 1.5;
   letter-spacing: -0.01em;
+  color: var(--foreground);
+  font-weight: 400;
 }
 
 /* Improved contrast for text on images */

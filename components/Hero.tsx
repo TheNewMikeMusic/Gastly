@@ -18,7 +18,7 @@ export function Hero() {
           <motion.div
             initial={prefersReducedMotion ? {} : { opacity: 0, y: 30 }}
             animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
             className="w-full lg:max-w-lg space-y-6 text-center lg:text-left"
           >
             <div className="hero-panel space-y-6">
@@ -34,7 +34,7 @@ export function Hero() {
                 <BuyButton size="lg" variant="primary" className="w-full sm:w-auto" />
                 <Link
                   href="#features"
-                  className="w-full sm:w-auto rounded-full border border-gray-200 px-6 py-3 text-sm font-semibold text-gray-800 hover:bg-gray-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/40"
+                  className="w-full sm:w-auto rounded-full border border-black/10 px-6 py-3 text-sm font-semibold text-gray-800 hover:bg-gray-100 transition-colors duration-200 ease-apple-standard focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/40"
                 >
                   Explore features
                 </Link>
@@ -48,11 +48,11 @@ export function Hero() {
           <motion.div
             initial={prefersReducedMotion ? {} : { opacity: 0, scale: 0.96 }}
             animate={prefersReducedMotion ? {} : { opacity: 1, scale: 1 }}
-            transition={{ duration: 0.9 }}
+            transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
             className="w-full max-w-2xl"
           >
             <div className="hero-product-frame">
-              <div className="relative aspect-[4/3] w-full">
+              <div className="relative aspect-[4/3] w-full rounded-[1.75rem] overflow-hidden">
                 <OptimizedImage
                   prefix="maclock_hello_retro_apple_style"
                   priority

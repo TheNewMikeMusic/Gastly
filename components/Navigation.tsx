@@ -34,17 +34,22 @@ export function Navigation() {
   }, [menuOpen])
 
   const shellClass = scrolled
-    ? 'bg-white/90 md:bg-white/90 border border-white/80 md:border-white/80 text-gray-900 shadow-lg backdrop-blur-2xl'
-    : 'bg-white/75 md:bg-white/60 border border-white/50 md:border-white/40 text-gray-900 shadow-[0_20px_50px_rgba(15,15,20,0.25)] md:shadow-[0_20px_50px_rgba(15,15,20,0.2)] backdrop-blur-2xl'
+    ? 'bg-white/90 md:bg-white/90 border border-black/10 text-gray-900 shadow-medium backdrop-blur-[20px]'
+    : 'bg-white/75 md:bg-white/60 border border-black/10 text-gray-900 shadow-medium backdrop-blur-[20px]'
 
   const allLinks = [...navItems, { label: 'Contact', href: '/contact' }]
 
   return (
     <>
-      <motion.nav initial={{ y: -100 }} animate={{ y: 0 }} className="fixed top-0 left-0 right-0 z-50">
+      <motion.nav 
+        initial={{ y: -100 }} 
+        animate={{ y: 0 }} 
+        transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+        className="fixed top-0 left-0 right-0 z-50"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div
-            className={`flex h-14 items-center justify-between rounded-full px-5 sm:px-6 transition-colors duration-500 ${shellClass}`}
+            className={`flex h-14 items-center justify-between rounded-full px-5 sm:px-6 transition-all duration-300 ease-apple-standard ${shellClass}`}
           >
             <Link
               href="/"
@@ -58,7 +63,7 @@ export function Navigation() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="text-gray-700 hover:text-gray-900 rounded-full px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/30"
+                  className="text-gray-700 hover:text-gray-900 rounded-full px-3 py-1.5 text-sm font-medium transition-colors duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/30"
                 >
                   {item.label}
                 </Link>
@@ -69,22 +74,22 @@ export function Navigation() {
                 <BuyButton
                   size="sm"
                   variant="primary"
-                  className={scrolled ? 'bg-gray-900 text-white hover:bg-gray-950 shadow-[0_15px_45px_rgba(2,6,23,0.35)]' : ''}
+                  className={scrolled ? 'bg-gray-900 text-white hover:bg-gray-950 shadow-deep' : ''}
                 />
               </div>
               <button
                 type="button"
                 onClick={() => setMenuOpen((prev) => !prev)}
-                className="md:hidden h-10 w-10 rounded-full border border-white/60 bg-white/80 backdrop-blur-xl shadow-[0_4px_20px_rgba(15,15,20,0.15)] px-0 flex flex-col items-center justify-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/40 transition-all duration-300 hover:bg-white/90 hover:shadow-[0_6px_25px_rgba(15,15,20,0.2)]"
+                className="md:hidden h-10 w-10 rounded-full border border-black/10 bg-white/80 backdrop-blur-[20px] shadow-medium px-0 flex flex-col items-center justify-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/40 transition-all duration-200 ease-apple-standard hover:bg-white/90 hover:shadow-deep"
                 aria-label="Toggle navigation menu"
                 aria-expanded={menuOpen}
               >
                 <span
-                  className={`block h-[2px] w-5 bg-gray-900 transition-transform ${menuOpen ? 'translate-y-[7px] rotate-45' : ''}`}
+                  className={`block h-[2px] w-5 bg-gray-900 transition-all duration-200 ease-apple-standard ${menuOpen ? 'translate-y-[7px] rotate-45' : ''}`}
                 />
-                <span className={`block h-[2px] w-5 bg-gray-900 transition-opacity ${menuOpen ? 'opacity-0' : 'opacity-100'}`} />
+                <span className={`block h-[2px] w-5 bg-gray-900 transition-opacity duration-200 ease-apple-standard ${menuOpen ? 'opacity-0' : 'opacity-100'}`} />
                 <span
-                  className={`block h-[2px] w-5 bg-gray-900 transition-transform ${menuOpen ? '-translate-y-[7px] -rotate-45' : ''}`}
+                  className={`block h-[2px] w-5 bg-gray-900 transition-all duration-200 ease-apple-standard ${menuOpen ? '-translate-y-[7px] -rotate-45' : ''}`}
                 />
               </button>
             </div>
@@ -98,6 +103,7 @@ export function Navigation() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
             className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm md:hidden"
             onClick={() => setMenuOpen(false)}
           >
@@ -105,7 +111,8 @@ export function Navigation() {
               initial={{ y: -20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -20, opacity: 0 }}
-              className="absolute top-20 right-4 left-4 rounded-3xl bg-white shadow-2xl p-6"
+              transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+              className="absolute top-20 right-4 left-4 rounded-3xl bg-white shadow-deep p-6"
               onClick={(e) => e.stopPropagation()}
             >
               <nav className="space-y-3" aria-label="Mobile navigation">
@@ -113,7 +120,7 @@ export function Navigation() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="block rounded-2xl px-4 py-3 text-base font-semibold text-gray-900 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/40"
+                    className="block rounded-2xl px-4 py-3 text-base font-semibold text-gray-900 hover:bg-gray-50 transition-colors duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/40"
                     onClick={() => setMenuOpen(false)}
                   >
                     {item.label}

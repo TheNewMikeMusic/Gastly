@@ -40,18 +40,19 @@ export function BuyButton({ className = '', variant = 'primary', size = 'md' }: 
 
   const variantClasses = {
     primary:
-      'bg-gray-900 text-white shadow-[0_18px_45px_rgba(15,23,42,0.35)] hover:bg-gray-950 hover:shadow-[0_28px_65px_rgba(15,23,42,0.45)] focus-visible:ring-gray-900/60',
+      'bg-gray-900 text-white shadow-deep hover:bg-gray-950 hover:shadow-deep focus-visible:ring-gray-900/60',
     secondary:
-      'border border-gray-300 bg-white/90 text-gray-900 hover:bg-white focus-visible:ring-gray-400',
+      'border border-black/10 bg-white/90 text-gray-900 hover:bg-white focus-visible:ring-gray-400',
   }
 
   return (
     <motion.button
       onClick={handleClick}
       disabled={loading}
-      className={`${sizeClasses[size]} ${variantClasses[variant]} font-semibold rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
+      className={`${sizeClasses[size]} ${variantClasses[variant]} font-semibold rounded-full transition-all duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
+      transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
       aria-label="Buy Now"
     >
       {loading ? 'Processing...' : 'Buy Now'}
