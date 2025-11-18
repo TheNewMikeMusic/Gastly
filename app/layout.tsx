@@ -13,18 +13,9 @@ const inter = Inter({
 
 export const metadata: Metadata = defaultMetadata
 
-// 条件性导入 ClerkProvider
-let ClerkProvider: any = ({ children }: { children: React.ReactNode }) => <>{children}</>
+import { ClerkProvider } from '@clerk/nextjs'
 
 const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
-if (publishableKey && publishableKey !== 'pk_test_dummy') {
-  try {
-    const Clerk = require('@clerk/nextjs')
-    ClerkProvider = Clerk.ClerkProvider
-  } catch (e) {
-    console.warn('Clerk not available, running in preview mode')
-  }
-}
 
 export default function RootLayout({
   children,
@@ -42,4 +33,3 @@ export default function RootLayout({
     </ClerkProvider>
   )
 }
-

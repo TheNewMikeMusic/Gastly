@@ -21,9 +21,16 @@
   --shadow-deep: 0 12px 40px rgba(0, 0, 0, 0.12);
   --surface-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
   --surface-shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.08);
-  /* Apple standard easing */
+  /* Apple standard easing - refined */
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  /* Animation durations */
+  --duration-fast: 200ms;
+  --duration-normal: 400ms;
+  --duration-slow: 600ms;
+  --duration-slower: 800ms;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -151,7 +158,7 @@ button, a {
   border: 1px solid var(--surface-glass-border);
   box-shadow: var(--shadow-medium);
   isolation: isolate;
-  transition: transform 0.3s var(--ease-standard), box-shadow 0.3s var(--ease-standard);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-card::after {
@@ -167,8 +174,9 @@ button, a {
 }
 
 .glass-card:hover {
-  transform: translateY(-6px) scale(1.01);
+  transform: translateY(-4px);
   box-shadow: var(--shadow-deep);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -546,60 +554,28 @@ button, a {
   padding: 0;
 }
 
-/* Ensure images inside containers have rounded corners */
-.image-container-text {
-  border-radius: 1.75rem !important;
-  overflow: hidden !important;
+/* Ensure nested elements inherit border radius and maintain overflow */
+.image-container-text > * {
+  border-radius: inherit;
+  overflow: hidden;
 }
 
-/* Force rounded corners on all nested elements inside image containers */
-.image-container-text > *,
-.image-container-text > div,
-.image-container-text > div > div,
-.image-container-text > div > div > div,
-.glass-card .image-container-text > div,
-.glass-card .image-container-text > div > div,
-.glass-card .image-container-text > div > div > div {
-  border-radius: inherit !important;
-  overflow: hidden !important;
+/* Ensure images inside containers fill properly */
+.image-container-text img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: inherit;
+  display: block;
 }
 
-/* Force rounded corners on all images */
-.image-container-text img,
-.image-container img,
-.glass-card .image-container-text img,
-.image-container-text > div img,
-.image-container-text > div > div img,
-.image-container-text > div > div > div img {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: contain !important;
-  border-radius: inherit !important;
-  display: block !important;
+/* Ensure images inside glass-card inherit border radius from parent */
+.glass-card .relative.aspect-\[3\/4\] {
+  border-radius: inherit;
 }
 
-/* Ensure aspect ratio containers with images have rounded corners */
-.relative.aspect-\[3\/4\],
-.relative.aspect-\[4\/3\] {
-  border-radius: 1.75rem !important;
-  overflow: hidden !important;
-}
-
-.relative.aspect-\[3\/4\] > div,
-.relative.aspect-\[3\/4\] > div > div,
-.relative.aspect-\[4\/3\] > div,
-.relative.aspect-\[4\/3\] > div > div {
-  border-radius: inherit !important;
-  overflow: hidden !important;
-}
-
-.relative.aspect-\[3\/4\] img,
-.relative.aspect-\[3\/4\] > div img,
-.relative.aspect-\[3\/4\] > div > div img,
-.relative.aspect-\[4\/3\] img,
-.relative.aspect-\[4\/3\] > div img,
-.relative.aspect-\[4\/3\] > div > div img {
-  border-radius: inherit !important;
+.glass-card .relative.aspect-\[3\/4\] img {
+  border-radius: inherit;
 }
 
 .image-container-text::after {
@@ -629,34 +605,99 @@ button, a {
   pointer-events: none;
 }
 
-/* Typography improvements - Apple standard */
+/* Typography system - Apple standard with refined hierarchy */
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  color: var(--foreground);
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  line-height: 1.1;
+  color: #1d1d1f;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 h1 {
-  font-size: clamp(2.75rem, 5.5vw, 5rem);
-  font-weight: 700;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
 }
 
 h2 {
-  font-size: clamp(2.25rem, 4.5vw, 4rem);
-  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  line-height: 1.08;
 }
 
 h3 {
-  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
   font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+h4 {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: 600;
+  letter-spacing: -0.018em;
+  line-height: 1.15;
 }
 
 p {
-  line-height: 1.5;
-  letter-spacing: -0.01em;
-  color: var(--foreground);
+  line-height: 1.6;
+  letter-spacing: -0.011em;
+  color: #1d1d1f;
   font-weight: 400;
+  font-size: 1rem;
+}
+
+/* Refined text colors */
+.text-gray-900 {
+  color: #1d1d1f;
+}
+
+.text-gray-700 {
+  color: #424245;
+}
+
+.text-gray-600 {
+  color: #6e6e73;
+}
+
+.text-gray-500 {
+  color: #86868b;
+}
+
+/* Unified animation system */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Standard animation durations */
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-fade-in-scale {
+  animation: fadeInScale 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 /* Improved contrast for text on images */

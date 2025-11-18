@@ -1,9 +1,9 @@
 import { Metadata } from 'next'
 
 export const siteConfig = {
-  name: 'Maclock',
+  name: 'Hello1984',
   description: 'A beautifully crafted retro Macintosh-style digital clock. Pixel-perfect nostalgia meets modern craftsmanship.',
-  url: process.env.NEXT_PUBLIC_URL || 'https://maclock.com',
+  url: process.env.NEXT_PUBLIC_URL || 'https://hello1984.com',
 }
 
 export const defaultMetadata: Metadata = {

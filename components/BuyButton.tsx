@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 
 interface BuyButtonProps {
@@ -10,26 +10,10 @@ interface BuyButtonProps {
 }
 
 export function BuyButton({ className = '', variant = 'primary', size = 'md' }: BuyButtonProps) {
-  const [loading, setLoading] = useState(false)
+  const router = useRouter()
 
-  const handleClick = async () => {
-    setLoading(true)
-    try {
-      const response = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      })
-      const data = await response.json()
-      if (data.url) {
-        window.location.href = data.url
-      } else {
-        throw new Error('No checkout URL returned')
-      }
-    } catch (error) {
-      console.error('Checkout error:', error)
-      alert('Failed to start checkout. Please try again.')
-      setLoading(false)
-    }
+  const handleClick = () => {
+    router.push('/checkout')
   }
 
   const sizeClasses = {
@@ -48,14 +32,13 @@ export function BuyButton({ className = '', variant = 'primary', size = 'md' }: 
   return (
     <motion.button
       onClick={handleClick}
-      disabled={loading}
-      className={`${sizeClasses[size]} ${variantClasses[variant]} font-semibold rounded-full transition-all duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
+      className={`${sizeClasses[size]} ${variantClasses[variant]} font-semibold rounded-full transition-all duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent ${className}`}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
       aria-label="Buy Now"
     >
-      {loading ? 'Processing...' : 'Buy Now'}
+      Buy Now
     </motion.button>
   )
 }

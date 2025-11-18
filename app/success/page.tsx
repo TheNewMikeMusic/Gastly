@@ -24,7 +24,7 @@ export default async function SuccessPage({
 }) {
   const { userId } = await auth()
   if (!userId) {
-    redirect('/login')
+    redirect('/sign-in')
   }
 
   const sessionId = searchParams.session_id
@@ -74,26 +74,87 @@ export default async function SuccessPage({
     const amount = (session.amount_total || 0) / 100
     const currency = session.currency?.toUpperCase() || 'USD'
 
+    // Get order with shipping information
+    const order = await prisma.order.findFirst({
+      where: { stripeSessionId: sessionId },
+    })
+
     return (
-      <div className="min-h-screen flex items-center justify-center px-4">
-        <div className="max-w-md w-full text-center space-y-6">
-          <div className="text-6xl mb-4">✓</div>
-          <h1 className="text-3xl font-bold">Payment Successful</h1>
-          <p className="text-foreground/70">
-            Your order has been confirmed. You will receive a confirmation email shortly.
-          </p>
-          <div className="glass rounded-lg p-6 mt-8">
-            <div className="text-sm text-foreground/60 mb-2">Amount Paid</div>
-            <div className="text-2xl font-bold">
-              {currency} {amount.toFixed(2)}
-            </div>
+      <div className="min-h-screen flex items-center justify-center px-4 py-16">
+        <div className="max-w-2xl w-full space-y-6">
+          <div className="text-center">
+            <div className="text-6xl mb-4">✓</div>
+            <h1 className="text-3xl font-bold mb-2">支付成功</h1>
+            <p className="text-foreground/70">
+              您的订单已确认，我们将尽快为您发货。
+            </p>
           </div>
-          <a
-            href="/dashboard"
-            className="inline-block px-6 py-3 bg-foreground text-background rounded-lg font-medium hover:opacity-90 transition-opacity"
-          >
-            View Orders
-          </a>
+
+          <div className="glass rounded-lg p-6 space-y-6">
+            <div>
+              <div className="text-sm text-foreground/60 mb-2">支付金额</div>
+              <div className="text-2xl font-bold">
+                {currency} {amount.toFixed(2)}
+              </div>
+            </div>
+
+            {order && (order.shippingName || order.shippingAddress) && (
+              <div className="border-t border-black/10 pt-6">
+                <h3 className="text-lg font-semibold mb-4">物流信息</h3>
+                <div className="space-y-2 text-sm">
+                  {order.shippingName && (
+                    <div className="flex">
+                      <span className="text-foreground/60 w-20">收货人：</span>
+                      <span className="font-medium">{order.shippingName}</span>
+                    </div>
+                  )}
+                  {order.shippingPhone && (
+                    <div className="flex">
+                      <span className="text-foreground/60 w-20">联系电话：</span>
+                      <span className="font-medium">{order.shippingPhone}</span>
+                    </div>
+                  )}
+                  {order.shippingEmail && (
+                    <div className="flex">
+                      <span className="text-foreground/60 w-20">邮箱：</span>
+                      <span className="font-medium">{order.shippingEmail}</span>
+                    </div>
+                  )}
+                  {(order.shippingAddress || order.shippingCity || order.shippingState || order.shippingZip) && (
+                    <div className="flex">
+                      <span className="text-foreground/60 w-20">收货地址：</span>
+                      <span className="font-medium">
+                        {[
+                          order.shippingAddress,
+                          order.shippingCity,
+                          order.shippingState,
+                          order.shippingZip,
+                        ]
+                          .filter(Boolean)
+                          .join(' ')}
+                        {order.shippingCountry && ` (${order.shippingCountry})`}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="flex gap-4 justify-center">
+            <a
+              href="/dashboard"
+              className="px-6 py-3 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-950 transition-all"
+            >
+              查看订单
+            </a>
+            <a
+              href="/"
+              className="px-6 py-3 border border-black/10 bg-white/90 text-gray-900 rounded-lg font-medium hover:bg-white transition-all"
+            >
+              返回首页
+            </a>
+          </div>
         </div>
       </div>
     )

@@ -23,7 +23,7 @@ const trustItems = [
   {
     icon: 'return',
     title: '30-day returns',
-    description: 'Try Maclock at home. If it’s not love, send it back for a full refund.',
+    description: "Try Hello1984 at home. If it's not love, send it back for a full refund.",
   },
 ]
 

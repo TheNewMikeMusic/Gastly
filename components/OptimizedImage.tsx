@@ -13,7 +13,7 @@ interface OptimizedImageProps {
   fill?: boolean
   width?: number
   height?: number
-  fit?: 'contain' | 'cover'
+  fit?: 'contain' | 'cover' | 'fill' | 'none' | 'scale-down'
 }
 
 export function OptimizedImage({
@@ -25,15 +25,15 @@ export function OptimizedImage({
   fill,
   width,
   height,
-  fit = 'contain',
+  fit = 'cover',
 }: OptimizedImageProps) {
   const prefersReducedMotion = useReducedMotion()
   const [imageSrc, setImageSrc] = useState<string>('')
   const [imageError, setImageError] = useState(false)
   
   useEffect(() => {
-    // 如果前缀已经包含完整文件名（如 .jpg.webp），直接使用
-    if (prefix.includes('.jpg.webp')) {
+    // 如果前缀已经包含完整文件名（如 .jpg.webp、.jpg 或 .webp），直接使用
+    if (prefix.includes('.jpg.webp') || prefix.endsWith('.jpg') || prefix.endsWith('.webp')) {
       setImageSrc(`/${prefix}`)
       return
     }
@@ -43,7 +43,7 @@ export function OptimizedImage({
   }, [prefix])
 
   const handleError = () => {
-    if (!imageError && !prefix.includes('.jpg.webp')) {
+    if (!imageError && !prefix.includes('.jpg.webp') && !prefix.endsWith('.jpg') && !prefix.endsWith('.webp')) {
       // 如果 .webp 失败，尝试其他格式
       const alternatives = [
         `/${prefix}.jpg.webp`,
@@ -70,13 +70,13 @@ export function OptimizedImage({
       initial={prefersReducedMotion ? {} : { opacity: 0 }}
       animate={prefersReducedMotion ? {} : { opacity: 1 }}
       transition={{ duration: 0.3 }}
-      className="relative overflow-hidden w-full h-full"
-      style={fill ? { width: '100%', height: '100%', borderRadius: 'inherit' } : { borderRadius: 'inherit' }}
+      className="relative w-full h-full"
+      style={fill ? { width: '100%', height: '100%' } : {}}
     >
       {imageError ? (
         <div
-          className="bg-gray-200 flex items-center justify-center w-full h-full"
-          style={fill ? { width: '100%', height: '100%', borderRadius: 'inherit' } : { width, height, borderRadius: 'inherit' }}
+          className={`bg-gray-200 flex items-center justify-center w-full h-full ${className}`}
+          style={fill ? { width: '100%', height: '100%' } : { width, height }}
           aria-label={alt || 'Maclock product image'}
         >
           <span className="text-gray-400 text-sm">Image not found</span>
@@ -86,11 +86,16 @@ export function OptimizedImage({
           src={imageSrc}
           alt={alt || 'Maclock product image'}
           className={`w-full h-full ${className}`}
-          style={{ 
+          style={fill ? { 
+            width: '100%', 
+            height: '100%', 
             objectFit: fit,
-            objectPosition: 'center',
-            borderRadius: 'inherit',
-            display: 'block'
+            objectPosition: 'center'
+          } : {
+            width: width || '100%',
+            height: height || '100%',
+            objectFit: fit,
+            objectPosition: 'center'
           }}
           loading={priority ? 'eager' : 'lazy'}
           onError={handleError}

@@ -10,7 +10,7 @@ const narratives = [
     title: 'The startup ritual returns.',
     description:
       'Maclock still greets you with the smiling face, floppy disk, and gentle fade that made the first Macintosh feel alive—now tuned to modern hardware so it happens in seconds.',
-    prefix: 'maclock_boot_smile_feature_grid_apple_style',
+    prefix: 'maclock_boot_smile_feature_grid_apple_style.jpg',
     alt: 'Maclock showing the smiling Macintosh boot screen beside the system disk animation',
     imageLeft: true,
   },
@@ -58,12 +58,17 @@ function NarrativeBlock({
   return (
     <motion.div
       ref={ref}
-      initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 40 }}
+      initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 32 }}
       animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.1, ease: [0.4, 0, 0.2, 1] }}
-      className={`flex flex-col ${narrative.imageLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-10 lg:gap-16 items-center`}
+      transition={{ duration: 0.6, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
+      className={`flex flex-col ${narrative.imageLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-12 lg:gap-20 items-center`}
     >
-      <div className="flex-1 relative aspect-[3/4] image-container-text rounded-[1.75rem] overflow-hidden">
+      <motion.div 
+        initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, scale: 0.96 }}
+        animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6, delay: index * 0.15 + 0.1, ease: [0.16, 1, 0.3, 1] }}
+        className="flex-1 relative aspect-[3/4] image-container-text overflow-hidden"
+      >
         <OptimizedImage
           prefix={narrative.prefix}
           fill
@@ -71,11 +76,11 @@ function NarrativeBlock({
           sizes="(max-width: 1024px) 100vw, 50vw"
           alt={narrative.alt}
         />
-      </div>
-      <div className="flex-1 space-y-6 lg:px-6">
-        <p className="text-sm uppercase tracking-[0.2em] text-gray-500">Chapter {index + 1}</p>
-        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">{narrative.title}</h2>
-        <p className="text-lg sm:text-xl text-gray-700 leading-relaxed">{narrative.description}</p>
+      </motion.div>
+      <div className="flex-1 space-y-6 lg:px-8">
+        <p className="text-xs uppercase tracking-[0.15em] text-gray-500 font-medium">Chapter {index + 1}</p>
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-gray-900 tracking-[-0.022em] leading-[1.08]">{narrative.title}</h2>
+        <p className="text-lg sm:text-xl text-gray-600 leading-[1.6] tracking-[-0.011em]">{narrative.description}</p>
       </div>
     </motion.div>
   )

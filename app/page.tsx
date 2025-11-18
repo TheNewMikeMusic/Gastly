@@ -4,6 +4,7 @@ import { TrustStrip } from '@/components/TrustStrip'
 import { NarrativeBlocks } from '@/components/NarrativeBlocks'
 import { FeaturesGrid } from '@/components/FeaturesGrid'
 import { Gallery } from '@/components/Gallery'
+import { SellerReviews } from '@/components/SellerReviews'
 import { SpecStrip } from '@/components/SpecStrip'
 import { FAQ } from '@/components/FAQ'
 import { Footer } from '@/components/Footer'
@@ -11,7 +12,7 @@ import type { Metadata } from 'next'
 import { siteConfig } from '@/lib/config'
 
 export const metadata: Metadata = {
-  title: 'Maclock - Retro Macintosh-style Digital Clock',
+  title: 'Hello1984 - Retro Macintosh-style Digital Clock',
   description: siteConfig.description,
   openGraph: {
     title: siteConfig.name,
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
         url: '/maclock_hello_retro_apple_style.webp',
         width: 1200,
         height: 630,
-        alt: 'Maclock retro hello screen',
+        alt: 'Hello1984 retro hello screen',
       },
     ],
     locale: 'en_US',
@@ -47,6 +48,7 @@ export default function HomePage() {
         <NarrativeBlocks />
         <FeaturesGrid />
         <Gallery />
+        <SellerReviews />
         <SpecStrip />
         <FAQ />
       </main>
@@ -54,4 +56,3 @@ export default function HomePage() {
     </>
   )
 }
-

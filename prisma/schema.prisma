@@ -12,11 +12,20 @@ datasource db {
 
 model Order {
   id              String   @id @default(cuid())
-  userId          String   // Clerk user ID
-  amount          Int      // in cents
+  userId          String // Clerk user ID
+  amount          Int // in cents
   currency        String   @default("usd")
   status          String   @default("pending") // pending, paid, cancelled, refunded
-  stripeSessionId String? @unique
+  stripeSessionId String?  @unique
+  // 物流信息
+  shippingName    String?
+  shippingPhone   String?
+  shippingEmail   String?
+  shippingAddress String?  @db.Text
+  shippingCity    String?
+  shippingState   String?
+  shippingZip     String?
+  shippingCountry String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -25,8 +34,8 @@ model Order {
 
 model Thread {
   id        String   @id @default(cuid())
-  buyerId   String   // Clerk user ID
-  staffId   String?  // admin/staff Clerk user ID
+  buyerId   String // Clerk user ID
+  staffId   String? // admin/staff Clerk user ID
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -38,7 +47,7 @@ model Thread {
 model Message {
   id        String   @id @default(cuid())
   threadId  String
-  authorId  String   // Clerk user ID
+  authorId  String // Clerk user ID
   body      String   @db.Text
   createdAt DateTime @default(now())
 
@@ -47,4 +56,3 @@ model Message {
   @@index([threadId])
   @@index([authorId])
 }
-

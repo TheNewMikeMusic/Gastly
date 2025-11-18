@@ -8,7 +8,7 @@ import { useRef } from 'react'
 const features = [
   {
     title: 'The smile sequence',
-    prefix: 'maclock_boot_smile_feature_grid_apple_style',
+    prefix: 'maclock_boot_smile_feature_grid_apple_style.jpg',
     alt: 'Maclock smiling face animation with "hello" glyph on screen',
     description:
       'Maclock wakes with the smile and floppy disk dance in under seven seconds, matched frame-for-frame to the original Macintosh hello.',
@@ -51,14 +51,14 @@ export function FeaturesGrid() {
         <motion.div
           initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 20 }}
           animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-          className="text-center mb-16"
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center mb-20"
         >
-          <h2 className="text-4xl sm:text-5xl font-bold mb-6 text-gray-900">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-semibold mb-6 text-gray-900 tracking-[-0.022em] leading-[1.08]">
             Built like a tiny computer.
           </h2>
-          <p className="text-lg text-gray-700 max-w-2xl mx-auto leading-relaxed">
-            A precise LCD grid, dependable internals, and interactions that feel analog even though they’re digital.
+          <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto leading-[1.6] tracking-[-0.011em]">
+            A precise LCD grid, dependable internals, and interactions that feel analog even though they're digital.
           </p>
         </motion.div>
 
@@ -91,13 +91,13 @@ function FeatureCard({
 }) {
   return (
     <motion.div
-      initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 30 }}
+      initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 24 }}
       animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.08, ease: [0.4, 0, 0.2, 1] }}
-      whileHover={prefersReducedMotion ? {} : { y: -6 }}
+      transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+      whileHover={prefersReducedMotion ? {} : { y: -4, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } }}
       className="glass-card rounded-2xl p-6 lg:p-8 overflow-hidden"
     >
-      <div className="relative aspect-[3/4] mb-6 rounded-[1.75rem] overflow-hidden image-container-text">
+      <div className="relative aspect-[3/4] mb-6 overflow-hidden image-container-text">
         <OptimizedImage
           prefix={feature.prefix}
           fill
@@ -106,8 +106,8 @@ function FeatureCard({
           alt={feature.alt}
         />
       </div>
-      <h3 className="text-2xl font-semibold mb-3 text-gray-900">{feature.title}</h3>
-      <p className="text-gray-700 leading-relaxed">{feature.description}</p>
+      <h3 className="text-2xl font-semibold mb-4 text-gray-900 tracking-[-0.02em] leading-[1.1]">{feature.title}</h3>
+      <p className="text-gray-600 leading-[1.6] tracking-[-0.011em]">{feature.description}</p>
     </motion.div>
   )
 }

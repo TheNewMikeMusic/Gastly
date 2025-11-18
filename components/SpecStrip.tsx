@@ -54,13 +54,13 @@ export function SpecStrip() {
         <motion.div
           initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 20 }}
           animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center mb-20"
         >
-          <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-gray-900">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-semibold mb-6 text-gray-900 tracking-[-0.022em] leading-[1.08]">
             Technical specifications
           </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-[1.6] tracking-[-0.011em]">
             Modern internals power every ritual: real-time clock backup, efficient LCD driving, and machined controls that
             feel more hi-fi than hobby.
           </p>
@@ -77,10 +77,10 @@ export function SpecStrip() {
               key={category.category}
               initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 20 }}
               animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: categoryIndex * 0.1 }}
+              transition={{ duration: 0.5, delay: categoryIndex * 0.1, ease: [0.16, 1, 0.3, 1] }}
               className="glass-panel rounded-2xl p-6"
             >
-              <h3 className="text-lg font-semibold mb-4 text-gray-900 border-b border-gray-200 pb-2">
+              <h3 className="text-lg font-semibold mb-4 text-gray-900 border-b border-gray-200 pb-2 tracking-[-0.018em]">
                 {category.category}
               </h3>
               <div className="space-y-3">

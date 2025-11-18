@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { BuyButton } from '@/components/BuyButton'
+import { UserButton, SignedIn, SignedOut } from '@clerk/nextjs'
 
 const navItems = [
   { label: 'Features', href: '/#features' },
@@ -54,9 +55,9 @@ export function Navigation() {
             <Link
               href="/"
               className="text-lg font-semibold tracking-tight text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/40 focus-visible:ring-offset-2 rounded-full"
-              aria-label="Maclock home"
+              aria-label="Hello1984 home"
             >
-              Maclock
+              Hello1984
             </Link>
             <nav className="hidden md:flex items-center gap-4" aria-label="Primary">
               {allLinks.map((item) => (
@@ -70,13 +71,32 @@ export function Navigation() {
               ))}
             </nav>
             <div className="flex items-center gap-3">
-              <div className="hidden sm:flex">
-                <BuyButton
-                  size="sm"
-                  variant="primary"
-                  className={scrolled ? 'bg-gray-900 text-white hover:bg-gray-950 shadow-deep' : ''}
-                />
-              </div>
+              <SignedIn>
+                <div className="hidden sm:flex items-center gap-3">
+                  <Link
+                    href="/account"
+                    className="text-gray-700 hover:text-gray-900 rounded-full px-3 py-1.5 text-sm font-medium transition-colors duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/30"
+                  >
+                    Account
+                  </Link>
+                  <UserButton 
+                    appearance={{
+                      elements: {
+                        avatarBox: 'w-8 h-8',
+                      },
+                    }}
+                  />
+                </div>
+              </SignedIn>
+              <SignedOut>
+                <div className="hidden sm:flex">
+                  <BuyButton
+                    size="sm"
+                    variant="primary"
+                    className={scrolled ? 'bg-gray-900 text-white hover:bg-gray-950 shadow-deep' : ''}
+                  />
+                </div>
+              </SignedOut>
               <button
                 type="button"
                 onClick={() => setMenuOpen((prev) => !prev)}
@@ -126,6 +146,15 @@ export function Navigation() {
                     {item.label}
                   </Link>
                 ))}
+                <SignedIn>
+                  <Link
+                    href="/account"
+                    className="block rounded-2xl px-4 py-3 text-base font-semibold text-gray-900 hover:bg-gray-50 transition-colors duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/40"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Account
+                  </Link>
+                </SignedIn>
               </nav>
             </motion.div>
           </motion.div>

@@ -16,20 +16,37 @@ export function Hero() {
       <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24">
         <div className="flex flex-col-reverse lg:flex-row items-center gap-10 lg:gap-14">
           <motion.div
-            initial={prefersReducedMotion ? {} : { opacity: 0, y: 30 }}
+            initial={prefersReducedMotion ? {} : { opacity: 0, y: 24 }}
             animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-            className="w-full lg:max-w-lg space-y-6 text-center lg:text-left"
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+            className="w-full lg:max-w-lg space-y-8 text-center lg:text-left"
           >
-            <div className="hero-panel space-y-6">
-              <span className="hero-pill inline-flex justify-center lg:justify-start">Maclock · 2025 Edition</span>
-              <h1 className="text-4xl sm:text-5xl font-semibold leading-tight tracking-tight">
+            <div className="hero-panel space-y-8">
+              <motion.span 
+                initial={prefersReducedMotion ? {} : { opacity: 0, y: 12 }}
+                animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+                className="hero-pill inline-flex justify-center lg:justify-start text-sm font-medium tracking-[0.05em]"
+              >
+                Hello1984 · 2025 Edition
+              </motion.span>
+              <motion.h1 
+                initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
+                animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+                className="text-5xl sm:text-6xl lg:text-7xl font-semibold leading-[1.05] tracking-[-0.025em] text-gray-900"
+              >
                 Hello again.
-              </h1>
-              <p className="text-base sm:text-lg leading-relaxed text-gray-700">
+              </motion.h1>
+              <motion.p 
+                initial={prefersReducedMotion ? {} : { opacity: 0, y: 16 }}
+                animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
+                className="text-lg sm:text-xl leading-[1.6] tracking-[-0.011em] text-gray-600 max-w-xl mx-auto lg:mx-0"
+              >
                 A faithful Macintosh-style clock with a remastered hello screen, analog brightness dial, and USB-C
                 dependability. Built to feel calm on a shelf and effortless on a tiny mobile screen.
-              </p>
+              </motion.p>
               <div className="flex flex-col sm:flex-row items-center gap-4">
                 <BuyButton size="lg" variant="primary" className="w-full sm:w-auto" />
                 <Link
@@ -48,19 +65,18 @@ export function Hero() {
           <motion.div
             initial={prefersReducedMotion ? {} : { opacity: 0, scale: 0.96 }}
             animate={prefersReducedMotion ? {} : { opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
             className="w-full max-w-2xl"
           >
             <div className="hero-product-frame">
               <div className="relative aspect-[4/3] w-full rounded-[1.75rem] overflow-hidden">
                 <OptimizedImage
-                  prefix="maclock_hello_retro_apple_style"
+                  prefix="maclock_hello_retro_apple_style.webp"
                   priority
                   fill
                   fit="contain"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   alt="Maclock showing the classic Macintosh hello screen on a muted desk background"
-                  className="object-contain"
                 />
               </div>
             </div>

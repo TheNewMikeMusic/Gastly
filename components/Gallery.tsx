@@ -7,20 +7,6 @@ import { useRef, useState } from 'react'
 
 const galleryImages = [
   {
-    prefix: 'maclock_hello_retro_apple_style',
-    alt: 'Maclock on a minimalist wooden desk beside notebooks and a coffee mug',
-    title: 'Morning desk companion',
-    description:
-      'Crisp enough for video calls, soft enough for journaling. Maclock anchors a desk without stealing every lumen in the room.',
-  },
-  {
-    prefix: 'maclock_hello_retro_dawn_apple_style',
-    alt: 'Maclock glowing in a living room with dawn light reflected on the screen',
-    title: 'Living room centerpiece',
-    description:
-      'A sculptural form, wrapped in the same warm beige that made the Macintosh iconic. It looks intentional on credenzas, consoles, and vinyl shelves.',
-  },
-  {
     prefix: 'maclock_boot_smile_features_apple_style',
     alt: 'Maclock beside a stack of books on a bedside table showing the smiling boot screen',
     title: 'Nightstand storyteller',
@@ -46,36 +32,37 @@ export function Gallery() {
           <motion.div
             initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 20 }}
             animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="text-center mb-20"
           >
-            <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-gray-900">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-semibold mb-6 text-gray-900 tracking-[-0.022em] leading-[1.08]">
               Designed for Your Space
             </h2>
-            <p className="text-lg text-gray-700 max-w-2xl mx-auto leading-relaxed">
-              The Maclock adapts to your environment, whether it&rsquo;s a morning desk setup, a living room display, or a bedside companion. Each scenario reveals different aspects of its thoughtful design.
+            <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto leading-[1.6] tracking-[-0.011em]">
+              The Maclock adapts to your environment, whether it&rsquo;s a morning desk setup, a living room display, or a bedside companion.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+          <div className="flex justify-center">
+            <div className="w-full max-w-md">
             {galleryImages.map((image, index) => (
               <motion.div
                 key={image.prefix}
-                initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 30 }}
+                initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 24 }}
                 animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={prefersReducedMotion ? {} : { y: -6 }}
+                transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                whileHover={prefersReducedMotion ? {} : { y: -4, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } }}
                 className="glass-card rounded-2xl overflow-hidden"
               >
                 <motion.button
                   type="button"
                   onClick={() => setSelectedImage(index)}
-                  className="w-full focus:outline-none focus:ring-2 focus:ring-foreground focus:ring-offset-2 rounded-t-2xl overflow-hidden"
+                  className="w-full focus:outline-none focus:ring-2 focus:ring-foreground focus:ring-offset-2 overflow-hidden"
                   aria-label={`View ${image.alt}`}
                   whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
                   whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
                 >
-                  <div className="relative aspect-[3/4] image-container-text rounded-[1.75rem] overflow-hidden">
+                  <div className="relative aspect-[3/4] overflow-hidden">
                     <OptimizedImage
                       prefix={image.prefix}
                       fill
@@ -86,11 +73,12 @@ export function Gallery() {
                   </div>
                 </motion.button>
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-2 text-gray-900">{image.title}</h3>
-                  <p className="text-sm text-gray-700 leading-relaxed">{image.description}</p>
+                  <h3 className="text-xl font-semibold mb-3 text-gray-900 tracking-[-0.02em] leading-[1.1]">{image.title}</h3>
+                  <p className="text-sm text-gray-600 leading-[1.6] tracking-[-0.011em]">{image.description}</p>
                 </div>
               </motion.div>
             ))}
+            </div>
           </div>
         </div>
       </section>
@@ -111,7 +99,7 @@ export function Gallery() {
           >
             ×
           </button>
-          <div className="relative max-w-2xl w-full aspect-[3/4] image-container-text bg-white/95 p-4 rounded-[1.75rem]">
+          <div className="relative max-w-2xl w-full aspect-[3/4] image-container-text bg-white/95 p-4">
             <OptimizedImage
               prefix={galleryImages[selectedImage].prefix}
               fill
