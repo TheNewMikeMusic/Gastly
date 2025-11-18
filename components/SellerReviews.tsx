@@ -34,7 +34,7 @@ const reviews: Review[] = [
     headline: 'So cute and really well made.',
     body: 'So cute and really well made.',
     response:
-      'Hi Jane, thank you so much for your sweet note. It makes me really happy to hear you think the little Mac-style clock is cute and well made. I keep the design simple and clean so it feels warm on a desk, and I love knowing it fits your vibe. If you ever want a different face style or a tiny matching piece for your setup, just tell me — I'm always here and happy to help you find something fun.',
+      "Hi Jane, thank you so much for your sweet note. It makes me really happy to hear you think the little Mac-style clock is cute and well made. I keep the design simple and clean so it feels warm on a desk, and I love knowing it fits your vibe. If you ever want a different face style or a tiny matching piece for your setup, just tell me — I'm always here and happy to help you find something fun.",
     media: [
       {
         file: 'iap_300x300.7307396637_refzr49b.webp',
@@ -52,7 +52,7 @@ const reviews: Review[] = [
     body:
       'Bought this as a gift for my husband who works at Apple. He is a very impressed by the detail put into the design and build. Shipping time was somewhat of a mystery as we are located less than 25 miles from the shipping facility and it took more than a week.',
     response:
-      'Listing review by Christine\nHi Christine, thank you so much for sharing this — and please tell your husband I'm really glad the little Mac-style clock won him over. I put a lot of care into the tiny details, so it means a lot hearing that someone from Apple noticed and enjoyed the design. The shipping delay is honestly a bit strange, and I'm sorry it took longer than it should have, especially when you're so close. Sometimes the carrier holds a package at a hub for a few days, but I know that doesn't make it any less confusing. If you ever need a matching piece or want a different retro style for his desk, just let me know. I'd love to help you put together something fun for him.',
+      "Listing review by Christine\nHi Christine, thank you so much for sharing this — and please tell your husband I'm really glad the little Mac-style clock won him over. I put a lot of care into the tiny details, so it means a lot hearing that someone from Apple noticed and enjoyed the design. The shipping delay is honestly a bit strange, and I'm sorry it took longer than it should have, especially when you're so close. Sometimes the carrier holds a package at a hub for a few days, but I know that doesn't make it any less confusing. If you ever need a matching piece or want a different retro style for his desk, just let me know. I'd love to help you put together something fun for him.",
     media: [
       {
         file: 'iap_300x300.7241535096_dvmyoc4g.webp',
@@ -70,7 +70,7 @@ const reviews: Review[] = [
     body:
       'My order shipped out on time and arrived in great condition. The clocks were a gift and my family loved them. They seem really well made and work great.',
     response:
-      'Hi Andrea! Thank you so much for sharing your lovely feedback — and that photo made my day! I'm really happy to hear your family loved the clocks and that everything arrived safely. I had a lot of fun designing this retro piece; it's such a nostalgic nod to old-school tech. Hope it brings lots of smiles whenever it boots up with that floppy grin!',
+      "Hi Andrea! Thank you so much for sharing your lovely feedback — and that photo made my day! I'm really happy to hear your family loved the clocks and that everything arrived safely. I had a lot of fun designing this retro piece; it's such a nostalgic nod to old-school tech. Hope it brings lots of smiles whenever it boots up with that floppy grin!",
     media: [
       {
         file: 'iap_1000x1000.7133129332_7ugtj81k.webp',
