@@ -10,7 +10,7 @@ export function Hero() {
   const prefersReducedMotion = useReducedMotion()
 
   return (
-    <section className="relative w-full min-h-screen flex items-center hero-banner pt-10 sm:pt-20 lg:pt-12">
+    <section className="relative w-full min-h-screen flex items-center hero-banner mobile-hero pt-10 sm:pt-20 lg:pt-12">
       <div className="absolute inset-0 hero-bg-dark" />
       <div className="hero-light-bloom" />
       <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 lg:py-24">

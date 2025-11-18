@@ -89,8 +89,22 @@ export function TrustStrip() {
   const isVisible = useIntersectionObserver(sectionRef, { threshold: 0.2 })
 
   return (
-    <section ref={sectionRef} className="py-14 px-4 sm:px-6 lg:px-8 bg-[#edeff2]">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+    <motion.section
+      ref={sectionRef}
+      initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
+      animate={prefersReducedMotion || isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className="relative overflow-hidden py-12 sm:py-14 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#f1f3f8] to-[#e6ebf4]"
+    >
+      <div
+        aria-hidden="true"
+        className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-white/60 to-transparent blur-3xl opacity-60"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute -right-10 top-6 h-40 w-40 rounded-full bg-[#d8e1ff] opacity-60 blur-3xl"
+      />
+      <div className="relative z-10 max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
         {trustItems.map((item, index) => (
           <motion.div
             key={item.title}
@@ -98,16 +112,18 @@ export function TrustStrip() {
             animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: index * 0.08 }}
             whileHover={prefersReducedMotion ? {} : { y: -6 }}
-            className="glass-card rounded-2xl p-6"
+            className="glass-card rounded-2xl p-5 sm:p-6 min-h-[180px] shadow-[0_18px_40px_rgba(15,23,42,0.08)]"
           >
             <div className="mb-3 flex justify-center lg:justify-start">
               {iconMap[item.icon]}
             </div>
-            <h3 className="text-lg font-semibold mb-1 text-gray-900">{item.title}</h3>
-            <p className="text-sm text-gray-700 leading-relaxed">{item.description}</p>
+            <h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{item.title}</h3>
+            <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
+              {item.description}
+            </p>
           </motion.div>
         ))}
       </div>
-    </section>
+    </motion.section>
   )
 }
