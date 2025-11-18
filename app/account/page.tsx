@@ -5,6 +5,11 @@ import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 
+// 扩展 Order 类型以包含 shipping 字段（Prisma schema 中已定义，但类型可能未更新）
+type OrderWithShipping = Awaited<ReturnType<typeof prisma.order.findMany>>[0] & {
+  shippingName?: string | null
+}
+
 async function getOrders(userId: string) {
   try {
     return prisma.order.findMany({
@@ -136,9 +141,9 @@ export default async function AccountPage() {
                               day: 'numeric',
                             })}
                           </div>
-                          {order.shippingName && (
+                          {(order as OrderWithShipping).shippingName && (
                             <div className="text-sm text-gray-600 mt-1">
-                              Shipping to: {order.shippingName}
+                              Shipping to: {(order as OrderWithShipping).shippingName}
                             </div>
                           )}
                         </div>
