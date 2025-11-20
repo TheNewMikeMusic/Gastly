@@ -415,6 +415,61 @@ button, a {
   pointer-events: none;
 }
 
+.page-stack {
+  background: linear-gradient(180deg, #fbfbfd 0%, #f5f6fa 45%, #ffffff 100%);
+}
+
+.page-stack__glow {
+  position: absolute;
+  inset: auto;
+  z-index: 0;
+  width: 320px;
+  height: 320px;
+  filter: blur(120px);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.page-stack__glow--one {
+  top: 10%;
+  left: -5%;
+  background: radial-gradient(circle, rgba(141, 166, 255, 0.6), transparent 60%);
+}
+
+.page-stack__glow--two {
+  bottom: 20%;
+  right: -5%;
+  background: radial-gradient(circle, rgba(255, 193, 168, 0.6), transparent 60%);
+}
+
+.section-ambient {
+  position: relative;
+  padding: clamp(1.75rem, 5vw, 4rem) 0;
+  background: #f6f7fb;
+  z-index: 1;
+}
+
+.section-ambient > * {
+  position: relative;
+  z-index: 2;
+}
+
+.section-ambient--footer {
+  background: #f6f7fb;
+  padding-top: clamp(2rem, 5vw, 3rem);
+  padding-bottom: 0;
+}
+
+@media (max-width: 640px) {
+  .section-ambient {
+    padding: 1.5rem 0 1.75rem;
+  }
+
+  .section-ambient--footer {
+    padding-top: 1.5rem;
+  }
+}
+
 @media (max-width: 768px) {
   .mobile-hero {
     min-height: auto;

@@ -3,6 +3,8 @@
 import Link from 'next/link'
 import { OptimizedImage } from '@/components/OptimizedImage'
 import { BuyButton } from '@/components/BuyButton'
+import { WishlistButton } from '@/components/WishlistButton'
+import { StockStatus } from '@/components/StockStatus'
 import { useReducedMotion } from '@/lib/hooks'
 import { motion } from 'framer-motion'
 
@@ -47,18 +49,26 @@ export function Hero() {
                 A faithful Macintosh-style clock with a remastered hello screen, analog brightness dial, and USB-C
                 dependability. Built to feel calm on a shelf and effortless on a tiny mobile screen.
               </motion.p>
-              <div className="flex flex-col sm:flex-row items-center gap-4">
-                <BuyButton size="lg" variant="primary" className="w-full sm:w-auto" />
-                <Link
-                  href="#features"
-                  className="w-full sm:w-auto rounded-full border border-black/10 px-6 py-3 text-sm font-semibold text-gray-800 hover:bg-gray-100 transition-colors duration-200 ease-apple-standard focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/40"
-                >
-                  Explore features
-                </Link>
+              <div className="space-y-4">
+                <div className="flex flex-col sm:flex-row items-center gap-4">
+                  <BuyButton size="lg" variant="primary" className="w-full sm:w-auto" />
+                  <div className="flex items-center gap-2">
+                    <WishlistButton productId="maclock-default" variant="button" />
+                    <Link
+                      href="#features"
+                      className="w-full sm:w-auto rounded-full border border-black/10 px-6 py-3 text-sm font-semibold text-gray-800 hover:bg-gray-100 transition-colors duration-200 ease-apple-standard focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/40"
+                    >
+                      Explore features
+                    </Link>
+                  </div>
+                </div>
+                <div className="max-w-md mx-auto lg:mx-0">
+                  <StockStatus productId="maclock-default" />
+                </div>
+                <p className="text-xs text-gray-500">
+                  Worldwide delivery + 30-day returns included.
+                </p>
               </div>
-              <p className="text-xs text-gray-500">
-                Worldwide delivery + 30-day returns included.
-              </p>
             </div>
           </motion.div>
 

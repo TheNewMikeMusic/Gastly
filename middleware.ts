@@ -16,9 +16,38 @@ const isPublicRoute = createRouteMatcher([
   '/privacy',
   '/terms',
   '/success',
+  '/admin/login', // 管理员登录页面是公开的
 ])
 
-export default function middleware(request: NextRequest) {
+// Admin routes that require admin authentication
+const isAdminRoute = (pathname: string) => {
+  return pathname.startsWith('/admin') && pathname !== '/admin/login'
+}
+
+// Check admin session from cookies
+async function checkAdminSession(request: NextRequest): Promise<boolean> {
+  const sessionCookie = request.cookies.get('admin_session')
+  if (!sessionCookie?.value) {
+    return false
+  }
+  // 简单的验证：检查session token格式
+  return /^[0-9a-f]{64}$/i.test(sessionCookie.value)
+}
+
+export default async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
+
+  // Handle admin routes separately
+  if (isAdminRoute(pathname)) {
+    const hasAdminSession = await checkAdminSession(request)
+    if (!hasAdminSession) {
+      const loginUrl = new URL('/admin/login', request.url)
+      loginUrl.searchParams.set('redirect', pathname)
+      return NextResponse.redirect(loginUrl)
+    }
+    return NextResponse.next()
+  }
+
   // Use Clerk middleware if configured
   if (isClerkConfigured) {
     return clerkMiddleware(async (auth, req) => {

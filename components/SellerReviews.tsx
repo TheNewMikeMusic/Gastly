@@ -144,13 +144,13 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
         </>
       )}
 
-      <div className="relative z-10 space-y-10">
+      <div className="relative z-10 space-y-8 sm:space-y-10">
         <motion.div
           {...getFadeMotion()}
           className={
             isDashboard
               ? 'flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'
-              : 'flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between'
+              : 'flex flex-col gap-4 sm:gap-6 lg:flex-row lg:items-center lg:justify-between'
           }
         >
           <div>
@@ -191,7 +191,7 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
           </div>
         </motion.div>
 
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
           {reviews.map((review, index) => (
             <motion.article
               key={review.id}
@@ -203,8 +203,8 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
               }
               className={
                 isDashboard
-                  ? 'rounded-2xl border border-black/10 bg-white/90 p-5 shadow-[0_15px_40px_rgba(15,23,42,0.06)] space-y-4'
-                  : 'rounded-2xl border border-black/5 bg-white/95 p-6 shadow-[0_20px_45px_rgba(15,23,42,0.08)] space-y-4'
+                  ? 'rounded-2xl border border-black/10 bg-white/90 p-4 sm:p-5 shadow-[0_15px_40px_rgba(15,23,42,0.06)] space-y-4'
+                  : 'rounded-2xl border border-black/5 bg-white/95 p-5 sm:p-6 shadow-[0_20px_45px_rgba(15,23,42,0.08)] space-y-4'
               }
             >
               <div className="flex items-start justify-between gap-4">
@@ -264,16 +264,8 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
   }
 
   return (
-    <section className="relative overflow-hidden py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#e9edf5] via-white to-[#f5f6fa]">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-white/80 to-transparent"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.9),_transparent_60%)]"
-      />
-      <div className="relative max-w-6xl mx-auto">{content}</div>
+    <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto">{content}</div>
     </section>
   )
 }

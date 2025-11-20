@@ -52,3 +52,5 @@ Get-Content .env.local | Select-String "PRICE_ID"
 - **Product ID** (`prod_...`): 产品标识符，用于管理产品
 - **Price ID** (`price_...`): 价格标识符，用于创建支付会话 ⭐ **需要这个**
 
+
+

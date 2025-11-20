@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { NewsletterSignup } from '@/components/NewsletterSignup'
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -65,6 +66,14 @@ export function Footer() {
                   Privacy Policy
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/admin/login"
+                  className="text-[#1d1d1f]/70 hover:text-[#1d1d1f] transition-colors duration-200 ease-apple-standard text-sm focus:outline-none focus:ring-2 focus:ring-[#007aff] focus:ring-offset-2 rounded"
+                >
+                  Admin
+                </Link>
+              </li>
             </ul>
             <p className="text-[#86868b] text-xs leading-relaxed mt-4 sm:mt-6">
               Hello1984 is an independent homage inspired by the Macintosh. Apple Inc. is not affiliated or involved.
@@ -72,6 +81,13 @@ export function Footer() {
           </div>
         </div>
         <div className="border-t border-[#d2d2d7] pt-6 sm:pt-8">
+          <div className="max-w-md mx-auto mb-6">
+            <h3 className="text-sm font-semibold mb-3 text-[#1d1d1f] text-center">Newsletter</h3>
+            <p className="text-xs text-[#86868b] text-center mb-3">
+              Subscribe to get updates on new products and exclusive offers.
+            </p>
+            <NewsletterSignup variant="inline" />
+          </div>
           <p className="text-center text-xs sm:text-sm text-[#86868b]">© {currentYear} Hello1984. All rights reserved.</p>
         </div>
       </div>

@@ -117,3 +117,5 @@ AND column_name LIKE 'shipping%';
 2. 访问结账页面：`http://localhost:3000/checkout`
 3. 测试物流信息填写功能
 
+
+

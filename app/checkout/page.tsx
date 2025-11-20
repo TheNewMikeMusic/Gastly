@@ -5,7 +5,10 @@ import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Navigation } from '@/components/Navigation'
 import { useReducedMotion } from '@/lib/hooks'
-import { useUser } from '@clerk/nextjs'
+import { useUser, useAuth } from '@clerk/nextjs'
+import { SavedAddresses } from '@/components/SavedAddresses'
+import { CouponInput } from '@/components/CouponInput'
+import { StockStatus } from '@/components/StockStatus'
 
 interface ShippingFormData {
   name: string
@@ -18,12 +21,34 @@ interface ShippingFormData {
   country: string
 }
 
+interface Address {
+  id: string
+  label?: string
+  name: string
+  phone: string
+  email?: string
+  address: string
+  city: string
+  state?: string
+  zip: string
+  country: string
+  isDefault: boolean
+}
+
 export default function CheckoutPage() {
   const router = useRouter()
   const { user, isLoaded } = useUser()
+  const { isSignedIn } = useAuth()
   const prefersReducedMotion = useReducedMotion()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [savedAddresses, setSavedAddresses] = useState<Address[]>([])
+  const [useSavedAddress, setUseSavedAddress] = useState(false)
+  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null)
+  const [couponCode, setCouponCode] = useState<string | null>(null)
+  const [discountAmount, setDiscountAmount] = useState(0)
+  const [productPrice, setProductPrice] = useState(29900) // $299 in cents
+  const [stock, setStock] = useState<number | null>(null)
   const [formData, setFormData] = useState<ShippingFormData>({
     name: '',
     phone: '',
@@ -52,12 +77,75 @@ export default function CheckoutPage() {
         }))
       }
     }
-  }, [user, isLoaded, router])
+
+    // 加载保存的地址
+    if (isSignedIn) {
+      loadSavedAddresses()
+    }
+
+    // 检查库存
+    checkStock()
+  }, [user, isLoaded, router, isSignedIn])
+
+  const loadSavedAddresses = async () => {
+    try {
+      const response = await fetch('/api/addresses')
+      const data = await response.json()
+      setSavedAddresses(data.addresses || [])
+      
+      // 如果有默认地址，自动选择
+      const defaultAddress = data.addresses?.find((a: Address) => a.isDefault)
+      if (defaultAddress) {
+        handleSelectAddress(defaultAddress)
+      }
+    } catch (error) {
+      console.error('Failed to load addresses:', error)
+    }
+  }
+
+  const checkStock = async () => {
+    try {
+      const response = await fetch('/api/inventory/check?productId=maclock-default&quantity=1')
+      const data = await response.json()
+      setStock(data.stock)
+    } catch (error) {
+      console.error('Failed to check stock:', error)
+    }
+  }
+
+  const handleSelectAddress = (address: Address) => {
+    setFormData({
+      name: address.name,
+      phone: address.phone,
+      email: address.email || '',
+      address: address.address,
+      city: address.city,
+      state: address.state || '',
+      zip: address.zip,
+      country: address.country,
+    })
+    setSelectedAddressId(address.id)
+    setUseSavedAddress(true)
+  }
+
+  const handleCouponApply = (code: string, discount: number) => {
+    setCouponCode(code)
+    setDiscountAmount(discount)
+  }
+
+  const handleCouponRemove = () => {
+    setCouponCode(null)
+    setDiscountAmount(0)
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
     setError(null)
+    if (useSavedAddress) {
+      setUseSavedAddress(false)
+      setSelectedAddressId(null)
+    }
   }
 
   const validateForm = (): boolean => {
@@ -104,6 +192,13 @@ export default function CheckoutPage() {
       setError('Please select your country')
       return false
     }
+
+    // 检查库存
+    if (stock !== null && stock <= 0) {
+      setError('Product is out of stock')
+      return false
+    }
+
     return true
   }
 
@@ -118,10 +213,18 @@ export default function CheckoutPage() {
     setError(null)
 
     try {
+      // 如果有优惠券，需要先验证并应用到订单
+      // 注意：实际应用中，优惠券应该在Stripe Checkout中处理
+      // 这里我们只是将优惠券代码传递到后端
+      const checkoutData = {
+        ...formData,
+        couponCode: couponCode || undefined,
+      }
+
       const response = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(checkoutData),
       })
 
       const data = await response.json()
@@ -140,14 +243,6 @@ export default function CheckoutPage() {
       const errorMessage = err instanceof Error ? err.message : 'Checkout failed. Please try again.'
       setError(errorMessage)
       setLoading(false)
-      
-      // Log detailed error for debugging
-      if (err instanceof Error) {
-        console.error('Error details:', {
-          message: err.message,
-          stack: err.stack,
-        })
-      }
     }
   }
 
@@ -172,6 +267,9 @@ export default function CheckoutPage() {
     )
   }
 
+  const finalPrice = productPrice - discountAmount
+  const finalPriceDisplay = (finalPrice / 100).toFixed(2)
+
   return (
     <div className="min-h-screen bg-white">
       <Navigation />
@@ -191,6 +289,13 @@ export default function CheckoutPage() {
             </p>
           </motion.div>
 
+          {/* 库存状态 */}
+          {stock !== null && (
+            <div className="mb-6">
+              <StockStatus productId="maclock-default" />
+            </div>
+          )}
+
           <div className="grid lg:grid-cols-3 gap-8 lg:gap-12">
             {/* Shipping Form */}
             <div className="lg:col-span-2">
@@ -205,149 +310,203 @@ export default function CheckoutPage() {
                   </motion.div>
                 )}
 
-                <div className="glass rounded-2xl p-6 sm:p-8 space-y-6">
-                  <h2 className="text-2xl font-semibold mb-6 text-gray-900">
-                    Shipping Information
-                  </h2>
-
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium mb-2 text-gray-900">
-                      Full Name <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white/90 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/30 transition-all duration-200 ease-apple-standard"
-                      placeholder="John Doe"
+                {/* 保存的地址选择 */}
+                {isSignedIn && savedAddresses.length > 0 && (
+                  <div className="glass rounded-2xl p-6 sm:p-8">
+                    <h3 className="text-lg font-semibold mb-4 text-gray-900">
+                      Use Saved Address
+                    </h3>
+                    <SavedAddresses
+                      onSelect={handleSelectAddress}
+                      showAddButton={false}
                     />
-                  </div>
-
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <label htmlFor="phone" className="block text-sm font-medium mb-2 text-gray-900">
-                        Phone Number <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white/90 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/30 transition-all duration-200 ease-apple-standard"
-                        placeholder="+1 (555) 123-4567"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-medium mb-2 text-gray-900">
-                        Email Address <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white/90 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/30 transition-all duration-200 ease-apple-standard"
-                        placeholder="john@example.com"
-                      />
+                    <div className="mt-4 pt-4 border-t border-gray-200">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setUseSavedAddress(false)
+                          setSelectedAddressId(null)
+                        }}
+                        className="text-sm text-gray-600 hover:text-gray-900"
+                      >
+                        Or enter a new address →
+                      </button>
                     </div>
                   </div>
+                )}
 
-                  <div>
-                    <label htmlFor="country" className="block text-sm font-medium mb-2 text-gray-900">
-                      Country <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      id="country"
-                      name="country"
-                      value={formData.country}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white/90 text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/30 transition-all duration-200 ease-apple-standard"
-                    >
-                      <option value="US">United States</option>
-                      <option value="CA">Canada</option>
-                      <option value="GB">United Kingdom</option>
-                      <option value="AU">Australia</option>
-                      <option value="DE">Germany</option>
-                      <option value="FR">France</option>
-                      <option value="JP">Japan</option>
-                      <option value="CN">China</option>
-                    </select>
-                  </div>
+                {(!useSavedAddress || savedAddresses.length === 0) && (
+                  <div className="glass rounded-2xl p-6 sm:p-8 space-y-6">
+                    <h2 className="text-2xl font-semibold mb-6 text-gray-900">
+                      Shipping Information
+                    </h2>
 
-                  <div>
-                    <label htmlFor="address" className="block text-sm font-medium mb-2 text-gray-900">
-                      Street Address <span className="text-red-500">*</span>
-                    </label>
-                    <textarea
-                      id="address"
-                      name="address"
-                      value={formData.address}
-                      onChange={handleInputChange}
-                      required
-                      rows={3}
-                      className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white/90 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/30 transition-all duration-200 ease-apple-standard resize-none"
-                      placeholder="123 Main Street, Apt 4B"
-                    />
-                  </div>
-
-                  <div className="grid sm:grid-cols-3 gap-4">
                     <div>
-                      <label htmlFor="state" className="block text-sm font-medium mb-2 text-gray-900">
-                        State / Province <span className="text-red-500">*</span>
+                      <label htmlFor="name" className="block text-sm font-medium mb-2 text-gray-900">
+                        Full Name <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
-                        id="state"
-                        name="state"
-                        value={formData.state}
+                        id="name"
+                        name="name"
+                        value={formData.name}
                         onChange={handleInputChange}
                         required
                         className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white/90 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/30 transition-all duration-200 ease-apple-standard"
-                        placeholder="CA"
+                        placeholder="John Doe"
                       />
                     </div>
 
-                    <div>
-                      <label htmlFor="city" className="block text-sm font-medium mb-2 text-gray-900">
-                        City <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        id="city"
-                        name="city"
-                        value={formData.city}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white/90 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/30 transition-all duration-200 ease-apple-standard"
-                        placeholder="San Francisco"
-                      />
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div>
+                        <label htmlFor="phone" className="block text-sm font-medium mb-2 text-gray-900">
+                          Phone Number <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="tel"
+                          id="phone"
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleInputChange}
+                          required
+                          className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white/90 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/30 transition-all duration-200 ease-apple-standard"
+                          placeholder="+1 (555) 123-4567"
+                        />
+                      </div>
+
+                      <div>
+                        <label htmlFor="email" className="block text-sm font-medium mb-2 text-gray-900">
+                          Email Address <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          required
+                          className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white/90 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/30 transition-all duration-200 ease-apple-standard"
+                          placeholder="john@example.com"
+                        />
+                      </div>
                     </div>
 
                     <div>
-                      <label htmlFor="zip" className="block text-sm font-medium mb-2 text-gray-900">
-                        Postal Code <span className="text-red-500">*</span>
+                      <label htmlFor="country" className="block text-sm font-medium mb-2 text-gray-900">
+                        Country <span className="text-red-500">*</span>
                       </label>
-                      <input
-                        type="text"
-                        id="zip"
-                        name="zip"
-                        value={formData.zip}
+                      <select
+                        id="country"
+                        name="country"
+                        value={formData.country}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white/90 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/30 transition-all duration-200 ease-apple-standard"
-                        placeholder="94102"
+                        className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white/90 text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/30 transition-all duration-200 ease-apple-standard"
+                      >
+                        <option value="US">United States</option>
+                        <option value="CA">Canada</option>
+                        <option value="GB">United Kingdom</option>
+                        <option value="AU">Australia</option>
+                        <option value="DE">Germany</option>
+                        <option value="FR">France</option>
+                        <option value="JP">Japan</option>
+                        <option value="CN">China</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label htmlFor="address" className="block text-sm font-medium mb-2 text-gray-900">
+                        Street Address <span className="text-red-500">*</span>
+                      </label>
+                      <textarea
+                        id="address"
+                        name="address"
+                        value={formData.address}
+                        onChange={handleInputChange}
+                        required
+                        rows={3}
+                        className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white/90 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/30 transition-all duration-200 ease-apple-standard resize-none"
+                        placeholder="123 Main Street, Apt 4B"
                       />
                     </div>
+
+                    <div className="grid sm:grid-cols-3 gap-4">
+                      <div>
+                        <label htmlFor="state" className="block text-sm font-medium mb-2 text-gray-900">
+                          State / Province <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          id="state"
+                          name="state"
+                          value={formData.state}
+                          onChange={handleInputChange}
+                          required
+                          className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white/90 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/30 transition-all duration-200 ease-apple-standard"
+                          placeholder="CA"
+                        />
+                      </div>
+
+                      <div>
+                        <label htmlFor="city" className="block text-sm font-medium mb-2 text-gray-900">
+                          City <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          id="city"
+                          name="city"
+                          value={formData.city}
+                          onChange={handleInputChange}
+                          required
+                          className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white/90 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/30 transition-all duration-200 ease-apple-standard"
+                          placeholder="San Francisco"
+                        />
+                      </div>
+
+                      <div>
+                        <label htmlFor="zip" className="block text-sm font-medium mb-2 text-gray-900">
+                          Postal Code <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          id="zip"
+                          name="zip"
+                          value={formData.zip}
+                          onChange={handleInputChange}
+                          required
+                          className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white/90 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/30 transition-all duration-200 ease-apple-standard"
+                          placeholder="94102"
+                        />
+                      </div>
+                    </div>
+
+                    {/* 保存地址选项 */}
+                    {isSignedIn && (
+                      <div className="flex items-center pt-4 border-t border-gray-200">
+                        <input
+                          type="checkbox"
+                          id="saveAddress"
+                          className="mr-2"
+                        />
+                        <label htmlFor="saveAddress" className="text-sm text-gray-700">
+                          Save this address for future orders
+                        </label>
+                      </div>
+                    )}
                   </div>
+                )}
+
+                {/* 优惠券输入 */}
+                <div className="glass rounded-2xl p-6 sm:p-8">
+                  <h3 className="text-lg font-semibold mb-4 text-gray-900">
+                    Have a Coupon?
+                  </h3>
+                  <CouponInput
+                    onApply={handleCouponApply}
+                    onRemove={handleCouponRemove}
+                    appliedCode={couponCode || undefined}
+                    discountAmount={discountAmount}
+                  />
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4">
@@ -360,10 +519,10 @@ export default function CheckoutPage() {
                   </button>
                   <button
                     type="submit"
-                    disabled={loading}
+                    disabled={loading || (stock !== null && stock <= 0)}
                     className="flex-1 px-6 py-3 rounded-full bg-gray-900 text-white font-semibold hover:bg-gray-950 shadow-deep transition-all duration-200 ease-apple-standard disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/60 focus-visible:ring-offset-2"
                   >
-                    {loading ? 'Processing...' : 'Continue to Payment'}
+                    {loading ? 'Processing...' : stock !== null && stock <= 0 ? 'Out of Stock' : 'Continue to Payment'}
                   </button>
                 </div>
               </form>
@@ -384,10 +543,26 @@ export default function CheckoutPage() {
                     <span className="text-gray-600">Quantity</span>
                     <span className="font-medium text-gray-900">1</span>
                   </div>
+                  <div className="flex justify-between items-center text-sm">
+                    <span className="text-gray-600">Subtotal</span>
+                    <span className="font-medium text-gray-900">
+                      ${(productPrice / 100).toFixed(2)}
+                    </span>
+                  </div>
+                  {discountAmount > 0 && (
+                    <div className="flex justify-between items-center text-sm text-green-600">
+                      <span>Discount ({couponCode})</span>
+                      <span className="font-medium">
+                        -${(discountAmount / 100).toFixed(2)}
+                      </span>
+                    </div>
+                  )}
                   <div className="border-t border-black/10 pt-4 mt-4">
                     <div className="flex justify-between items-baseline mb-2">
                       <span className="text-lg font-semibold text-gray-900">Total</span>
-                      <span className="text-lg font-semibold text-gray-900">—</span>
+                      <span className="text-lg font-semibold text-gray-900">
+                        ${finalPriceDisplay}
+                      </span>
                     </div>
                     <p className="text-xs text-gray-500 mt-2">
                       Payment will be completed on the next step

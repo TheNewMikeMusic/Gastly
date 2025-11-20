@@ -26,14 +26,14 @@ export function Gallery() {
       <section
         ref={sectionRef}
         id="gallery"
-        className="py-20 px-4 sm:px-6 lg:px-8 bg-[#f8f9fb]"
+        className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8"
       >
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 20 }}
             animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="text-center mb-20"
+            className="text-center mb-12 sm:mb-16"
           >
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-semibold mb-6 text-gray-900 tracking-[-0.022em] leading-[1.08]">
               Designed for Your Space

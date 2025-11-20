@@ -48,7 +48,20 @@ export async function POST(request: Request) {
     }
     
     // Get shipping data from request body
-    const shippingData: ShippingData = await request.json()
+    const body = await request.json()
+    const shippingData: ShippingData = body
+    const couponCode = body.couponCode
+    
+    // 初步检查库存（最终检查在事务内进行）
+    try {
+      const { checkStock } = await import('@/lib/inventory')
+      const inStock = await checkStock('maclock-default', 1)
+      if (!inStock) {
+        return Response.json({ error: 'Product is out of stock' }, { status: 400 })
+      }
+    } catch (error) {
+      console.warn('Failed to check stock, continuing anyway:', error)
+    }
     
     // 如果没有 Clerk，使用基于邮箱的临时用户 ID
     if (!userId) {
@@ -62,6 +75,26 @@ export async function POST(request: Request) {
         !shippingData.address || !shippingData.city || !shippingData.state || 
         !shippingData.zip || !shippingData.country) {
       return Response.json({ error: 'Missing required shipping information' }, { status: 400 })
+    }
+
+    // 验证和应用优惠券
+    let discountAmount = 0
+    if (couponCode) {
+      try {
+        const { validateCoupon } = await import('@/lib/coupon')
+        const priceId = process.env.NEXT_PUBLIC_STRIPE_PRICE_ID
+        if (priceId) {
+          const stripe = getStripe()
+          const price = await stripe.prices.retrieve(priceId)
+          const orderAmount = price.unit_amount || 0
+          const couponResult = await validateCoupon(couponCode, orderAmount)
+          if (couponResult.valid) {
+            discountAmount = couponResult.discountAmount
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to validate coupon, continuing without discount:', error)
+      }
     }
 
     const priceId = process.env.NEXT_PUBLIC_STRIPE_PRICE_ID
@@ -83,8 +116,10 @@ export async function POST(request: Request) {
     
     // 获取价格信息以确定是订阅还是单次支付
     let priceMode: 'payment' | 'subscription' = 'payment'
+    let basePrice: number = 0
     try {
       const price = await stripe.prices.retrieve(priceId)
+      basePrice = price.unit_amount || 0
       // 如果价格有 recurring 属性，说明是订阅价格
       if (price.type === 'recurring') {
         priceMode = 'subscription'
@@ -94,6 +129,22 @@ export async function POST(request: Request) {
     } catch (priceError) {
       console.warn('Failed to retrieve price info, defaulting to payment mode:', priceError)
       // 如果获取价格信息失败，默认使用 payment 模式
+    }
+
+    // 如果有优惠券，创建Stripe Coupon并应用到session
+    let discounts: Array<{ coupon: string }> | undefined = undefined
+    if (couponCode && discountAmount > 0) {
+      try {
+        const { createStripeCoupon } = await import('@/lib/coupon')
+        const stripeCouponId = await createStripeCoupon(couponCode)
+        if (stripeCouponId) {
+          discounts = [{ coupon: stripeCouponId }]
+        } else {
+          console.warn('Failed to create Stripe coupon, continuing without discount')
+        }
+      } catch (error) {
+        console.warn('Failed to apply coupon to Stripe session:', error)
+      }
     }
     
     const session = await stripe.checkout.sessions.create({
@@ -106,7 +157,8 @@ export async function POST(request: Request) {
         },
       ],
       currency: 'usd',
-      allow_promotion_codes: true,
+      allow_promotion_codes: !couponCode, // 如果已使用优惠券，禁用promotion codes
+      ...(discounts ? { discounts } : {}),
       ...(priceMode === 'payment' ? {
         // 单次支付模式：收集配送地址
         shipping_address_collection: {
@@ -131,34 +183,72 @@ export async function POST(request: Request) {
         shippingState: shippingData.state,
         shippingZip: shippingData.zip,
         shippingCountry: shippingData.country,
+        couponCode: couponCode || '',
       },
     })
 
-    // Create order record with shipping information
+    // 使用事务创建订单并预留库存
+    const { prisma } = await import('@/lib/prisma')
     try {
-      const { prisma } = await import('@/lib/prisma')
-      await prisma.order.create({
-        data: {
-          userId: userId,
-          amount: session.amount_total || 0,
-          currency: session.currency || 'usd',
-          status: 'pending',
-          stripeSessionId: session.id,
-          shippingName: shippingData.name,
-          shippingPhone: shippingData.phone,
-          shippingEmail: shippingData.email,
-          shippingAddress: shippingData.address,
-          shippingCity: shippingData.city,
-          shippingState: shippingData.state,
-          shippingZip: shippingData.zip,
-          shippingCountry: shippingData.country,
-        },
+      await prisma.$transaction(async (tx) => {
+        // 检查并预留库存（在事务内）
+        const { checkStock, reserveStock } = await import('@/lib/inventory')
+        const inStock = await checkStock('maclock-default', 1, tx)
+        if (!inStock) {
+          throw new Error('Product is out of stock')
+        }
+
+        const reserved = await reserveStock('maclock-default', 1, tx)
+        if (!reserved) {
+          throw new Error('Failed to reserve stock')
+        }
+
+        // 创建订单记录，设置预留时间
+        // 注意：如果优惠券已应用到Stripe session，session.amount_total已经是折扣后的金额
+        // 但此时session可能还未完成，所以使用basePrice减去discountAmount
+        const orderAmount = basePrice > 0 ? basePrice - discountAmount : (session.amount_total || 0)
+        await tx.order.create({
+          data: {
+            userId: userId,
+            amount: orderAmount, // 应用折扣后的金额（webhook中会用实际支付金额更新）
+            currency: session.currency || 'usd',
+            status: 'pending',
+            stripeSessionId: session.id,
+            couponCode: couponCode || null,
+            discountAmount: discountAmount,
+            reservedAt: new Date(), // 记录预留时间
+            shippingName: shippingData.name,
+            shippingPhone: shippingData.phone,
+            shippingEmail: shippingData.email,
+            shippingAddress: shippingData.address,
+            shippingCity: shippingData.city,
+            shippingState: shippingData.state,
+            shippingZip: shippingData.zip,
+            shippingCountry: shippingData.country,
+          },
+        })
       })
-    } catch (dbError) {
+
+      // 在事务外更新优惠券使用次数
+      if (couponCode) {
+        try {
+          const { applyCoupon } = await import('@/lib/coupon')
+          await applyCoupon(couponCode, session.id)
+        } catch (error) {
+          console.warn('Failed to apply coupon:', error)
+          // 不影响订单创建，可以在webhook中重试
+        }
+      }
+    } catch (dbError: any) {
       // 如果数据库操作失败，记录错误但继续返回 Stripe session URL
       // 这样用户仍然可以完成支付，订单可以在 webhook 中创建
       console.warn('Failed to create order record:', dbError)
       console.warn('Stripe session created successfully, but order record failed. Session ID:', session.id)
+      
+      // 如果是库存不足错误，返回错误
+      if (dbError.message?.includes('stock')) {
+        return Response.json({ error: dbError.message }, { status: 400 })
+      }
     }
 
     return Response.json({ url: session.url })

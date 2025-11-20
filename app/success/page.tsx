@@ -39,34 +39,48 @@ export default async function SuccessPage({
     )
   }
 
-  // Verify session and update order
+  // Verify session and get order
+  // Note: Order status update is handled by webhook, this page just displays the result
   try {
     const stripe = getStripe()
     const session = await stripe.checkout.sessions.retrieve(sessionId)
     
-    if (session.payment_status === 'paid') {
-      await prisma.order.updateMany({
-        where: { stripeSessionId: sessionId },
-        data: { status: 'paid' },
+    // Get order (may not be updated yet if webhook hasn't processed)
+    const order = await prisma.order.findFirst({
+      where: { stripeSessionId: sessionId },
+    })
+
+    if (order && order.userId === userId) {
+      // Create thread for buyer (if not exists)
+      const existingThread = await prisma.thread.findFirst({
+        where: { buyerId: userId },
       })
 
-      // Create thread for buyer
-      const order = await prisma.order.findFirst({
-        where: { stripeSessionId: sessionId },
-      })
-
-      if (order && order.userId === userId) {
-        // Check if thread already exists
-        const existingThread = await prisma.thread.findFirst({
-          where: { buyerId: userId },
+      if (!existingThread) {
+        await prisma.thread.create({
+          data: {
+            buyerId: userId,
+          },
         })
+      }
 
-        if (!existingThread) {
-          await prisma.thread.create({
-            data: {
-              buyerId: userId,
-            },
+      // Send order confirmation email (if not sent yet and webhook hasn't processed)
+      // This is a fallback in case webhook fails
+      if (
+        session.payment_status === 'paid' &&
+        !order.confirmationEmailSent &&
+        order.shippingEmail &&
+        order.status === 'pending'
+      ) {
+        try {
+          const { sendOrderConfirmationEmail } = await import('@/lib/email')
+          await sendOrderConfirmationEmail(order)
+          await prisma.order.update({
+            where: { id: order.id },
+            data: { confirmationEmailSent: true },
           })
+        } catch (emailError) {
+          console.error('Failed to send confirmation email:', emailError)
         }
       }
     }

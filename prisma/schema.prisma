@@ -11,25 +11,51 @@ datasource db {
 }
 
 model Order {
-  id              String   @id @default(cuid())
-  userId          String // Clerk user ID
-  amount          Int // in cents
-  currency        String   @default("usd")
-  status          String   @default("pending") // pending, paid, cancelled, refunded
-  stripeSessionId String?  @unique
+  id                    String    @id @default(cuid())
+  userId                String // Clerk user ID
+  amount                Int // in cents
+  currency              String    @default("usd")
+  status                String    @default("pending") // pending, paid, cancelled, refunded
+  stripeSessionId       String?   @unique
+  // 优惠券信息
+  couponCode            String?
+  discountAmount        Int?      @default(0) // 折扣金额（分）
   // 物流信息
-  shippingName    String?
-  shippingPhone   String?
-  shippingEmail   String?
-  shippingAddress String?  @db.Text
-  shippingCity    String?
-  shippingState   String?
-  shippingZip     String?
-  shippingCountry String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  shippingName          String?
+  shippingPhone         String?
+  shippingEmail         String?
+  shippingAddress       String?   @db.Text
+  shippingCity          String?
+  shippingState         String?
+  shippingZip           String?
+  shippingCountry       String?
+  // Logistics tracking (4PX)
+  trackingNumber        String?
+  trackingCarrier       String    @default("4PX")
+  trackingStatus        String    @default("pending")
+  trackingEta           DateTime?
+  trackingLastSyncedAt  DateTime?
+  trackingEvents        Json?
+  trackingMeta          Json?
+  // 退款信息
+  refundedAt            DateTime?
+  refundAmount          Int?
+  refundReason          String?   @db.Text
+  // 邮件通知状态
+  emailSent             Boolean   @default(false)
+  confirmationEmailSent Boolean   @default(false)
+  shippingEmailSent     Boolean   @default(false)
+  // 库存预留时间（30分钟过期）
+  reservedAt            DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 
   @@index([userId])
+  @@index([trackingNumber])
+  @@index([couponCode])
+  @@index([status])
+  @@index([reservedAt])
+  @@index([status, reservedAt])
 }
 
 model Thread {
@@ -55,4 +81,94 @@ model Message {
 
   @@index([threadId])
   @@index([authorId])
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String?  @db.Text
+  price       Int // 价格（分）
+  currency    String   @default("usd")
+  stock       Int      @default(0) // 库存数量
+  sku         String?  @unique
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([sku])
+  @@index([isActive])
+}
+
+model Coupon {
+  id            String   @id @default(cuid())
+  code          String   @unique
+  description   String?  @db.Text
+  discountType  String // "percentage" or "fixed"
+  discountValue Int // 折扣值（百分比或固定金额分）
+  minAmount     Int? // 最低消费金额（分）
+  maxDiscount   Int? // 最大折扣金额（分，仅百分比时有效）
+  usageLimit    Int? // 使用次数限制
+  usedCount     Int      @default(0) // 已使用次数
+  validFrom     DateTime
+  validUntil    DateTime
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([code])
+  @@index([isActive])
+  @@index([validUntil])
+}
+
+model Newsletter {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  isActive       Boolean   @default(true)
+  subscribedAt   DateTime  @default(now())
+  unsubscribedAt DateTime?
+
+  @@index([email])
+  @@index([isActive])
+}
+
+model Waitlist {
+  id         String    @id @default(cuid())
+  email      String
+  userId     String? // Clerk user ID（可选）
+  notified   Boolean   @default(false)
+  notifiedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@unique([email])
+  @@index([email])
+  @@index([notified])
+}
+
+model SavedAddress {
+  id        String   @id @default(cuid())
+  userId    String // Clerk user ID
+  label     String? // 地址标签（如：Home, Office）
+  name      String
+  phone     String
+  email     String?
+  address   String   @db.Text
+  city      String
+  state     String?
+  zip       String
+  country   String
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Wishlist {
+  id        String   @id @default(cuid())
+  userId    String // Clerk user ID
+  productId String   @default("maclock-default")
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+  @@index([userId])
 }

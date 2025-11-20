@@ -13,6 +13,7 @@ const navItems = [
   { label: 'FAQ', href: '/#faq' },
 ]
 
+
 export function Navigation() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -38,8 +39,6 @@ export function Navigation() {
     ? 'bg-white/90 md:bg-white/90 border border-black/10 text-gray-900 shadow-medium backdrop-blur-[20px]'
     : 'bg-white/75 md:bg-white/60 border border-black/10 text-gray-900 shadow-medium backdrop-blur-[20px]'
 
-  const allLinks = [...navItems, { label: 'Contact', href: '/contact' }]
-
   return (
     <>
       <motion.nav 
@@ -60,7 +59,7 @@ export function Navigation() {
               Hello1984
             </Link>
             <nav className="hidden md:flex items-center gap-4" aria-label="Primary">
-              {allLinks.map((item) => (
+              {navItems.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
@@ -69,6 +68,22 @@ export function Navigation() {
                   {item.label}
                 </Link>
               ))}
+              <SignedIn>
+                <Link
+                  href="/account"
+                  className="text-gray-700 hover:text-gray-900 rounded-full px-3 py-1.5 text-sm font-medium transition-colors duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/30"
+                >
+                  My Orders
+                </Link>
+              </SignedIn>
+              <SignedOut>
+                <Link
+                  href="/contact"
+                  className="text-gray-700 hover:text-gray-900 rounded-full px-3 py-1.5 text-sm font-medium transition-colors duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/30"
+                >
+                  Contact
+                </Link>
+              </SignedOut>
             </nav>
             <div className="flex items-center gap-3">
               <SignedIn>
@@ -136,7 +151,7 @@ export function Navigation() {
               onClick={(e) => e.stopPropagation()}
             >
               <nav className="space-y-3" aria-label="Mobile navigation">
-                {allLinks.map((item) => (
+                {navItems.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
@@ -152,9 +167,18 @@ export function Navigation() {
                     className="block rounded-2xl px-4 py-3 text-base font-semibold text-gray-900 hover:bg-gray-50 transition-colors duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/40"
                     onClick={() => setMenuOpen(false)}
                   >
-                    Account
+                    My Orders
                   </Link>
                 </SignedIn>
+                <SignedOut>
+                  <Link
+                    href="/contact"
+                    className="block rounded-2xl px-4 py-3 text-base font-semibold text-gray-900 hover:bg-gray-50 transition-colors duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/40"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Contact
+                  </Link>
+                </SignedOut>
               </nav>
             </motion.div>
           </motion.div>

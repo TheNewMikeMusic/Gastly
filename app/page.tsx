@@ -42,17 +42,35 @@ export default function HomePage() {
   return (
     <>
       <Navigation />
-      <main>
-        <Hero />
-        <TrustStrip />
-        <NarrativeBlocks />
-        <FeaturesGrid />
-        <Gallery />
-        <SellerReviews />
-        <SpecStrip />
-        <FAQ />
+      <main className="page-stack relative overflow-hidden">
+        <div className="page-stack__glow page-stack__glow--one" aria-hidden="true" />
+        <div className="page-stack__glow page-stack__glow--two" aria-hidden="true" />
+        <div className="relative z-10 space-y-0">
+          <Hero />
+          <div className="section-ambient">
+            <TrustStrip />
+          </div>
+          <div className="section-ambient">
+            <NarrativeBlocks />
+          </div>
+          <div className="section-ambient">
+            <FeaturesGrid />
+          </div>
+          <div className="section-ambient">
+            <Gallery />
+          </div>
+          <div className="section-ambient">
+            <SellerReviews />
+          </div>
+          <SpecStrip />
+          <div className="section-ambient">
+            <FAQ />
+          </div>
+        </div>
       </main>
-      <Footer />
+      <div className="section-ambient section-ambient--footer">
+        <Footer />
+      </div>
     </>
   )
 }

@@ -28,8 +28,8 @@ export function NarrativeBlocks() {
   const prefersReducedMotion = useReducedMotion()
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-[#f8f9fb]">
-      <div className="max-w-7xl mx-auto space-y-24">
+    <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto space-y-16 lg:space-y-24">
         {narratives.map((narrative, index) => (
           <NarrativeBlock
             key={narrative.prefix}
@@ -61,7 +61,7 @@ function NarrativeBlock({
       initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 32 }}
       animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
-      className={`flex flex-col ${narrative.imageLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-12 lg:gap-20 items-center`}
+      className={`flex flex-col ${narrative.imageLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-10 lg:gap-20 items-center`}
     >
       <motion.div 
         initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, scale: 0.96 }}
