@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 interface AnalyticsData {
   totalOrders: number
@@ -22,11 +22,7 @@ export function AdminAnalytics() {
     endDate: '',
   })
 
-  useEffect(() => {
-    loadAnalytics()
-  }, [])
-
-  const loadAnalytics = async () => {
+  const loadAnalytics = useCallback(async () => {
     setLoading(true)
     try {
       const params = new URLSearchParams()
@@ -41,7 +37,11 @@ export function AdminAnalytics() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [dateRange])
+
+  useEffect(() => {
+    loadAnalytics()
+  }, [loadAnalytics])
 
   const handleDateChange = () => {
     loadAnalytics()

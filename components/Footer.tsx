@@ -80,6 +80,14 @@ export function Footer() {
                   Privacy
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/admin/login"
+                  className="text-[#86868b] active:text-[#1d1d1f] hover:text-[#1d1d1f] transition-colors duration-150 ease-apple-standard text-xs focus:outline-none focus:ring-2 focus:ring-[#007aff] focus:ring-offset-2 rounded py-1.5 block touch-manipulation"
+                >
+                  Admin
+                </Link>
+              </li>
             </ul>
             <p className="text-[#86868b] text-xs leading-relaxed mt-4 hidden sm:block">
               Hello1984 is an independent homage inspired by the Macintosh. Apple Inc. is not affiliated or involved.

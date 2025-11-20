@@ -41,7 +41,7 @@ export function AboutUs() {
             Built with intention
           </h2>
           <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto leading-[1.6] tracking-[-0.011em] px-4">
-            Hello1984 is more than a clock—it's a statement about thoughtful design, analog warmth, and the joy of well-made things.
+            Hello1984 is more than a clock—it&apos;s a statement about thoughtful design, analog warmth, and the joy of well-made things.
           </p>
         </motion.div>
 

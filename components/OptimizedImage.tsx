@@ -82,6 +82,7 @@ export function OptimizedImage({
           <span className="text-gray-400 text-sm">Image not found</span>
         </div>
       ) : (
+        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={imageSrc}
           alt={alt || 'Maclock product image'}

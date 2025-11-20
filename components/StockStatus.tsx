@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 interface StockStatusProps {
   productId?: string
@@ -14,11 +14,7 @@ export function StockStatus({ productId = 'maclock-default' }: StockStatusProps)
   const [waitlistLoading, setWaitlistLoading] = useState(false)
   const [waitlistSuccess, setWaitlistSuccess] = useState(false)
 
-  useEffect(() => {
-    checkStock()
-  }, [productId])
-
-  const checkStock = async () => {
+  const checkStock = useCallback(async () => {
     try {
       const response = await fetch(`/api/inventory/check?productId=${productId}&quantity=1`)
       const data = await response.json()
@@ -28,7 +24,11 @@ export function StockStatus({ productId = 'maclock-default' }: StockStatusProps)
     } finally {
       setLoading(false)
     }
-  }
+  }, [productId])
+
+  useEffect(() => {
+    checkStock()
+  }, [checkStock])
 
   const handleWaitlistSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

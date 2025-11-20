@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { FormError } from '@/components/FormError'
 import * as validation from '@/lib/validation'
 import { useRouter } from 'next/navigation'
@@ -63,6 +63,47 @@ export default function CheckoutPage() {
     country: 'US',
   })
 
+  const handleSelectAddress = useCallback((address: Address) => {
+    setFormData({
+      name: address.name,
+      phone: address.phone,
+      email: address.email || '',
+      address: address.address,
+      city: address.city,
+      state: address.state || '',
+      zip: address.zip,
+      country: address.country,
+    })
+    setSelectedAddressId(address.id)
+    setUseSavedAddress(true)
+  }, [])
+
+  const loadSavedAddresses = useCallback(async () => {
+    try {
+      const response = await fetch('/api/addresses')
+      const data = await response.json()
+      setSavedAddresses(data.addresses || [])
+      
+      // 如果有默认地址，自动选择
+      const defaultAddress = data.addresses?.find((a: Address) => a.isDefault)
+      if (defaultAddress) {
+        handleSelectAddress(defaultAddress)
+      }
+    } catch (error) {
+      console.error('Failed to load addresses:', error)
+    }
+  }, [handleSelectAddress])
+
+  const checkStock = useCallback(async () => {
+    try {
+      const response = await fetch('/api/inventory/check?productId=maclock-default&quantity=1')
+      const data = await response.json()
+      setStock(data.stock)
+    } catch (error) {
+      console.error('Failed to check stock:', error)
+    }
+  }, [])
+
   useEffect(() => {
     const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
     const isClerkConfigured = publishableKey && publishableKey !== 'pk_test_dummy' && !publishableKey.includes('你的Clerk')
@@ -88,48 +129,7 @@ export default function CheckoutPage() {
 
     // 检查库存
     checkStock()
-  }, [user, isLoaded, router, isSignedIn])
-
-  const loadSavedAddresses = async () => {
-    try {
-      const response = await fetch('/api/addresses')
-      const data = await response.json()
-      setSavedAddresses(data.addresses || [])
-      
-      // 如果有默认地址，自动选择
-      const defaultAddress = data.addresses?.find((a: Address) => a.isDefault)
-      if (defaultAddress) {
-        handleSelectAddress(defaultAddress)
-      }
-    } catch (error) {
-      console.error('Failed to load addresses:', error)
-    }
-  }
-
-  const checkStock = async () => {
-    try {
-      const response = await fetch('/api/inventory/check?productId=maclock-default&quantity=1')
-      const data = await response.json()
-      setStock(data.stock)
-    } catch (error) {
-      console.error('Failed to check stock:', error)
-    }
-  }
-
-  const handleSelectAddress = (address: Address) => {
-    setFormData({
-      name: address.name,
-      phone: address.phone,
-      email: address.email || '',
-      address: address.address,
-      city: address.city,
-      state: address.state || '',
-      zip: address.zip,
-      country: address.country,
-    })
-    setSelectedAddressId(address.id)
-    setUseSavedAddress(true)
-  }
+  }, [user, isLoaded, router, isSignedIn, loadSavedAddresses, checkStock])
 
   const handleCouponApply = (code: string, discount: number) => {
     setCouponCode(code)

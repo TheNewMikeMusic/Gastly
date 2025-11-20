@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useAuth } from '@clerk/nextjs'
 
 interface WishlistButtonProps {
@@ -13,13 +13,7 @@ export function WishlistButton({ productId = 'maclock-default', variant = 'icon'
   const [isInWishlist, setIsInWishlist] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    if (isSignedIn) {
-      checkWishlist()
-    }
-  }, [isSignedIn, productId])
-
-  const checkWishlist = async () => {
+  const checkWishlist = useCallback(async () => {
     try {
       const response = await fetch('/api/wishlist')
       const data = await response.json()
@@ -27,7 +21,13 @@ export function WishlistButton({ productId = 'maclock-default', variant = 'icon'
     } catch (error) {
       console.error('Failed to check wishlist:', error)
     }
-  }
+  }, [productId])
+
+  useEffect(() => {
+    if (isSignedIn) {
+      checkWishlist()
+    }
+  }, [isSignedIn, checkWishlist])
 
   const toggleWishlist = async () => {
     if (!isSignedIn) {
