@@ -3,14 +3,33 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Order } from '@prisma/client'
+import { Pagination } from './Pagination'
+import { MergeOrdersButton } from './MergeOrdersButton'
 
 interface AdminOrdersListProps {
   orders: Order[]
+  pagination?: {
+    currentPage: number
+    totalPages: number
+    totalItems: number
+    itemsPerPage: number
+  }
 }
 
-export function AdminOrdersList({ orders }: AdminOrdersListProps) {
+export function AdminOrdersList({ orders, pagination }: AdminOrdersListProps) {
   const [filterStatus, setFilterStatus] = useState<string>('all')
   const [searchQuery, setSearchQuery] = useState('')
+  const [selectedOrders, setSelectedOrders] = useState<Set<string>>(new Set())
+
+  const toggleOrderSelection = (orderId: string) => {
+    const newSelected = new Set(selectedOrders)
+    if (newSelected.has(orderId)) {
+      newSelected.delete(orderId)
+    } else {
+      newSelected.add(orderId)
+    }
+    setSelectedOrders(newSelected)
+  }
 
   // 统计数据
   const stats = {
@@ -55,8 +74,15 @@ export function AdminOrdersList({ orders }: AdminOrdersListProps) {
         <StatCard label="待发货" value={stats.noTracking} color="orange" />
       </div>
 
-      {/* 筛选和搜索 */}
+      {/* 批量操作和筛选 */}
       <div className="glass rounded-xl p-4 space-y-4">
+        {/* 批量操作 */}
+        <MergeOrdersButton 
+          orders={filteredOrders.filter((o) => o.status === 'paid' && !o.trackingNumber)}
+          selectedOrders={selectedOrders}
+          onSelectionChange={setSelectedOrders}
+        />
+        
         <div className="flex flex-col sm:flex-row gap-4">
           {/* 搜索框 */}
           <div className="flex-1">
@@ -113,130 +139,159 @@ export function AdminOrdersList({ orders }: AdminOrdersListProps) {
         </div>
       ) : (
         <div className="space-y-4">
-          {filteredOrders.map((order) => (
-            <div
-              key={order.id}
-              className="glass rounded-xl p-6 hover:shadow-lg transition-all border border-gray-200"
-            >
-              <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
-                <div className="flex-1 space-y-3">
-                  {/* 订单头部信息 */}
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-3 flex-wrap">
-                        <span className="font-semibold text-gray-900">
-                          订单号: {order.id.slice(0, 8).toUpperCase()}
+          {filteredOrders.map((order) => {
+            const isSelected = selectedOrders.has(order.id)
+            const canSelect = order.status === 'paid' && !order.trackingNumber
+            
+            return (
+              <div
+                key={order.id}
+                className={`glass rounded-xl p-6 hover:shadow-lg transition-all border ${
+                  isSelected ? 'border-blue-500 bg-blue-50/30' : 'border-gray-200'
+                }`}
+              >
+                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                  <div className="flex-1 space-y-3">
+                    {/* 订单头部信息 */}
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="space-y-1 flex-1">
+                        <div className="flex items-center gap-3 flex-wrap">
+                          {/* 批量选择复选框 */}
+                          {canSelect && (
+                            <input
+                              type="checkbox"
+                              checked={isSelected}
+                              onChange={() => toggleOrderSelection(order.id)}
+                              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                            />
+                          )}
+                          <span className="font-semibold text-gray-900">
+                            订单号: {order.id.slice(0, 8).toUpperCase()}
+                          </span>
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-medium ${
+                              order.status === 'paid'
+                                ? 'bg-green-100 text-green-800'
+                                : order.status === 'pending'
+                                ? 'bg-yellow-100 text-yellow-800'
+                                : 'bg-gray-100 text-gray-800'
+                            }`}
+                          >
+                            {order.status === 'paid' ? '已支付' : order.status === 'pending' ? '待支付' : order.status}
+                          </span>
+                          {order.trackingNumber && (
+                            <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                              已发货
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          创建时间:{' '}
+                          {new Date(order.createdAt).toLocaleString('zh-CN', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-lg font-bold text-gray-900">
+                          {order.currency.toUpperCase()} {(order.amount / 100).toFixed(2)}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 收货人信息 */}
+                    {order.shippingName && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <span className="text-gray-500">收货人: </span>
+                          <span className="text-gray-900 font-medium">{order.shippingName}</span>
+                        </div>
+                        {order.shippingPhone && (
+                          <div>
+                            <span className="text-gray-500">电话: </span>
+                            <span className="text-gray-900 font-medium">{order.shippingPhone}</span>
+                          </div>
+                        )}
+                        {order.shippingEmail && (
+                          <div>
+                            <span className="text-gray-500">邮箱: </span>
+                            <span className="text-gray-900 font-medium">{order.shippingEmail}</span>
+                          </div>
+                        )}
+                        {(order.shippingCity || order.shippingCountry) && (
+                          <div>
+                            <span className="text-gray-500">地址: </span>
+                            <span className="text-gray-900 font-medium">
+                              {[order.shippingCity, order.shippingState, order.shippingCountry]
+                                .filter(Boolean)
+                                .join(', ')}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* 详细地址 */}
+                    {order.shippingAddress && (
+                      <div className="text-sm">
+                        <span className="text-gray-500">详细地址: </span>
+                        <span className="text-gray-900">
+                          {order.shippingAddress}
+                          {order.shippingZip && ` (${order.shippingZip})`}
                         </span>
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-medium ${
-                            order.status === 'paid'
-                              ? 'bg-green-100 text-green-800'
-                              : order.status === 'pending'
-                              ? 'bg-yellow-100 text-yellow-800'
-                              : 'bg-gray-100 text-gray-800'
-                          }`}
-                        >
-                          {order.status === 'paid' ? '已支付' : order.status === 'pending' ? '待支付' : order.status}
+                      </div>
+                    )}
+
+                    {/* 跟踪号 */}
+                    {order.trackingNumber && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-gray-500">跟踪号: </span>
+                        <span className="font-mono font-semibold text-gray-900">
+                          {order.trackingNumber}
                         </span>
-                        {order.trackingNumber && (
-                          <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                            已发货
+                        {order.trackingStatus && (
+                          <span className="px-2 py-0.5 rounded text-xs bg-gray-100 text-gray-700">
+                            {order.trackingStatus}
                           </span>
                         )}
                       </div>
-                      <div className="text-sm text-gray-600">
-                        创建时间:{' '}
-                        {new Date(order.createdAt).toLocaleString('zh-CN', {
-                          year: 'numeric',
-                          month: '2-digit',
-                          day: '2-digit',
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })}
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-lg font-bold text-gray-900">
-                        {order.currency.toUpperCase()} {(order.amount / 100).toFixed(2)}
-                      </div>
-                    </div>
+                    )}
                   </div>
 
-                  {/* 收货人信息 */}
-                  {order.shippingName && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <span className="text-gray-500">收货人: </span>
-                        <span className="text-gray-900 font-medium">{order.shippingName}</span>
-                      </div>
-                      {order.shippingPhone && (
-                        <div>
-                          <span className="text-gray-500">电话: </span>
-                          <span className="text-gray-900 font-medium">{order.shippingPhone}</span>
-                        </div>
-                      )}
-                      {order.shippingEmail && (
-                        <div>
-                          <span className="text-gray-500">邮箱: </span>
-                          <span className="text-gray-900 font-medium">{order.shippingEmail}</span>
-                        </div>
-                      )}
-                      {(order.shippingCity || order.shippingCountry) && (
-                        <div>
-                          <span className="text-gray-500">地址: </span>
-                          <span className="text-gray-900 font-medium">
-                            {[order.shippingCity, order.shippingState, order.shippingCountry]
-                              .filter(Boolean)
-                              .join(', ')}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* 详细地址 */}
-                  {order.shippingAddress && (
-                    <div className="text-sm">
-                      <span className="text-gray-500">详细地址: </span>
-                      <span className="text-gray-900">
-                        {order.shippingAddress}
-                        {order.shippingZip && ` (${order.shippingZip})`}
-                      </span>
-                    </div>
-                  )}
-
-                  {/* 跟踪号 */}
-                  {order.trackingNumber && (
-                    <div className="flex items-center gap-2 text-sm">
-                      <span className="text-gray-500">跟踪号: </span>
-                      <span className="font-mono font-semibold text-gray-900">
-                        {order.trackingNumber}
-                      </span>
-                      {order.trackingStatus && (
-                        <span className="px-2 py-0.5 rounded text-xs bg-gray-100 text-gray-700">
-                          {order.trackingStatus}
-                        </span>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                {/* 操作按钮 */}
-                <div className="flex flex-col gap-2 lg:items-end">
-                  <Link
-                    href={`/admin/orders/${order.id}`}
-                    className="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-950 transition-colors text-center whitespace-nowrap"
-                  >
-                    查看详情
-                  </Link>
-                  {order.status === 'paid' && !order.trackingNumber && (
-                    <span className="text-xs text-orange-600 font-medium">需要发货</span>
-                  )}
+                  {/* 操作按钮 */}
+                  <div className="flex flex-col gap-2 lg:items-end">
+                    <Link
+                      href={`/admin/orders/${order.id}`}
+                      className="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-950 transition-colors text-center whitespace-nowrap"
+                    >
+                      查看详情
+                    </Link>
+                    {order.status === 'paid' && !order.trackingNumber && (
+                      <span className="text-xs text-orange-600 font-medium">需要发货</span>
+                    )}
+                    {order.status === 'paid' && order.trackingNumber && (
+                      <span className="text-xs text-green-600 font-medium">已创建运单</span>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
+      )}
+
+      {/* 分页 */}
+      {pagination && (
+        <Pagination
+          currentPage={pagination.currentPage}
+          totalPages={pagination.totalPages}
+          totalItems={pagination.totalItems}
+          itemsPerPage={pagination.itemsPerPage}
+        />
       )}
     </div>
   )

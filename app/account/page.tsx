@@ -3,6 +3,9 @@ import { SellerReviews } from '@/components/SellerReviews'
 import { TrackingStatusBadge } from '@/components/TrackingStatusBadge'
 import { SavedAddresses } from '@/components/SavedAddresses'
 import { CancelOrderButton } from '@/components/CancelOrderButton'
+import { OrderSearchFilter } from '@/components/OrderSearchFilter'
+import { Pagination } from '@/components/Pagination'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { auth, currentUser } from '@clerk/nextjs/server'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
@@ -16,20 +19,43 @@ type OrderWithShipping = Awaited<ReturnType<typeof prisma.order.findMany>>[0] & 
 
 type OrderWithTracking = Awaited<ReturnType<typeof enrichOrdersWithTracking>>[number]
 
-async function getOrders(userId: string) {
+async function getOrders(userId: string, page: number = 1, pageSize: number = 10) {
   try {
-    return await prisma.order.findMany({
-      where: { userId },
-      orderBy: { createdAt: 'desc' },
-      take: 50, // 增加显示数量
-    })
+    const skip = (page - 1) * pageSize
+    const [orders, total] = await Promise.all([
+      prisma.order.findMany({
+        where: { userId },
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: pageSize,
+      }),
+      prisma.order.count({ where: { userId } }),
+    ])
+
+    return {
+      orders,
+      total,
+      page,
+      pageSize,
+      totalPages: Math.ceil(total / pageSize),
+    }
   } catch (error) {
     console.error('Failed to load orders', error)
-    return []
+    return {
+      orders: [],
+      total: 0,
+      page: 1,
+      pageSize: 10,
+      totalPages: 0,
+    }
   }
 }
 
-export default async function AccountPage() {
+export default async function AccountPage({
+  searchParams,
+}: {
+  searchParams: { page?: string; search?: string; status?: string; sort?: string }
+}) {
   const { userId } = await auth()
 
   if (!userId) {
@@ -37,29 +63,34 @@ export default async function AccountPage() {
   }
 
   const user = await currentUser()
-  const orders = await getOrders(userId)
-  const ordersWithTracking: OrderWithTracking[] = await enrichOrdersWithTracking(orders)
+  const page = parseInt(searchParams.page || '1', 10)
+  const ordersData = await getOrders(userId, page, 10)
+  const ordersWithTracking: OrderWithTracking[] = await enrichOrdersWithTracking(ordersData.orders)
 
-  // 统计信息
-  const totalOrders = orders.length
-  const paidOrders = orders.filter((o) => o.status === 'paid').length
-  const shippedOrders = ordersWithTracking.filter((o) => o.status === 'paid' && o.trackingSnapshot?.trackingNumber).length
+  // 统计信息（基于所有订单，不仅仅是当前页）
+  const allOrdersStats = await prisma.order.findMany({
+    where: { userId },
+  })
+  const totalOrders = ordersData.total
+  const paidOrders = allOrdersStats.filter((o) => o.status === 'paid').length
+  const shippedOrders = allOrdersStats.filter((o) => o.status === 'paid' && (o as any).trackingNumber).length
   const deliveredOrders = ordersWithTracking.filter((o) => o.trackingSnapshot?.status === 'delivered').length
 
   return (
     <>
       <Navigation />
-      <div className="min-h-screen bg-white pt-24 pb-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto space-y-8">
-          <header className="space-y-4">
-            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900">My Orders</h1>
-            <p className="text-lg text-gray-700">
+      <ErrorBoundary>
+        <div className="min-h-screen bg-white page-content pb-20 px-4 sm:px-6 lg:px-8 safe-area-bottom">
+        <div className="max-w-6xl mx-auto space-y-6 sm:space-y-8">
+          <header className="space-y-3 sm:space-y-4">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">My Orders</h1>
+            <p className="text-base sm:text-lg text-gray-700">
               View and track all your orders and shipping information.
             </p>
           </header>
 
           {/* 统计卡片 */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
             <StatCard label="Total Orders" value={totalOrders} />
             <StatCard label="Paid Orders" value={paidOrders} />
             <StatCard label="Shipped" value={shippedOrders} />
@@ -67,9 +98,9 @@ export default async function AccountPage() {
           </div>
 
           {/* 账户信息 */}
-          <section className="glass rounded-2xl p-6 sm:p-8">
-            <h2 className="text-2xl font-semibold mb-6 text-gray-900">Account Information</h2>
-            <dl className="grid gap-6 sm:grid-cols-2">
+          <section className="glass rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8">
+            <h2 className="text-xl sm:text-2xl font-semibold mb-5 sm:mb-6 text-gray-900">Account Information</h2>
+            <dl className="grid gap-5 sm:gap-6 sm:grid-cols-2">
               <InfoField label="Full Name" value={user?.fullName || 'Not set'} />
               <InfoField
                 label="Email Address"
@@ -94,27 +125,37 @@ export default async function AccountPage() {
           </section>
 
           {/* 订单列表 */}
-          <section className="glass rounded-2xl p-6 sm:p-8 space-y-6">
+          <section className="glass rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 space-y-5 sm:space-y-6">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <h2 className="text-2xl font-semibold text-gray-900">Order History</h2>
-                <p className="text-sm text-gray-600">All your orders with shipping and tracking information.</p>
+                <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">Order History</h2>
+                <p className="text-xs sm:text-sm text-gray-600 mt-1">All your orders with shipping and tracking information.</p>
               </div>
             </div>
 
+            {/* 搜索和筛选 */}
+            <OrderSearchFilter 
+              orders={ordersData.orders} 
+            />
+
             {ordersWithTracking.length === 0 ? (
               <div className="text-center py-12">
-                <p className="text-gray-600 mb-4">No orders yet.</p>
-                <Link
-                  href="/checkout"
-                  className="inline-block px-6 py-3 rounded-full bg-gray-900 text-white font-semibold hover:bg-gray-950 shadow-deep transition-all duration-200 ease-apple-standard"
-                >
-                  Start Shopping
-                </Link>
+                <p className="text-gray-600 mb-4">
+                  {ordersData.total === 0 ? 'No orders yet.' : 'No orders match your filters.'}
+                </p>
+                {ordersData.total === 0 && (
+                  <Link
+                    href="/checkout"
+                    className="inline-block px-6 py-3 rounded-full bg-gray-900 text-white font-semibold hover:bg-gray-950 shadow-deep transition-all duration-200 ease-apple-standard"
+                  >
+                    Start Shopping
+                  </Link>
+                )}
               </div>
             ) : (
-              <div className="space-y-4">
-                {ordersWithTracking.map((order) => {
+              <>
+                <div className="space-y-4">
+                  {ordersWithTracking.map((order) => {
                   const shipping = order as OrderWithShipping
                   const tracking = order.trackingSnapshot
                   const lastEvent =
@@ -125,9 +166,9 @@ export default async function AccountPage() {
                   return (
                     <div
                       key={order.id}
-                      className="border border-black/10 rounded-xl p-5 transition-all hover:border-gray-900/20 hover:shadow-md space-y-4"
+                      className="border border-gray-200 rounded-xl sm:rounded-2xl p-4 sm:p-5 transition-all hover:border-gray-300 hover:shadow-md space-y-4 active:scale-[0.99] touch-manipulation"
                     >
-                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
                         <div className="flex-1 space-y-2">
                           <div className="flex items-center gap-3 flex-wrap">
                             <div className="font-semibold text-gray-900">
@@ -173,7 +214,7 @@ export default async function AccountPage() {
                           {tracking && tracking.trackingNumber && (
                             <Link
                               href={`/account/track/${order.id}`}
-                              className="px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-gray-950 transition-colors text-center"
+                              className="px-4 py-2.5 sm:py-2 bg-gray-900 text-white text-sm font-medium rounded-lg active:bg-gray-950 transition-colors text-center min-h-[44px] flex items-center justify-center touch-manipulation"
                             >
                               Track Package
                             </Link>
@@ -278,28 +319,40 @@ export default async function AccountPage() {
                     </div>
                   )
                 })}
-              </div>
+                </div>
+
+                {/* 分页 */}
+                {ordersData.totalPages > 1 && (
+                  <Pagination
+                    currentPage={ordersData.page}
+                    totalPages={ordersData.totalPages}
+                    totalItems={ordersData.total}
+                    itemsPerPage={ordersData.pageSize}
+                  />
+                )}
+              </>
             )}
           </section>
 
           {/* 保存的地址 */}
-          <section className="glass rounded-2xl p-6 sm:p-8">
-            <h2 className="text-2xl font-semibold mb-6 text-gray-900">Saved Addresses</h2>
+          <section className="glass rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8">
+            <h2 className="text-xl sm:text-2xl font-semibold mb-5 sm:mb-6 text-gray-900">Saved Addresses</h2>
             <SavedAddresses showAddButton={true} />
           </section>
 
           <SellerReviews variant="dashboard" />
         </div>
       </div>
+      </ErrorBoundary>
     </>
   )
 }
 
 function StatCard({ label, value }: { label: string; value: number }) {
   return (
-    <div className="glass rounded-xl p-4 text-center">
-      <div className="text-2xl font-bold text-gray-900">{value}</div>
-      <div className="text-sm text-gray-600 mt-1">{label}</div>
+    <div className="glass rounded-xl p-4 sm:p-5 text-center">
+      <div className="text-xl sm:text-2xl font-bold text-gray-900">{value}</div>
+      <div className="text-xs sm:text-sm text-gray-600 mt-1">{label}</div>
     </div>
   )
 }

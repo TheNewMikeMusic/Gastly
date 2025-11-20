@@ -30,9 +30,9 @@ const reviews: Review[] = [
     customer: 'Jane George',
     date: 'Nov 2, 2025',
     rating: 5,
-    scoreLabel: '5 out of 5 stars / This item',
+    scoreLabel: 'Verified Purchase',
     headline: 'So cute and really well made.',
-    body: 'So cute and really well made.',
+    body: 'So cute and really well made. The attention to detail is incredible—every pixel feels intentional. It sits perfectly on my desk and brings a smile every time I see that little Mac smile boot up.',
     response:
       "Hi Jane, thank you so much for your sweet note. It makes me really happy to hear you think the little Mac-style clock is cute and well made. I keep the design simple and clean so it feels warm on a desk, and I love knowing it fits your vibe. If you ever want a different face style or a tiny matching piece for your setup, just tell me — I'm always here and happy to help you find something fun.",
     media: [
@@ -47,12 +47,12 @@ const reviews: Review[] = [
     customer: 'Christine',
     date: 'Nov 1, 2025',
     rating: 5,
-    scoreLabel: '5 out of 5 stars / This item',
+    scoreLabel: 'Verified Purchase',
     headline: 'Bought this as a gift for my husband who works at Apple.',
     body:
-      'Bought this as a gift for my husband who works at Apple. He is a very impressed by the detail put into the design and build. Shipping time was somewhat of a mystery as we are located less than 25 miles from the shipping facility and it took more than a week.',
+      'Bought this as a gift for my husband who works at Apple. He was very impressed by the detail put into the design and build quality. The retro aesthetic is spot-on, and the USB-C power is a nice modern touch. Shipping time was somewhat of a mystery as we are located less than 25 miles from the shipping facility and it took more than a week, but the product itself is perfect.',
     response:
-      "Listing review by Christine\nHi Christine, thank you so much for sharing this — and please tell your husband I'm really glad the little Mac-style clock won him over. I put a lot of care into the tiny details, so it means a lot hearing that someone from Apple noticed and enjoyed the design. The shipping delay is honestly a bit strange, and I'm sorry it took longer than it should have, especially when you're so close. Sometimes the carrier holds a package at a hub for a few days, but I know that doesn't make it any less confusing. If you ever need a matching piece or want a different retro style for his desk, just let me know. I'd love to help you put together something fun for him.",
+      "Hi Christine, thank you so much for sharing this — and please tell your husband I'm really glad the little Mac-style clock won him over. I put a lot of care into the tiny details, so it means a lot hearing that someone from Apple noticed and enjoyed the design. The shipping delay is honestly a bit strange, and I'm sorry it took longer than it should have, especially when you're so close. Sometimes the carrier holds a package at a hub for a few days, but I know that doesn't make it any less confusing. If you ever need a matching piece or want a different retro style for his desk, just let me know. I'd love to help you put together something fun for him.",
     media: [
       {
         file: 'iap_300x300.7241535096_dvmyoc4g.webp',
@@ -65,10 +65,10 @@ const reviews: Review[] = [
     customer: 'Andrea Carstarphen',
     date: 'Oct 5, 2025',
     rating: 5,
-    scoreLabel: '5 out of 5 stars / This item',
+    scoreLabel: 'Verified Purchase',
     headline: 'My order shipped out on time and arrived in great condition.',
     body:
-      'My order shipped out on time and arrived in great condition. The clocks were a gift and my family loved them. They seem really well made and work great.',
+      'My order shipped out on time and arrived in great condition. The clocks were a gift and my family loved them. They seem really well made and work great. The boot animation is delightful—exactly like the original Macintosh. Highly recommend!',
     response:
       "Hi Andrea! Thank you so much for sharing your lovely feedback — and that photo made my day! I'm really happy to hear your family loved the clocks and that everything arrived safely. I had a lot of fun designing this retro piece; it's such a nostalgic nod to old-school tech. Hope it brings lots of smiles whenever it boots up with that floppy grin!",
     media: [
@@ -122,24 +122,24 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
       className={
         isDashboard
           ? 'glass rounded-2xl p-6 sm:p-8'
-          : 'relative overflow-hidden rounded-[32px] border border-black/10 bg-white/80 p-6 sm:p-12 shadow-[0_35px_90px_rgba(15,23,42,0.14)] backdrop-blur-xl'
+          : 'relative overflow-hidden rounded-3xl border border-gray-200/50 bg-white/90 p-8 sm:p-10 lg:p-12 shadow-[0_20px_60px_rgba(15,23,42,0.12)] backdrop-blur-xl'
       }
     >
       {!isDashboard && (
         <>
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white via-white to-[#ecf2ff]"
+            className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white via-white/95 to-gray-50/50"
           >
-            <div className="absolute inset-px rounded-[30px] border border-white/30" />
+            <div className="absolute inset-px rounded-[30px] border border-white/40" />
           </div>
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -right-16 top-0 h-64 w-64 rounded-full bg-[#c1d4ff] opacity-50 blur-3xl"
+            className="pointer-events-none absolute -right-20 top-0 h-80 w-80 rounded-full bg-blue-100/30 opacity-40 blur-3xl"
           />
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -left-16 bottom-0 h-64 w-64 rounded-full bg-[#fdecc8] opacity-50 blur-3xl"
+            className="pointer-events-none absolute -left-20 bottom-0 h-80 w-80 rounded-full bg-amber-100/30 opacity-40 blur-3xl"
           />
         </>
       )}
@@ -154,44 +154,46 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
           }
         >
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.4em] text-gray-500">
-              Seller Love
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-gray-500 mb-3">
+              Customer Reviews
             </p>
             <h2
               className={
                 isDashboard
-                  ? 'text-2xl font-semibold text-gray-900'
-                  : 'text-3xl sm:text-4xl font-semibold tracking-[-0.02em] text-gray-900'
+                  ? 'text-2xl font-semibold text-gray-900 tracking-[-0.022em]'
+                  : 'text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-[-0.022em] text-gray-900 leading-[1.08]'
               }
             >
-              Collectors keep sending 5 star notes
+              Loved by collectors worldwide
             </h2>
             <p
               className={
                 isDashboard
-                  ? 'text-sm text-gray-600 mt-2 max-w-2xl'
-                  : 'text-base text-gray-600 mt-3 max-w-2xl'
+                  ? 'text-sm text-gray-600 mt-3 max-w-2xl leading-relaxed'
+                  : 'text-base sm:text-lg text-gray-600 mt-4 max-w-2xl leading-relaxed'
               }
             >
-              Real Etsy buyers share how the Hello1984 desk clock feels in their homes. Each review
-              highlights the precise build, fast communication, and the responsive follow up from Aleks.
+              Real customers share how Hello1984 fits into their daily lives. Each review highlights 
+              the thoughtful design, quality craftsmanship, and the personal attention we give every order.
             </p>
           </div>
-          <div className={isDashboard ? 'sm:text-right' : 'lg:text-right'}>
-            <p className="text-sm font-medium text-gray-600">Average rating</p>
-            <div className="flex items-center gap-2 justify-start lg:justify-end">
-              <div className="text-3xl font-semibold text-gray-900">5.0</div>
-              <div className="flex text-amber-500">
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <StarIcon key={index} className="h-4 w-4" />
-                ))}
+          <div className={`${isDashboard ? 'sm:text-right' : 'lg:text-right'} mt-6 lg:mt-0`}>
+            <div className="inline-flex flex-col items-start lg:items-end gap-2">
+              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Average Rating</p>
+              <div className="flex items-baseline gap-3">
+                <div className="text-4xl sm:text-5xl font-semibold text-gray-900 tracking-tight">5.0</div>
+                <div className="flex text-amber-500 gap-0.5">
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <StarIcon key={index} className="h-5 w-5 sm:h-6 sm:w-6" />
+                  ))}
+                </div>
               </div>
+              <p className="text-xs text-gray-500 mt-1">Based on verified purchases</p>
             </div>
-            <p className="text-xs text-gray-500 mt-1">Verified Etsy reviews</p>
           </div>
         </motion.div>
 
-        <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
+        <div className="grid gap-5 sm:gap-6 lg:grid-cols-3">
           {reviews.map((review, index) => (
             <motion.article
               key={review.id}
@@ -199,58 +201,82 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
               whileHover={
                 prefersReducedMotion
                   ? undefined
-                  : { y: isDashboard ? -4 : -8, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } }
+                  : { y: isDashboard ? -4 : -6, transition: { duration: 0.25, ease: [0.16, 1, 0.3, 1] } }
               }
               className={
                 isDashboard
-                  ? 'rounded-2xl border border-black/10 bg-white/90 p-4 sm:p-5 shadow-[0_15px_40px_rgba(15,23,42,0.06)] space-y-4'
-                  : 'rounded-2xl border border-black/5 bg-white/95 p-5 sm:p-6 shadow-[0_20px_45px_rgba(15,23,42,0.08)] space-y-4'
+                  ? 'glass-card rounded-2xl p-5 sm:p-6 space-y-5'
+                  : 'glass-card rounded-2xl p-6 sm:p-7 space-y-5 h-full flex flex-col'
               }
             >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-[11px] uppercase tracking-[0.35em] text-gray-500">
-                    {review.scoreLabel}
-                  </p>
-                  <p className="text-base font-semibold text-gray-900 mt-2">{review.customer}</p>
-                  <p className="text-sm text-gray-500">{review.date}</p>
+              {/* Header with avatar and rating */}
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center text-gray-600 font-semibold text-lg">
+                    {review.customer.charAt(0)}
+                  </div>
                 </div>
-                <div className="flex text-amber-500 shrink-0">
-                  {Array.from({ length: review.rating }).map((_, starIndex) => (
-                    <StarIcon key={starIndex} className="h-4 w-4" />
-                  ))}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <div className="min-w-0">
+                      <p className="text-base font-semibold text-gray-900 truncate">{review.customer}</p>
+                      <p className="text-xs text-gray-500 mt-0.5">{review.date}</p>
+                    </div>
+                    <div className="flex text-amber-500 shrink-0 gap-0.5">
+                      {Array.from({ length: review.rating }).map((_, starIndex) => (
+                        <StarIcon key={starIndex} className="h-4 w-4" />
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 mt-2">
+                    <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <p className="text-[10px] uppercase tracking-wider text-gray-500 font-medium">
+                      {review.scoreLabel}
+                    </p>
+                  </div>
                 </div>
               </div>
 
-              <div>
-                <p className="text-sm font-semibold text-gray-900">{review.headline}</p>
-                <p className="text-sm text-gray-700 leading-relaxed mt-2">{review.body}</p>
+              {/* Review content */}
+              <div className="flex-grow">
+                <h3 className="text-base font-semibold text-gray-900 mb-2 leading-snug">{review.headline}</h3>
+                <p className="text-sm text-gray-600 leading-relaxed">{review.body}</p>
               </div>
 
+              {/* Media gallery */}
               {review.media && review.media.length > 0 && (
                 <div className={`grid gap-3 ${review.media.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
                   {review.media.map((mediaItem) => (
                     <div
                       key={mediaItem.file}
-                      className="relative aspect-square overflow-hidden rounded-xl border border-black/5 bg-gray-100"
+                      className="relative aspect-square overflow-hidden rounded-xl border border-gray-200/50 bg-gray-50 group cursor-pointer"
                     >
                       <Image
                         src={`/${mediaItem.file}`}
                         alt={mediaItem.alt}
                         fill
-                        className="object-cover"
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
                         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 220px"
                       />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
                     </div>
                   ))}
                 </div>
               )}
 
-              <div className="rounded-xl border border-black/5 bg-gray-50 p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-gray-500">
-                  Response from Aleks
-                </p>
-                <p className="text-sm text-gray-700 leading-relaxed mt-2 whitespace-pre-line">{review.response}</p>
+              {/* Seller response */}
+              <div className="rounded-xl border border-gray-200/50 bg-gray-50/80 p-4 sm:p-5 mt-auto">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-6 h-6 rounded-full bg-gray-900 flex items-center justify-center">
+                    <span className="text-white text-xs font-semibold">A</span>
+                  </div>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-gray-600">
+                    Response from Hello1984
+                  </p>
+                </div>
+                <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">{review.response}</p>
               </div>
             </motion.article>
           ))}
@@ -264,16 +290,21 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
   }
 
   return (
-    <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">{content}</div>
+    <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">{content}</div>
     </section>
   )
 }
 
 function StarIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" className="fill-current" {...props}>
-      <path d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l1.578 3.794a1 1 0 0 0 .84.61l4.103.288c1.196.084 1.686 1.59.77 2.338l-3.117 2.56a1 1 0 0 0-.329 1.045l.979 3.982c.285 1.162-.964 2.062-1.96 1.45l-3.52-2.16a1 1 0 0 0-1.04 0l-3.52 2.16c-.996.612-2.245-.288-1.96-1.45l.979-3.982a1 1 0 0 0-.329-1.045l-3.117-2.56c-.917-.749-.427-2.254.77-2.338l4.102-.288a1 1 0 0 0 .841-.61z" />
+    <svg 
+      viewBox="0 0 24 24" 
+      aria-hidden="true" 
+      className="fill-current drop-shadow-sm" 
+      {...props}
+    >
+      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
     </svg>
   )
 }

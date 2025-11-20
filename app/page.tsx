@@ -1,6 +1,7 @@
 import { Navigation } from '@/components/Navigation'
 import { Hero } from '@/components/Hero'
 import { TrustStrip } from '@/components/TrustStrip'
+import { ProductSpinVideo } from '@/components/ProductSpinVideo'
 import { NarrativeBlocks } from '@/components/NarrativeBlocks'
 import { FeaturesGrid } from '@/components/FeaturesGrid'
 import { Gallery } from '@/components/Gallery'
@@ -47,6 +48,7 @@ export default function HomePage() {
         <div className="page-stack__glow page-stack__glow--two" aria-hidden="true" />
         <div className="relative z-10 space-y-0">
           <Hero />
+          <ProductSpinVideo />
           <div className="section-ambient">
             <TrustStrip />
           </div>

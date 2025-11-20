@@ -34,40 +34,27 @@ async function checkAdminSession(request: NextRequest): Promise<boolean> {
   return /^[0-9a-f]{64}$/i.test(sessionCookie.value)
 }
 
-export default async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl
+export default clerkMiddleware(async (auth, req: NextRequest) => {
+  const { pathname } = req.nextUrl
 
   // Handle admin routes separately
   if (isAdminRoute(pathname)) {
-    const hasAdminSession = await checkAdminSession(request)
+    const hasAdminSession = await checkAdminSession(req)
     if (!hasAdminSession) {
-      const loginUrl = new URL('/admin/login', request.url)
+      const loginUrl = new URL('/admin/login', req.url)
       loginUrl.searchParams.set('redirect', pathname)
       return NextResponse.redirect(loginUrl)
     }
     return NextResponse.next()
   }
 
-  // Use Clerk middleware if configured
-  if (isClerkConfigured) {
-    return clerkMiddleware(async (auth, req) => {
-      // Protect routes that are not public
-      if (!isPublicRoute(req)) {
-        // Check authentication status
-        const { userId } = await auth()
-        if (!userId) {
-          // Redirect to sign-in if not authenticated
-          const signInUrl = new URL('/sign-in', req.url)
-          signInUrl.searchParams.set('redirect_url', req.url)
-          return NextResponse.redirect(signInUrl)
-        }
-      }
-    })(request)
+  // Protect routes that are not public (only if Clerk is configured)
+  if (isClerkConfigured && !isPublicRoute(req)) {
+    auth().protect()
   }
   
-  // Fallback: allow all routes if Clerk is not configured
   return NextResponse.next()
-}
+})
 
 export const config = {
   matcher: [

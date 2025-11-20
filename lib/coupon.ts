@@ -163,7 +163,7 @@ export async function createStripeCoupon(couponCode: string): Promise<string | n
       throw new Error('STRIPE_SECRET_KEY is not configured')
     }
     const stripe = new Stripe.default(secretKey, {
-      apiVersion: '2024-11-20.acacia',
+      apiVersion: '2025-02-24.acacia',
     })
 
     // 创建或获取Stripe Coupon
@@ -177,7 +177,7 @@ export async function createStripeCoupon(couponCode: string): Promise<string | n
       } catch (retrieveError: any) {
         // Coupon不存在，创建新的
         if (retrieveError.code === 'resource_missing') {
-          const couponData: Stripe.CouponCreateParams = {
+          const couponData: any = {
             id: couponCode.toUpperCase(), // 使用相同的ID
             name: coupon.description || couponCode,
             duration: 'once',

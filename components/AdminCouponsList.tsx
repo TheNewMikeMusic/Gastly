@@ -6,12 +6,12 @@ import { useRouter } from 'next/navigation'
 interface Coupon {
   id: string
   code: string
-  description?: string
+  description?: string | null
   discountType: string
   discountValue: number
-  minAmount?: number
-  maxDiscount?: number
-  usageLimit?: number
+  minAmount?: number | null
+  maxDiscount?: number | null
+  usageLimit?: number | null
   usedCount: number
   validFrom: Date | string
   validUntil: Date | string

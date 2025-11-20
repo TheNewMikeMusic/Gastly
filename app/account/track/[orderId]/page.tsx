@@ -38,7 +38,7 @@ export default async function AccountTrackingPage({ params, searchParams }: Trac
   return (
     <>
       <Navigation />
-      <div className="min-h-screen bg-white pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-white page-content pb-16 px-4 sm:px-6 lg:px-8 safe-area-bottom">
         <div className="max-w-5xl mx-auto space-y-8">
           {/* 页面头部 */}
           <div className="space-y-3">

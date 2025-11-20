@@ -46,7 +46,7 @@ export default async function DashboardPage() {
   return (
     <>
       <Navigation />
-      <div className="min-h-screen bg-white pt-24 pb-20 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-white page-content pb-20 px-4 sm:px-6 lg:px-8 safe-area-bottom">
         <div className="max-w-7xl mx-auto">
           <div className="mb-12">
             <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-gray-900">

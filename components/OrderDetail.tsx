@@ -191,7 +191,7 @@ export function OrderDetail({ order }: OrderDetailProps) {
       <div className="glass rounded-2xl p-6 space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold text-gray-900">物流信息</h2>
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap">
             {!order.trackingNumber && order.status === 'paid' && (
               <>
                 <button
@@ -201,7 +201,7 @@ export function OrderDetail({ order }: OrderDetailProps) {
                   }}
                   className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
                 >
-                  创建4PX订单
+                  单独创建4PX运单
                 </button>
                 <button
                   onClick={() => {
@@ -213,6 +213,17 @@ export function OrderDetail({ order }: OrderDetailProps) {
                   手动填入单号
                 </button>
               </>
+            )}
+            {order.trackingNumber && (
+              <button
+                onClick={() => {
+                  setShowTrackingForm(!showTrackingForm)
+                  setShowCreateForm(false)
+                }}
+                className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors"
+              >
+                更新/回填单号
+              </button>
             )}
           </div>
         </div>
@@ -236,7 +247,10 @@ export function OrderDetail({ order }: OrderDetailProps) {
         {/* 创建4PX订单表单 */}
         {showCreateForm && (
           <div className="border-t border-gray-200 pt-4 mt-4 space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">创建4PX订单</h3>
+            <h3 className="text-lg font-semibold text-gray-900">单独创建4PX运单</h3>
+            <p className="text-sm text-gray-600">
+              为当前订单单独创建一个4px运单。创建成功后，可以在4px平台打印面单。
+            </p>
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
                 {error}
@@ -259,6 +273,7 @@ export function OrderDetail({ order }: OrderDetailProps) {
                   placeholder="例如: A1, A5"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent outline-none"
                 />
+                <p className="mt-1 text-xs text-gray-500">4px物流产品代码</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -271,6 +286,7 @@ export function OrderDetail({ order }: OrderDetailProps) {
                   placeholder="例如: 1"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent outline-none"
                 />
+                <p className="mt-1 text-xs text-gray-500">货物到仓方式代码</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -283,7 +299,13 @@ export function OrderDetail({ order }: OrderDetailProps) {
                   placeholder="例如: 1"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent outline-none"
                 />
+                <p className="mt-1 text-xs text-gray-500">投递到收件人的方式代码</p>
               </div>
+            </div>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+              <p className="text-sm text-blue-800">
+                <strong>提示：</strong>创建运单后，跟踪号会自动回填。如需打印面单，请在4px平台操作。
+              </p>
             </div>
             <div className="flex gap-2">
               <button
@@ -291,7 +313,7 @@ export function OrderDetail({ order }: OrderDetailProps) {
                 disabled={loading}
                 className="px-6 py-2 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-950 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                {loading ? '创建中...' : '创建订单'}
+                {loading ? '创建中...' : '创建运单'}
               </button>
               <button
                 onClick={() => {
@@ -310,7 +332,14 @@ export function OrderDetail({ order }: OrderDetailProps) {
         {/* 手动填入单号表单 */}
         {showTrackingForm && (
           <div className="border-t border-gray-200 pt-4 mt-4 space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">手动填入跟踪号</h3>
+            <h3 className="text-lg font-semibold text-gray-900">
+              {order.trackingNumber ? '更新/回填跟踪号' : '手动填入跟踪号'}
+            </h3>
+            <p className="text-sm text-gray-600">
+              {order.trackingNumber
+                ? '如果4px运单已创建但跟踪号未自动回填，或需要更新跟踪号，请在此处手动填入。'
+                : '如果已在4px平台手动创建了运单，请在此处填入跟踪号。'}
+            </p>
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
                 {error}
@@ -327,11 +356,16 @@ export function OrderDetail({ order }: OrderDetailProps) {
               </label>
               <input
                 type="text"
-                value={trackingNumber}
+                value={trackingNumber || order.trackingNumber || ''}
                 onChange={(e) => setTrackingNumber(e.target.value)}
                 placeholder="请输入4PX跟踪号"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent outline-none"
               />
+              {order.trackingNumber && (
+                <p className="mt-1 text-xs text-gray-500">
+                  当前跟踪号: <span className="font-mono">{order.trackingNumber}</span>
+                </p>
+              )}
             </div>
             <div className="flex gap-2">
               <button
@@ -339,7 +373,7 @@ export function OrderDetail({ order }: OrderDetailProps) {
                 disabled={loading}
                 className="px-6 py-2 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-950 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                {loading ? '更新中...' : '更新跟踪号'}
+                {loading ? '更新中...' : order.trackingNumber ? '更新跟踪号' : '保存跟踪号'}
               </button>
               <button
                 onClick={() => {

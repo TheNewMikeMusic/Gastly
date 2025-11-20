@@ -59,6 +59,6 @@ export async function clearAdminSession() {
 
 export async function requireAdmin(): Promise<boolean> {
   const session = await getAdminSession()
-  return await verifyAdminSession(session)
+  return await verifyAdminSession(session || undefined)
 }
 

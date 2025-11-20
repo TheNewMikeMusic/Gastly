@@ -91,7 +91,7 @@ async function refreshTrackingFromSource(order: Order, cached: TrackingEvent[]) 
       where: { id: order.id },
       data: {
         trackingStatus: normalized.status,
-        trackingEvents: normalized.events as Prisma.JsonArray,
+        trackingEvents: normalized.events as unknown as Prisma.JsonArray,
         trackingLastSyncedAt: now,
         trackingEta: normalized.eta ? new Date(normalized.eta) : null,
         trackingMeta: normalized.meta
@@ -145,11 +145,12 @@ function buildSnapshotFromSample(order: Order, cached: TrackingEvent[]): Trackin
   const sorted = sortEvents(events)
   const lastEvent = sorted[sorted.length - 1]
   const status = lastEvent?.status ?? order.trackingStatus ?? 'in_transit'
+  const normalizedStatus = normalizeTrackingStatus(status)
 
   return {
     trackingNumber: order.trackingNumber || `TEMP-${order.id.slice(0, 8).toUpperCase()}`,
-    status: normalizeTrackingStatus(status),
-    statusLabel: trackingStatusToLabel(status),
+    status: normalizedStatus,
+    statusLabel: trackingStatusToLabel(normalizedStatus),
     events: sorted,
     delivered: normalizeTrackingStatus(status) === 'delivered',
     provider: order.trackingCarrier || '4PX',
@@ -291,28 +292,28 @@ function parseTrackingEvents(value: Prisma.JsonValue | null): TrackingEvent[] {
     return []
   }
 
-  return value
-    .map((item) => {
-      if (!item || typeof item !== 'object') {
-        return null
-      }
+  const events: TrackingEvent[] = []
+  for (const item of value) {
+    if (!item || typeof item !== 'object') {
+      continue
+    }
 
-      const record = item as Record<string, any>
-      const time = normalizeDateInput(record.time)
-      const description = stringify(record.description)
-      if (!time || !description) {
-        return null
-      }
+    const record = item as Record<string, any>
+    const time = normalizeDateInput(record.time)
+    const description = stringify(record.description)
+    if (!time || !description) {
+      continue
+    }
 
-      return {
-        code: stringify(record.code) || 'EVENT_REPORTED',
-        description,
-        location: stringify(record.location) || undefined,
-        time,
-        status: normalizeTrackingStatus(record.status),
-      }
+    events.push({
+      code: stringify(record.code) || 'EVENT_REPORTED',
+      description,
+      location: stringify(record.location) || undefined,
+      time,
+      status: normalizeTrackingStatus(record.status),
     })
-    .filter((event): event is TrackingEvent => Boolean(event))
+  }
+  return events
 }
 
 function sortEvents(events: TrackingEvent[]) {

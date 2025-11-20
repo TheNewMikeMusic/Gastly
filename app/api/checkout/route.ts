@@ -8,7 +8,7 @@ const getStripe = () => {
   }
   // 使用稳定的 Stripe API 版本
   return new Stripe(secretKey, {
-    apiVersion: '2024-11-20.acacia',
+    apiVersion: '2025-02-24.acacia',
   })
 }
 
@@ -70,11 +70,42 @@ export async function POST(request: Request) {
       userId = `temp_${crypto.createHash('md5').update(shippingData.email || 'anonymous').digest('hex').substring(0, 16)}`
     }
     
-    // Validate shipping data
-    if (!shippingData.name || !shippingData.phone || !shippingData.email || 
-        !shippingData.address || !shippingData.city || !shippingData.state || 
-        !shippingData.zip || !shippingData.country) {
-      return Response.json({ error: 'Missing required shipping information' }, { status: 400 })
+    // Validate shipping data with detailed validation
+    const { validateEmail, validatePhone, validateName, validateAddress, validateCity, validateState, validateZip } = await import('@/lib/validation')
+    
+    const nameResult = validateName(shippingData.name)
+    if (!nameResult.valid) {
+      return Response.json({ error: nameResult.error || 'Invalid name' }, { status: 400 })
+    }
+
+    const phoneResult = validatePhone(shippingData.phone, shippingData.country)
+    if (!phoneResult.valid) {
+      return Response.json({ error: phoneResult.error || 'Invalid phone number' }, { status: 400 })
+    }
+
+    const emailResult = validateEmail(shippingData.email)
+    if (!emailResult.valid) {
+      return Response.json({ error: emailResult.error || 'Invalid email' }, { status: 400 })
+    }
+
+    const addressResult = validateAddress(shippingData.address)
+    if (!addressResult.valid) {
+      return Response.json({ error: addressResult.error || 'Invalid address' }, { status: 400 })
+    }
+
+    const cityResult = validateCity(shippingData.city)
+    if (!cityResult.valid) {
+      return Response.json({ error: cityResult.error || 'Invalid city' }, { status: 400 })
+    }
+
+    const stateResult = validateState(shippingData.state, shippingData.country)
+    if (!stateResult.valid) {
+      return Response.json({ error: stateResult.error || 'Invalid state/province' }, { status: 400 })
+    }
+
+    const zipResult = validateZip(shippingData.zip, shippingData.country)
+    if (!zipResult.valid) {
+      return Response.json({ error: zipResult.error || 'Invalid ZIP/postal code' }, { status: 400 })
     }
 
     // 验证和应用优惠券
@@ -273,10 +304,10 @@ export async function POST(request: Request) {
       } else if (error.message.includes('Missing required')) {
         errorMessage = error.message
         statusCode = 400
-      } else if (error && typeof error === 'object' && 'type' in error && error.type?.startsWith('Stripe')) {
+      } else if (error && typeof error === 'object' && 'type' in error && typeof (error as any).type === 'string' && (error as any).type.startsWith('Stripe')) {
         // Stripe API 错误
         const stripeError = error as { type?: string; message?: string }
-        errorMessage = `Stripe error: ${stripeError.message || error.message}`
+        errorMessage = `Stripe error: ${stripeError.message || (error as any).message}`
         if (stripeError.type === 'StripeInvalidRequestError') {
           errorMessage = `Invalid Stripe request: ${stripeError.message || error.message}. Please check your Price ID and Stripe configuration.`
         }

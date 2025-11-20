@@ -1,15 +1,7 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import './globals.css'
 import { defaultMetadata } from '@/lib/config'
 import { Analytics } from '@/components/Analytics'
-
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-geist-sans',
-  weight: ['400', '500', '600', '700'],
-})
 
 export const metadata: Metadata = defaultMetadata
 
@@ -24,7 +16,10 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider publishableKey={publishableKey}>
-      <html lang="en" className={inter.variable}>
+      <html lang="en">
+        <head>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+        </head>
         <body>
           {children}
           <Analytics />

@@ -8,7 +8,7 @@ const getStripe = () => {
     throw new Error('STRIPE_SECRET_KEY is not configured')
   }
   return new Stripe(secretKey, {
-    apiVersion: '2024-11-20.acacia',
+    apiVersion: '2025-02-24.acacia',
   })
 }
 
@@ -27,11 +27,10 @@ export async function createRefund(orderId: string, reason?: string): Promise<{
     }
 
     if (order.status !== 'paid') {
+      if (order.status === 'refunded') {
+        return { success: false, error: 'Order already refunded' }
+      }
       return { success: false, error: 'Order is not paid, cannot refund' }
-    }
-
-    if (order.status === 'refunded') {
-      return { success: false, error: 'Order already refunded' }
     }
 
     // 获取Stripe payment intent

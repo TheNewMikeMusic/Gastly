@@ -47,24 +47,24 @@ export function FAQ() {
     <section
       ref={sectionRef}
       id="faq"
-      className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8"
+      className="py-12 sm:py-16 lg:py-24 px-4 sm:px-6 lg:px-8"
     >
       <div className="max-w-3xl mx-auto">
         <motion.div
           initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 20 }}
           animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center mb-12 sm:mb-16"
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center mb-10 sm:mb-14 lg:mb-16"
         >
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-semibold mb-6 text-gray-900 tracking-[-0.022em] leading-[1.08]">
+          <h2 className="text-3xl sm:text-4xl lg:text-6xl font-semibold mb-4 sm:mb-6 text-gray-900 tracking-[-0.022em] leading-[1.08]">
             Frequently asked questions
           </h2>
-          <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto leading-[1.6] tracking-[-0.011em]">
+          <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto leading-[1.6] tracking-[-0.011em] px-4">
             Everything you need to know about Hello1984, from shipping and setup to warranty and returns.
           </p>
         </motion.div>
 
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index
             return (
@@ -72,16 +72,16 @@ export function FAQ() {
                 key={faq.question}
                 initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 20 }}
                 animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
-                className="glass-card rounded-2xl px-6 py-4"
+                transition={{ duration: 0.4, delay: index * 0.06, ease: [0.16, 1, 0.3, 1] }}
+                className="glass-card rounded-xl sm:rounded-2xl px-5 sm:px-6 py-4 active:scale-[0.98] touch-manipulation"
               >
                 <button
                   type="button"
-                  className="w-full flex items-center justify-between gap-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 rounded-xl py-2 transition-colors duration-200"
+                  className="w-full flex items-center justify-between gap-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 rounded-xl py-2 transition-colors duration-150 min-h-[48px] touch-manipulation"
                   onClick={() => setOpenIndex(isOpen ? null : index)}
                   aria-expanded={isOpen}
                 >
-                  <span className="text-lg font-semibold text-gray-900 tracking-[-0.018em]">{faq.question}</span>
+                  <span className="text-base sm:text-lg font-semibold text-gray-900 tracking-[-0.018em] pr-2">{faq.question}</span>
                   <span
                     className={`h-6 w-6 flex items-center justify-center rounded-full border text-sm font-bold transition-transform ${
                       isOpen ? 'rotate-45 border-gray-400 text-gray-500' : 'border-gray-300 text-gray-600'
@@ -98,10 +98,10 @@ export function FAQ() {
                     open: { height: 'auto', opacity: 1, marginTop: '0.75rem' },
                     collapsed: { height: 0, opacity: 0, marginTop: '0rem' },
                   }}
-                  transition={{ duration: 0.35, ease: 'easeInOut' }}
+                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                   className="overflow-hidden"
                 >
-                  <p className="text-gray-600 leading-[1.6] tracking-[-0.011em] pb-2">{faq.answer}</p>
+                  <p className="text-sm sm:text-base text-gray-600 leading-[1.6] tracking-[-0.011em] pb-2">{faq.answer}</p>
                 </motion.div>
               </motion.div>
             )

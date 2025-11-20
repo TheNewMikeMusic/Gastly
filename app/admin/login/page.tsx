@@ -29,7 +29,7 @@ export default function AdminLoginPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        setError(data.error || '登录失败')
+        setError(data.error || 'Login failed')
         setLoading(false)
         return
       }
@@ -38,7 +38,7 @@ export default function AdminLoginPage() {
       router.push(redirectTo)
       router.refresh()
     } catch (err) {
-      setError('网络错误，请稍后重试')
+      setError('Network error, please try again later')
       setLoading(false)
     }
   }
@@ -46,12 +46,12 @@ export default function AdminLoginPage() {
   return (
     <>
       <Navigation />
-      <div className="min-h-screen bg-white pt-24 pb-20 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-white page-content pb-20 px-4 sm:px-6 lg:px-8 safe-area-bottom">
         <div className="max-w-md mx-auto">
           <div className="glass rounded-2xl p-8 space-y-6">
             <div className="text-center">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">管理员登录</h1>
-              <p className="text-gray-600">请使用管理员账号登录</p>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Login</h1>
+              <p className="text-gray-600">Please login with your admin credentials</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -63,7 +63,7 @@ export default function AdminLoginPage() {
 
               <div>
                 <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
-                  用户名
+                  Username
                 </label>
                 <input
                   id="username"
@@ -72,13 +72,13 @@ export default function AdminLoginPage() {
                   onChange={(e) => setUsername(e.target.value)}
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent outline-none transition-all"
-                  placeholder="请输入用户名"
+                  placeholder="Enter your username"
                 />
               </div>
 
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                  密码
+                  Password
                 </label>
                 <input
                   id="password"
@@ -87,7 +87,7 @@ export default function AdminLoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-900 focus:border-transparent outline-none transition-all"
-                  placeholder="请输入密码"
+                  placeholder="Enter your password"
                 />
               </div>
 
@@ -96,7 +96,7 @@ export default function AdminLoginPage() {
                 disabled={loading}
                 className="w-full px-6 py-3 bg-gray-900 text-white font-semibold rounded-lg hover:bg-gray-950 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               >
-                {loading ? '登录中...' : '登录'}
+                {loading ? 'Logging in...' : 'Login'}
               </button>
             </form>
           </div>

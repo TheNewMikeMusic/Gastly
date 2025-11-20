@@ -32,7 +32,7 @@ export default async function OrderDetailPage({
     return (
       <>
         <Navigation />
-        <div className="min-h-screen bg-white pt-24 pb-20 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-white page-content pb-20 px-4 sm:px-6 lg:px-8 safe-area-bottom">
           <div className="max-w-4xl mx-auto">
             <div className="glass rounded-2xl p-12 text-center">
               <p className="text-gray-600 mb-4">订单不存在</p>
@@ -52,7 +52,7 @@ export default async function OrderDetailPage({
   return (
     <>
       <Navigation />
-      <div className="min-h-screen bg-white pt-24 pb-20 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-white page-content pb-20 px-4 sm:px-6 lg:px-8 safe-area-bottom">
         <div className="max-w-4xl mx-auto">
           <div className="mb-6">
             <a

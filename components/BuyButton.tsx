@@ -17,9 +17,9 @@ export function BuyButton({ className = '', variant = 'primary', size = 'md' }: 
   }
 
   const sizeClasses = {
-    sm: 'px-4 py-2 text-sm',
-    md: 'px-6 py-3 text-base',
-    lg: 'px-8 py-4 text-lg',
+    sm: 'px-5 py-2.5 text-sm min-h-[44px]',
+    md: 'px-6 py-3 text-base min-h-[48px]',
+    lg: 'px-8 py-4 text-lg min-h-[52px]',
   }
 
   const variantClasses = {
@@ -32,10 +32,10 @@ export function BuyButton({ className = '', variant = 'primary', size = 'md' }: 
   return (
     <motion.button
       onClick={handleClick}
-      className={`${sizeClasses[size]} ${variantClasses[variant]} font-semibold rounded-full transition-all duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent ${className}`}
+      className={`${sizeClasses[size]} ${variantClasses[variant]} font-semibold rounded-full transition-all duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent touch-manipulation ${className}`}
       whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+      whileTap={{ scale: 0.96 }}
+      transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
       aria-label="Buy Now"
     >
       Buy Now

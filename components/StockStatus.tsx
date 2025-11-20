@@ -131,7 +131,7 @@ export function StockStatus({ productId = 'maclock-default' }: StockStatusProps)
         {waitlistSuccess && (
           <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
             <p className="text-sm text-green-900">
-              ✓ You've been added to the waitlist. We'll notify you when it's back in stock!
+              ✓ You&apos;ve been added to the waitlist. We&apos;ll notify you when it&apos;s back in stock!
             </p>
           </div>
         )}
@@ -146,7 +146,7 @@ export function StockStatus({ productId = 'maclock-default' }: StockStatusProps)
           ⚠️ Only {stock} left in stock!
         </p>
         <p className="text-xs text-yellow-700 mt-1">
-          Order now before it's gone.
+          Order now before it&apos;s gone.
         </p>
       </div>
     )

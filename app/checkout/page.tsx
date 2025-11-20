@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { FormError } from '@/components/FormError'
+import * as validation from '@/lib/validation'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Navigation } from '@/components/Navigation'
@@ -42,6 +44,7 @@ export default function CheckoutPage() {
   const prefersReducedMotion = useReducedMotion()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [savedAddresses, setSavedAddresses] = useState<Address[]>([])
   const [useSavedAddress, setUseSavedAddress] = useState(false)
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null)
@@ -148,6 +151,57 @@ export default function CheckoutPage() {
     }
   }
 
+  const validateField = (fieldName: string, value: string) => {
+    const errors: Record<string, string> = {}
+    
+    switch (fieldName) {
+      case 'name':
+        const nameResult = validation.validateName(value)
+        if (!nameResult.valid) {
+          errors.name = nameResult.error || ''
+        }
+        break
+      case 'phone':
+        const phoneResult = validation.validatePhone(value, formData.country)
+        if (!phoneResult.valid) {
+          errors.phone = phoneResult.error || ''
+        }
+        break
+      case 'email':
+        const emailResult = validation.validateEmail(value)
+        if (!emailResult.valid) {
+          errors.email = emailResult.error || ''
+        }
+        break
+      case 'address':
+        const addressResult = validation.validateAddress(value)
+        if (!addressResult.valid) {
+          errors.address = addressResult.error || ''
+        }
+        break
+      case 'city':
+        const cityResult = validation.validateCity(value)
+        if (!cityResult.valid) {
+          errors.city = cityResult.error || ''
+        }
+        break
+      case 'state':
+        const stateResult = validation.validateState(value)
+        if (!stateResult.valid) {
+          errors.state = stateResult.error || ''
+        }
+        break
+      case 'zip':
+        const zipResult = validation.validateZip(value, formData.country)
+        if (!zipResult.valid) {
+          errors.zip = zipResult.error || ''
+        }
+        break
+    }
+    
+    setFieldErrors((prev) => ({ ...prev, ...errors }))
+  }
+
   const validateForm = (): boolean => {
     if (!formData.name.trim()) {
       setError('Please enter your full name')
@@ -205,7 +259,9 @@ export default function CheckoutPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
+    // 验证所有字段
     if (!validateForm()) {
+      setError('Please fix the errors in the form')
       return
     }
 
@@ -273,7 +329,7 @@ export default function CheckoutPage() {
   return (
     <div className="min-h-screen bg-white">
       <Navigation />
-      <div className="pt-24 pb-20 px-4 sm:px-6 lg:px-8">
+      <div className="page-content pb-20 px-4 sm:px-6 lg:px-8 safe-area-bottom">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
@@ -300,15 +356,7 @@ export default function CheckoutPage() {
             {/* Shipping Form */}
             <div className="lg:col-span-2">
               <form onSubmit={handleSubmit} className="space-y-6">
-                {error && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="glass rounded-2xl p-4 border border-red-200 bg-red-50/50"
-                  >
-                    <p className="text-sm text-red-600 font-medium">{error}</p>
-                  </motion.div>
-                )}
+                {error && <FormError error={error} />}
 
                 {/* 保存的地址选择 */}
                 {isSignedIn && savedAddresses.length > 0 && (
@@ -342,7 +390,7 @@ export default function CheckoutPage() {
                     </h2>
 
                     <div>
-                      <label htmlFor="name" className="block text-sm font-medium mb-2 text-gray-900">
+                      <label htmlFor="name" className="block text-sm font-semibold mb-2.5 text-gray-900">
                         Full Name <span className="text-red-500">*</span>
                       </label>
                       <input
@@ -351,15 +399,24 @@ export default function CheckoutPage() {
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
+                        onBlur={() => validateField('name', formData.name)}
                         required
-                        className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white/90 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/30 transition-all duration-200 ease-apple-standard"
+                        autoComplete="name"
+                        className={`w-full px-4 py-3.5 sm:py-3 rounded-xl border bg-white text-gray-900 placeholder-gray-400 text-base focus:outline-none focus:ring-2 transition-all duration-200 ease-apple-standard min-h-[48px] touch-manipulation ${
+                          fieldErrors.name
+                            ? 'border-red-400 focus:ring-red-500/30 focus:border-red-500'
+                            : 'border-gray-300 focus:ring-gray-900/20 focus:border-gray-900/40'
+                        }`}
                         placeholder="John Doe"
                       />
+                      {fieldErrors.name && (
+                        <p className="mt-1.5 text-sm text-red-600 font-medium">{fieldErrors.name}</p>
+                      )}
                     </div>
 
-                    <div className="grid sm:grid-cols-2 gap-4">
+                    <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
                       <div>
-                        <label htmlFor="phone" className="block text-sm font-medium mb-2 text-gray-900">
+                        <label htmlFor="phone" className="block text-sm font-semibold mb-2.5 text-gray-900">
                           Phone Number <span className="text-red-500">*</span>
                         </label>
                         <input
@@ -368,14 +425,24 @@ export default function CheckoutPage() {
                           name="phone"
                           value={formData.phone}
                           onChange={handleInputChange}
+                          onBlur={() => validateField('phone', formData.phone)}
                           required
-                          className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white/90 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/30 transition-all duration-200 ease-apple-standard"
+                          autoComplete="tel"
+                          inputMode="tel"
+                          className={`w-full px-4 py-3.5 sm:py-3 rounded-xl border bg-white text-gray-900 placeholder-gray-400 text-base focus:outline-none focus:ring-2 transition-all duration-200 ease-apple-standard min-h-[48px] touch-manipulation ${
+                            fieldErrors.phone
+                              ? 'border-red-400 focus:ring-red-500/30 focus:border-red-500'
+                              : 'border-gray-300 focus:ring-gray-900/20 focus:border-gray-900/40'
+                          }`}
                           placeholder="+1 (555) 123-4567"
                         />
+                        {fieldErrors.phone && (
+                          <p className="mt-1.5 text-sm text-red-600 font-medium">{fieldErrors.phone}</p>
+                        )}
                       </div>
 
                       <div>
-                        <label htmlFor="email" className="block text-sm font-medium mb-2 text-gray-900">
+                        <label htmlFor="email" className="block text-sm font-semibold mb-2.5 text-gray-900">
                           Email Address <span className="text-red-500">*</span>
                         </label>
                         <input
@@ -384,15 +451,25 @@ export default function CheckoutPage() {
                           name="email"
                           value={formData.email}
                           onChange={handleInputChange}
+                          onBlur={() => validateField('email', formData.email)}
                           required
-                          className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white/90 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/30 transition-all duration-200 ease-apple-standard"
+                          autoComplete="email"
+                          inputMode="email"
+                          className={`w-full px-4 py-3.5 sm:py-3 rounded-xl border bg-white text-gray-900 placeholder-gray-400 text-base focus:outline-none focus:ring-2 transition-all duration-200 ease-apple-standard min-h-[48px] touch-manipulation ${
+                            fieldErrors.email
+                              ? 'border-red-400 focus:ring-red-500/30 focus:border-red-500'
+                              : 'border-gray-300 focus:ring-gray-900/20 focus:border-gray-900/40'
+                          }`}
                           placeholder="john@example.com"
                         />
+                        {fieldErrors.email && (
+                          <p className="mt-1.5 text-sm text-red-600 font-medium">{fieldErrors.email}</p>
+                        )}
                       </div>
                     </div>
 
                     <div>
-                      <label htmlFor="country" className="block text-sm font-medium mb-2 text-gray-900">
+                      <label htmlFor="country" className="block text-sm font-semibold mb-2.5 text-gray-900">
                         Country <span className="text-red-500">*</span>
                       </label>
                       <select
@@ -401,7 +478,8 @@ export default function CheckoutPage() {
                         value={formData.country}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white/90 text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/30 transition-all duration-200 ease-apple-standard"
+                        autoComplete="country"
+                        className="w-full px-4 py-3.5 sm:py-3 rounded-xl border border-gray-300 bg-white text-gray-900 text-base focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/40 transition-all duration-200 ease-apple-standard min-h-[48px] touch-manipulation appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22currentColor%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpolyline points=%226 9 12 15 18 9%22%3E%3C/polyline%3E%3C/svg%3E')] bg-no-repeat bg-right-4 bg-[length:20px] pr-10"
                       >
                         <option value="US">United States</option>
                         <option value="CA">Canada</option>
@@ -415,7 +493,7 @@ export default function CheckoutPage() {
                     </div>
 
                     <div>
-                      <label htmlFor="address" className="block text-sm font-medium mb-2 text-gray-900">
+                      <label htmlFor="address" className="block text-sm font-semibold mb-2.5 text-gray-900">
                         Street Address <span className="text-red-500">*</span>
                       </label>
                       <textarea
@@ -423,16 +501,25 @@ export default function CheckoutPage() {
                         name="address"
                         value={formData.address}
                         onChange={handleInputChange}
+                        onBlur={() => validateField('address', formData.address)}
                         required
+                        autoComplete="street-address"
                         rows={3}
-                        className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white/90 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/30 transition-all duration-200 ease-apple-standard resize-none"
+                        className={`w-full px-4 py-3.5 sm:py-3 rounded-xl border bg-white text-gray-900 placeholder-gray-400 text-base focus:outline-none focus:ring-2 transition-all duration-200 ease-apple-standard resize-none min-h-[48px] touch-manipulation ${
+                          fieldErrors.address
+                            ? 'border-red-400 focus:ring-red-500/30 focus:border-red-500'
+                            : 'border-gray-300 focus:ring-gray-900/20 focus:border-gray-900/40'
+                        }`}
                         placeholder="123 Main Street, Apt 4B"
                       />
+                      {fieldErrors.address && (
+                        <p className="mt-1.5 text-sm text-red-600 font-medium">{fieldErrors.address}</p>
+                      )}
                     </div>
 
-                    <div className="grid sm:grid-cols-3 gap-4">
+                    <div className="grid sm:grid-cols-3 gap-4 sm:gap-5">
                       <div>
-                        <label htmlFor="state" className="block text-sm font-medium mb-2 text-gray-900">
+                        <label htmlFor="state" className="block text-sm font-semibold mb-2.5 text-gray-900">
                           State / Province <span className="text-red-500">*</span>
                         </label>
                         <input
@@ -442,13 +529,14 @@ export default function CheckoutPage() {
                           value={formData.state}
                           onChange={handleInputChange}
                           required
-                          className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white/90 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/30 transition-all duration-200 ease-apple-standard"
+                          autoComplete="address-level1"
+                          className="w-full px-4 py-3.5 sm:py-3 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 text-base focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/40 transition-all duration-200 ease-apple-standard min-h-[48px] touch-manipulation"
                           placeholder="CA"
                         />
                       </div>
 
                       <div>
-                        <label htmlFor="city" className="block text-sm font-medium mb-2 text-gray-900">
+                        <label htmlFor="city" className="block text-sm font-semibold mb-2.5 text-gray-900">
                           City <span className="text-red-500">*</span>
                         </label>
                         <input
@@ -458,13 +546,14 @@ export default function CheckoutPage() {
                           value={formData.city}
                           onChange={handleInputChange}
                           required
-                          className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white/90 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/30 transition-all duration-200 ease-apple-standard"
+                          autoComplete="address-level2"
+                          className="w-full px-4 py-3.5 sm:py-3 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 text-base focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/40 transition-all duration-200 ease-apple-standard min-h-[48px] touch-manipulation"
                           placeholder="San Francisco"
                         />
                       </div>
 
                       <div>
-                        <label htmlFor="zip" className="block text-sm font-medium mb-2 text-gray-900">
+                        <label htmlFor="zip" className="block text-sm font-semibold mb-2.5 text-gray-900">
                           Postal Code <span className="text-red-500">*</span>
                         </label>
                         <input
@@ -474,7 +563,9 @@ export default function CheckoutPage() {
                           value={formData.zip}
                           onChange={handleInputChange}
                           required
-                          className="w-full px-4 py-3 rounded-xl border border-black/10 bg-white/90 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/30 transition-all duration-200 ease-apple-standard"
+                          autoComplete="postal-code"
+                          inputMode="numeric"
+                          className="w-full px-4 py-3.5 sm:py-3 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 text-base focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/40 transition-all duration-200 ease-apple-standard min-h-[48px] touch-manipulation"
                           placeholder="94102"
                         />
                       </div>
@@ -509,18 +600,18 @@ export default function CheckoutPage() {
                   />
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
                   <button
                     type="button"
                     onClick={() => router.back()}
-                    className="flex-1 px-6 py-3 rounded-full border border-black/10 bg-white/90 text-gray-900 font-semibold hover:bg-white transition-all duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/40 focus-visible:ring-offset-2"
+                    className="flex-1 px-6 py-3.5 sm:py-3 rounded-full border border-gray-300 bg-white text-gray-900 font-semibold active:bg-gray-50 transition-all duration-150 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/40 focus-visible:ring-offset-2 min-h-[48px] touch-manipulation"
                   >
                     Back
                   </button>
                   <button
                     type="submit"
                     disabled={loading || (stock !== null && stock <= 0)}
-                    className="flex-1 px-6 py-3 rounded-full bg-gray-900 text-white font-semibold hover:bg-gray-950 shadow-deep transition-all duration-200 ease-apple-standard disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/60 focus-visible:ring-offset-2"
+                    className="flex-1 px-6 py-3.5 sm:py-3 rounded-full bg-gray-900 text-white font-semibold active:bg-gray-950 shadow-deep transition-all duration-150 ease-apple-standard disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/60 focus-visible:ring-offset-2 min-h-[48px] touch-manipulation"
                   >
                     {loading ? 'Processing...' : stock !== null && stock <= 0 ? 'Out of Stock' : 'Continue to Payment'}
                   </button>

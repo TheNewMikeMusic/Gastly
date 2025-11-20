@@ -88,11 +88,6 @@ export default async function SuccessPage({
     const amount = (session.amount_total || 0) / 100
     const currency = session.currency?.toUpperCase() || 'USD'
 
-    // Get order with shipping information
-    const order = await prisma.order.findFirst({
-      where: { stripeSessionId: sessionId },
-    })
-
     return (
       <div className="min-h-screen flex items-center justify-center px-4 py-16">
         <div className="max-w-2xl w-full space-y-6">

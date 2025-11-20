@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
 
     if (!username || !password) {
       return NextResponse.json(
-        { error: '用户名和密码不能为空' },
+        { error: 'Username and password are required' },
         { status: 400 }
       )
     }
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     
     if (!isValid) {
       return NextResponse.json(
-        { error: '用户名或密码错误' },
+        { error: 'Invalid username or password' },
         { status: 401 }
       )
     }
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Admin login error:', error)
     return NextResponse.json(
-      { error: '登录失败，请稍后重试' },
+      { error: 'Login failed, please try again later' },
       { status: 500 }
     )
   }

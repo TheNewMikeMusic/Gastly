@@ -28,8 +28,8 @@ export function NarrativeBlocks() {
   const prefersReducedMotion = useReducedMotion()
 
   return (
-    <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-16 lg:space-y-24">
+    <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto space-y-12 sm:space-y-16 lg:space-y-24">
         {narratives.map((narrative, index) => (
           <NarrativeBlock
             key={narrative.prefix}
@@ -58,16 +58,16 @@ function NarrativeBlock({
   return (
     <motion.div
       ref={ref}
-      initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 32 }}
+      initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 24 }}
       animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
-      className={`flex flex-col ${narrative.imageLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-10 lg:gap-20 items-center`}
+      transition={{ duration: 0.5, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
+      className={`flex flex-col ${narrative.imageLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-8 sm:gap-10 lg:gap-20 items-center`}
     >
       <motion.div 
         initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, scale: 0.96 }}
         animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6, delay: index * 0.15 + 0.1, ease: [0.16, 1, 0.3, 1] }}
-        className="flex-1 relative aspect-[3/4] image-container-text overflow-hidden"
+        transition={{ duration: 0.5, delay: index * 0.12 + 0.1, ease: [0.16, 1, 0.3, 1] }}
+        className="flex-1 relative aspect-[3/4] rounded-xl sm:rounded-2xl overflow-hidden bg-gray-50 w-full"
       >
         <OptimizedImage
           prefix={narrative.prefix}
@@ -77,10 +77,10 @@ function NarrativeBlock({
           alt={narrative.alt}
         />
       </motion.div>
-      <div className="flex-1 space-y-6 lg:px-8">
+      <div className="flex-1 space-y-4 sm:space-y-6 lg:px-8 text-center lg:text-left">
         <p className="text-xs uppercase tracking-[0.15em] text-gray-500 font-medium">Chapter {index + 1}</p>
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-gray-900 tracking-[-0.022em] leading-[1.08]">{narrative.title}</h2>
-        <p className="text-lg sm:text-xl text-gray-600 leading-[1.6] tracking-[-0.011em]">{narrative.description}</p>
+        <h2 className="text-2xl sm:text-3xl lg:text-5xl font-semibold text-gray-900 tracking-[-0.022em] leading-[1.08]">{narrative.title}</h2>
+        <p className="text-base sm:text-lg lg:text-xl text-gray-600 leading-[1.6] tracking-[-0.011em]">{narrative.description}</p>
       </div>
     </motion.div>
   )
