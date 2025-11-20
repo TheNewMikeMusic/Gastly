@@ -56,7 +56,7 @@ export function FAQ() {
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           className="text-center mb-10 sm:mb-14 lg:mb-16"
         >
-          <h2 className="text-3xl sm:text-4xl lg:text-6xl font-semibold mb-4 sm:mb-6 text-gray-900 tracking-[-0.022em] leading-[1.08]">
+          <h2 className="text-3xl sm:text-4xl lg:text-6xl font-semibold mb-4 sm:mb-6 text-gray-900 tracking-[-0.022em] leading-[1.12]">
             Frequently asked questions
           </h2>
           <p className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto leading-[1.6] tracking-[-0.011em] px-4">
@@ -81,7 +81,7 @@ export function FAQ() {
                   onClick={() => setOpenIndex(isOpen ? null : index)}
                   aria-expanded={isOpen}
                 >
-                  <span className="text-base sm:text-lg font-semibold text-gray-900 tracking-[-0.018em] pr-2">{faq.question}</span>
+                  <span className="text-base sm:text-lg font-semibold text-gray-900 tracking-[-0.018em] leading-[1.4] pr-2">{faq.question}</span>
                   <span
                     className={`h-6 w-6 flex items-center justify-center rounded-full border text-sm font-bold transition-transform ${
                       isOpen ? 'rotate-45 border-gray-400 text-gray-500' : 'border-gray-300 text-gray-600'
@@ -101,7 +101,7 @@ export function FAQ() {
                   transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                   className="overflow-hidden"
                 >
-                  <p className="text-sm sm:text-base text-gray-600 leading-[1.6] tracking-[-0.011em] pb-2">{faq.answer}</p>
+                  <p className="text-sm sm:text-base text-gray-600 leading-[1.7] tracking-[-0.011em] pb-2">{faq.answer}</p>
                 </motion.div>
               </motion.div>
             )
