@@ -7,12 +7,16 @@ interface BuyButtonProps {
   className?: string
   variant?: 'primary' | 'secondary'
   size?: 'sm' | 'md' | 'lg'
+  onClick?: () => void
 }
 
-export function BuyButton({ className = '', variant = 'primary', size = 'md' }: BuyButtonProps) {
+export function BuyButton({ className = '', variant = 'primary', size = 'md', onClick }: BuyButtonProps) {
   const router = useRouter()
 
   const handleClick = () => {
+    if (onClick) {
+      onClick()
+    }
     router.push('/checkout')
   }
 

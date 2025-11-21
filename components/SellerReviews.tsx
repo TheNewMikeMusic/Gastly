@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { useReducedMotion, useIntersectionObserver } from '@/lib/hooks'
 import { motion } from 'framer-motion'
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 
 type SellerReviewsProps = {
   variant?: 'marketing' | 'dashboard'
@@ -70,7 +70,7 @@ const reviews: Review[] = [
     body:
       'My order shipped out on time and arrived in great condition. The clocks were a gift and my family loved them. They seem really well made and work great. The boot animation is delightful—exactly like the original Macintosh. Highly recommend!',
     response:
-      "Hi Andrea! Thank you so much for sharing your lovely feedback — and that photo made my day! I'm really happy to hear your family loved the clocks and that everything arrived safely. I had a lot of fun designing this retro piece; it's such a nostalgic nod to old-school tech. Hope it brings lots of smiles whenever it boots up with that floppy grin!",
+      "Hi Andrea! Thank you so much for sharing your lovely feedback — and that photo made my day! I&apos;m really happy to hear your family loved the clocks and that everything arrived safely. I had a lot of fun designing this retro piece; it&apos;s such a nostalgic nod to old-school tech. Hope it brings lots of smiles whenever it boots up with that floppy grin!",
     media: [
       {
         file: 'iap_1000x1000.7133129332_7ugtj81k.webp',
@@ -88,31 +88,25 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
   const isDashboard = variant === 'dashboard'
   const prefersReducedMotion = useReducedMotion()
   const containerRef = useRef<HTMLDivElement>(null)
-  const hasAnimatedRef = useRef(false)
-  const isVisible = useIntersectionObserver(containerRef, { threshold: 0.25 })
+  const isVisible = useIntersectionObserver(containerRef, { threshold: 0.1 })
 
-  if (isVisible && !hasAnimatedRef.current) {
-    hasAnimatedRef.current = true
-  }
-
-  const shouldShow = prefersReducedMotion || hasAnimatedRef.current || isVisible
-
+  // 简化动画逻辑：始终显示内容，只在可见时触发动画
   const getFadeMotion = (delay = 0) => {
     if (prefersReducedMotion) return {}
     return {
-      initial: { opacity: 0, y: 24 },
-      animate: shouldShow ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 },
-      transition: { duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] },
+      initial: { opacity: 0, y: 20 },
+      animate: isVisible ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }, // 始终显示，不依赖可见性
+      transition: { duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] },
     }
   }
 
   const getCardMotion = (index: number) => {
     if (prefersReducedMotion) return {}
-    const baseDelay = isDashboard ? 0 : 0.2
+    const baseDelay = isDashboard ? 0 : 0.1
     return {
-      initial: { opacity: 0, y: 32 },
-      animate: shouldShow ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 },
-      transition: { duration: 0.6, delay: baseDelay + index * 0.12, ease: [0.16, 1, 0.3, 1] },
+      initial: { opacity: 0, y: 20 },
+      animate: isVisible ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }, // 始终显示
+      transition: { duration: 0.5, delay: baseDelay + index * 0.1, ease: [0.16, 1, 0.3, 1] },
     }
   }
 
@@ -122,29 +116,27 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
       className={
         isDashboard
           ? 'glass rounded-2xl p-6 sm:p-8'
-          : 'relative overflow-hidden rounded-3xl border border-gray-200/50 bg-white/90 p-8 sm:p-10 lg:p-12 shadow-[0_20px_60px_rgba(15,23,42,0.12)] backdrop-blur-xl'
+          : 'relative rounded-2xl sm:rounded-3xl border border-gray-200/50 bg-white p-4 sm:p-6 lg:p-8 xl:p-12 shadow-[0_20px_60px_rgba(15,23,42,0.12)] w-full'
       }
     >
       {!isDashboard && (
         <>
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white via-white/95 to-gray-50/50"
-          >
-            <div className="absolute inset-px rounded-[30px] border border-white/40" />
-          </div>
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -right-20 top-0 h-80 w-80 rounded-full bg-blue-100/30 opacity-40 blur-3xl"
+            className="pointer-events-none absolute inset-0 bg-white rounded-2xl sm:rounded-3xl z-0"
           />
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -left-20 bottom-0 h-80 w-80 rounded-full bg-amber-100/30 opacity-40 blur-3xl"
+            className="pointer-events-none absolute -right-20 top-0 h-80 w-80 rounded-full bg-blue-100/10 opacity-20 blur-3xl z-0"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -left-20 bottom-0 h-80 w-80 rounded-full bg-amber-100/10 opacity-20 blur-3xl z-0"
           />
         </>
       )}
 
-      <div className="relative z-10 space-y-8 sm:space-y-10">
+      <div className="relative z-10 space-y-6 sm:space-y-8 lg:space-y-10 w-full">
         <motion.div
           {...getFadeMotion()}
           className={
@@ -193,7 +185,7 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
           </div>
         </motion.div>
 
-        <div className="grid gap-5 sm:gap-6 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-5 lg:gap-6 lg:grid-cols-3 w-full">
           {reviews.map((review, index) => (
             <motion.article
               key={review.id}
@@ -206,7 +198,7 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
               className={
                 isDashboard
                   ? 'glass-card rounded-2xl p-5 sm:p-6 space-y-5'
-                  : 'glass-card rounded-2xl p-6 sm:p-7 space-y-5 h-full flex flex-col'
+                  : 'glass-card rounded-2xl p-6 sm:p-7 space-y-5 flex flex-col'
               }
             >
               {/* Header with avatar and rating */}
@@ -240,34 +232,26 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
               </div>
 
               {/* Review content */}
-              <div className="flex-grow">
+              <div className="flex-shrink-0">
                 <h3 className="text-base font-semibold text-gray-900 mb-2 leading-snug">{review.headline}</h3>
                 <p className="text-sm text-gray-600 leading-relaxed">{review.body}</p>
               </div>
 
               {/* Media gallery */}
               {review.media && review.media.length > 0 && (
-                <div className={`grid gap-3 ${review.media.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
+                <div className={`grid gap-3 flex-shrink-0 ${review.media.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
                   {review.media.map((mediaItem) => (
-                    <div
+                    <ReviewImage
                       key={mediaItem.file}
-                      className="relative aspect-square overflow-hidden rounded-xl border border-gray-200/50 bg-gray-50 group cursor-pointer"
-                    >
-                      <Image
-                        src={`/${mediaItem.file}`}
-                        alt={mediaItem.alt}
-                        fill
-                        className="object-cover transition-transform duration-300 group-hover:scale-105"
-                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 220px"
-                      />
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
-                    </div>
+                      file={mediaItem.file}
+                      alt={mediaItem.alt}
+                    />
                   ))}
                 </div>
               )}
 
               {/* Seller response */}
-              <div className="rounded-xl border border-gray-200/50 bg-gray-50/80 p-4 sm:p-5 mt-auto">
+              <div className="rounded-xl border border-gray-200/50 bg-gray-50/80 p-4 sm:p-5 flex-shrink-0">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-6 h-6 rounded-full bg-gray-900 flex items-center justify-center">
                     <span className="text-white text-xs font-semibold">A</span>
@@ -290,9 +274,93 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
   }
 
   return (
-    <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">{content}</div>
+    <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 w-full">
+      <div className="max-w-7xl mx-auto w-full">{content}</div>
     </section>
+  )
+}
+
+function ReviewImage({ file, alt }: { file: string; alt: string }) {
+  const [imageError, setImageError] = useState(false)
+  const [imageSrc, setImageSrc] = useState(`/${file}`)
+  const [isLoading, setIsLoading] = useState(true)
+  const [retryCount, setRetryCount] = useState(0)
+  
+  // 检测是否为PC视图（非移动端）
+  const [isPC, setIsPC] = useState(false)
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsPC(window.innerWidth >= 768) // md断点以上为PC
+      
+      const handleResize = () => {
+        setIsPC(window.innerWidth >= 768)
+      }
+      
+      window.addEventListener('resize', handleResize)
+      return () => window.removeEventListener('resize', handleResize)
+    }
+  }, [])
+
+  const handleError = () => {
+    // 尝试不同的路径格式
+    const alternatives = [
+      `/${file}`,
+      `/${file.replace('.webp', '.avif')}`, // 尝试avif格式
+      `/${file.replace('.webp', '.jpg')}`, // 尝试jpg格式
+    ]
+    
+    if (retryCount < alternatives.length - 1) {
+      const nextIndex = retryCount + 1
+      setImageSrc(alternatives[nextIndex])
+      setRetryCount(nextIndex)
+      setIsLoading(true) // 重试时重置加载状态
+    } else {
+      setImageError(true)
+      setIsLoading(false)
+    }
+  }
+
+  const handleLoad = () => {
+    setIsLoading(false)
+  }
+
+  // 骨架屏组件
+  const SkeletonPlaceholder = () => (
+    <div className="absolute inset-0 bg-gradient-to-br from-gray-200 via-gray-100 to-gray-200 animate-pulse">
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" />
+    </div>
+  )
+
+  if (imageError) {
+    return (
+      <div className="relative aspect-square overflow-hidden rounded-xl border border-gray-200/50 bg-gray-100 flex items-center justify-center min-h-[200px]">
+        <span className="text-xs text-gray-400 text-center px-2">图片加载失败</span>
+      </div>
+    )
+  }
+
+  return (
+    <div className="relative w-full aspect-square overflow-hidden rounded-xl border border-gray-200/50 bg-gray-50 group cursor-pointer">
+      {/* 骨架屏占位符 */}
+      {isLoading && <SkeletonPlaceholder />}
+      
+      {/* 使用普通img标签以支持动态src切换 */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={imageSrc}
+        alt={alt}
+        className={`absolute inset-0 w-full h-full object-cover transition-all duration-300 group-hover:scale-105 ${
+          isLoading ? 'opacity-0' : 'opacity-100'
+        }`}
+        onError={handleError}
+        onLoad={handleLoad}
+        loading={isPC ? 'eager' : 'lazy'}
+        fetchPriority={isPC ? 'high' : 'auto'}
+        decoding={isPC ? 'sync' : 'async'}
+      />
+      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
+    </div>
   )
 }
 

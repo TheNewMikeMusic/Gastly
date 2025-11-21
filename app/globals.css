@@ -545,10 +545,11 @@ button:active, a:active {
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.25);
   background: rgba(255, 255, 255, 0.08);
-  color: #f6f8ff;
+  color: #1d1d1f;
   font-size: 0.85rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  font-weight: 600;
 }
 
 .surface-divider {
@@ -833,6 +834,19 @@ p {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
 }
 
 /* Standard animation durations */

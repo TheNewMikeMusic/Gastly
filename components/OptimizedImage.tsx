@@ -1,8 +1,8 @@
 'use client'
 
-import { useReducedMotion } from '@/lib/hooks'
+import { useReducedMotion, useIntersectionObserver } from '@/lib/hooks'
 import { motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 interface OptimizedImageProps {
   prefix: string
@@ -30,10 +30,24 @@ export function OptimizedImage({
   const prefersReducedMotion = useReducedMotion()
   const [imageSrc, setImageSrc] = useState<string>('')
   const [imageError, setImageError] = useState(false)
+  const [isVisible, setIsVisible] = useState(priority) // 优先级图片默认可见
+  const containerRef = useRef<HTMLDivElement>(null)
+  
+  // 使用Intersection Observer检测图片是否进入视口
+  const isIntersecting = useIntersectionObserver(containerRef, { 
+    threshold: 0.1,
+    rootMargin: '50px' // 提前50px开始加载
+  })
+  
+  useEffect(() => {
+    if (isIntersecting || priority) {
+      setIsVisible(true)
+    }
+  }, [isIntersecting, priority])
   
   useEffect(() => {
     // 如果前缀已经包含完整文件名（如 .jpg.webp、.jpg 或 .webp），直接使用
-    if (prefix.includes('.jpg.webp') || prefix.endsWith('.jpg') || prefix.endsWith('.webp')) {
+    if (prefix.includes('.jpg.webp') || prefix.endsWith('.jpg') || prefix.endsWith('.webp') || prefix.endsWith('.png') || prefix.endsWith('.avif')) {
       setImageSrc(`/${prefix}`)
       return
     }
@@ -65,8 +79,15 @@ export function OptimizedImage({
     return null
   }
 
+  // 确定加载策略：优先级图片或进入视口的图片使用eager loading
+  const shouldUseEager = priority || isVisible
+  const loadingStrategy = shouldUseEager ? 'eager' : 'lazy'
+  const fetchPriorityValue = priority ? 'high' : (isVisible ? 'high' : 'auto')
+  const decodingStrategy = priority ? 'sync' : (isVisible ? 'sync' : 'async')
+
   return (
     <motion.div
+      ref={containerRef}
       initial={prefersReducedMotion ? {} : { opacity: 0 }}
       animate={prefersReducedMotion ? {} : { opacity: 1 }}
       transition={{ duration: 0.3 }}
@@ -98,7 +119,9 @@ export function OptimizedImage({
             objectFit: fit,
             objectPosition: 'center'
           }}
-          loading={priority ? 'eager' : 'lazy'}
+          loading={loadingStrategy}
+          fetchPriority={fetchPriorityValue}
+          decoding={decodingStrategy}
           onError={handleError}
         />
       )}

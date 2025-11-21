@@ -27,7 +27,7 @@ const trustItems = [
   {
     icon: 'return',
     title: '30-day returns',
-    description: "Try Hello1984 at home. If it's not love, send it back for a full refund.",
+    description: "Try Hello1984 at home. If it&apos;s not love, send it back for a full refund.",
     href: '/returns',
   },
 ]
@@ -90,12 +90,12 @@ const iconMap: Record<string, JSX.Element> = {
 
 export function TrustStrip() {
   const prefersReducedMotion = useReducedMotion()
-  const sectionRef = useRef<HTMLElement>(null)
+  const sectionRef = useRef<HTMLElement | null>(null)
   const isVisible = useIntersectionObserver(sectionRef, { threshold: 0.2 })
 
   return (
     <motion.section
-      ref={sectionRef}
+      ref={sectionRef as React.RefObject<HTMLElement>}
       initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
       animate={prefersReducedMotion || isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
@@ -115,25 +115,25 @@ export function TrustStrip() {
               href={item.href}
               className="glass-card rounded-2xl p-5 sm:p-6 h-full flex flex-col shadow-[0_18px_40px_rgba(15,23,42,0.08)] transition-all duration-200 ease-apple-standard active:scale-[0.98] touch-manipulation group"
             >
-              {/* Icon - 统一对齐和高度 */}
-              <div className="mb-4 flex items-center h-10">
+              {/* Icon - 统一对齐和高度，居中 */}
+              <div className="mb-4 flex items-center justify-center h-10">
                 <div className="group-hover:scale-110 transition-transform duration-200 flex-shrink-0">
                   {iconMap[item.icon]}
                 </div>
               </div>
               
-              {/* Title - 统一高度，左对齐 */}
-              <h3 className="text-base sm:text-lg font-semibold mb-2.5 text-gray-900 group-hover:text-gray-950 transition-colors leading-tight min-h-[2.5rem] sm:min-h-[3rem] flex items-start">
+              {/* Title - 统一高度，居中 */}
+              <h3 className="text-base sm:text-lg font-semibold mb-2.5 text-gray-900 group-hover:text-gray-950 transition-colors leading-tight min-h-[2.5rem] sm:min-h-[3rem] text-center">
                 {item.title}
               </h3>
               
-              {/* Description - 统一行数和高度，左对齐 */}
-              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed flex-grow mb-3 min-h-[3rem] sm:min-h-[3.5rem]">
+              {/* Description - 统一行数和高度，居中 */}
+              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed flex-grow mb-3 min-h-[3rem] sm:min-h-[3.5rem] text-center">
                 {item.description}
               </p>
               
-              {/* Learn more - 统一位置，底部对齐 */}
-              <div className="mt-auto pt-2 text-xs text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200 font-medium">
+              {/* Learn more - 统一位置，底部对齐，居中 */}
+              <div className="mt-auto pt-2 text-xs text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200 font-medium text-center">
                 Learn more →
               </div>
             </Link>

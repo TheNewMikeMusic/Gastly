@@ -13,12 +13,20 @@ export default function Error({
   useEffect(() => {
     // 记录错误到控制台或错误监控服务
     console.error('Application error:', error)
+    
+    // 如果是客户端错误，尝试自动恢复
+    if (typeof window !== 'undefined' && error.message?.includes('chunk')) {
+      // Chunk加载错误，尝试重新加载页面
+      setTimeout(() => {
+        window.location.reload()
+      }, 2000)
+    }
   }, [error])
 
   return (
     <>
       <Navigation />
-      <div className="min-h-screen flex items-center justify-center px-4 pt-24">
+      <div className="min-h-screen flex items-center justify-center px-4 pt-24 bg-gray-50">
         <div className="max-w-md w-full text-center space-y-6">
           <div className="text-6xl">⚠️</div>
           <div className="space-y-2">
@@ -38,9 +46,15 @@ export default function Error({
               </pre>
             </details>
           )}
-          <div className="flex gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
-              onClick={reset}
+              onClick={() => {
+                try {
+                  reset()
+                } catch (e) {
+                  window.location.href = '/'
+                }
+              }}
               className="px-6 py-3 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-950 transition-colors"
             >
               重试
@@ -57,4 +71,6 @@ export default function Error({
     </>
   )
 }
+
+
 

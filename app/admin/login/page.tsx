@@ -34,9 +34,12 @@ export default function AdminLoginPage() {
         return
       }
 
+      // 等待一下确保cookie已设置
+      await new Promise(resolve => setTimeout(resolve, 100))
+      
       const redirectTo = searchParams.get('redirect') || '/admin'
-      router.push(redirectTo)
-      router.refresh()
+      // 使用window.location而不是router.push，确保完全刷新
+      window.location.href = redirectTo
     } catch (err) {
       setError('Network error, please try again later')
       setLoading(false)

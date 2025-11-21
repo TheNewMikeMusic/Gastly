@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 export const siteConfig = {
   name: 'Hello1984',
   description: 'A beautifully crafted retro Macintosh-style digital clock. Pixel-perfect nostalgia meets modern craftsmanship.',
-  url: process.env.NEXT_PUBLIC_URL || 'https://hello1984.com',
+  url: process.env.NEXT_PUBLIC_URL || 'https://38.175.195.104',
 }
 
 export const defaultMetadata: Metadata = {
@@ -28,6 +28,11 @@ export const defaultMetadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+  },
+  icons: {
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
   },
 }
 

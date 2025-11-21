@@ -109,27 +109,50 @@ export default function CheckoutPage() {
     const isClerkConfigured = publishableKey && publishableKey !== 'pk_test_dummy' && !publishableKey.includes('你的Clerk')
     
     if (isClerkConfigured) {
-      if (isLoaded && !user) {
-        router.push('/sign-in?redirect_url=/checkout')
+      // 等待Clerk完全加载
+      if (!isLoaded) {
         return
       }
-      if (isLoaded && user) {
-        setFormData((prev) => ({
-          ...prev,
-          name: user.fullName || prev.name,
-          email: user.primaryEmailAddress?.emailAddress || prev.email,
-        }))
+      
+      // 如果已加载但用户未登录，重定向到登录页
+      if (!user && !isSignedIn) {
+        // 使用setTimeout避免在重定向过程中触发错误
+        const timer = setTimeout(() => {
+          router.push('/sign-in?redirect_url=/checkout')
+        }, 100)
+        return () => clearTimeout(timer)
+      }
+      
+      // 如果用户已登录，填充表单数据
+      if (user && isSignedIn) {
+        try {
+          setFormData((prev) => ({
+            ...prev,
+            name: user.fullName || prev.name,
+            email: user.primaryEmailAddress?.emailAddress || prev.email,
+          }))
+        } catch (error) {
+          console.error('Error setting user data:', error)
+        }
       }
     }
 
-    // 加载保存的地址
-    if (isSignedIn) {
-      loadSavedAddresses()
+    // 加载保存的地址（仅在已登录时）
+    if (isSignedIn && isLoaded) {
+      try {
+        loadSavedAddresses()
+      } catch (error) {
+        console.error('Error loading addresses:', error)
+      }
     }
 
     // 检查库存
-    checkStock()
-  }, [user, isLoaded, router, isSignedIn, loadSavedAddresses, checkStock])
+    try {
+      checkStock()
+    } catch (error) {
+      console.error('Error checking stock:', error)
+    }
+  }, [user, isLoaded, isSignedIn, router, loadSavedAddresses, checkStock])
 
   const handleCouponApply = (code: string, discount: number) => {
     setCouponCode(code)
@@ -306,20 +329,34 @@ export default function CheckoutPage() {
   const isClerkConfigured = publishableKey && publishableKey !== 'pk_test_dummy' && !publishableKey.includes('你的Clerk')
   
   // Show loading state while checking authentication
+  // 在手机端登录后重定向时，给Clerk更多时间加载
   if (isClerkConfigured && !isLoaded) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-gray-600">Loading...</div>
-      </div>
+      <>
+        <Navigation />
+        <div className="min-h-screen flex items-center justify-center bg-background pt-24">
+          <div className="text-center space-y-4">
+            <div className="text-gray-600">正在加载...</div>
+            <div className="w-8 h-8 border-4 border-gray-300 border-t-gray-900 rounded-full animate-spin mx-auto"></div>
+          </div>
+        </div>
+      </>
     )
   }
 
-  // If Clerk is configured and user is not authenticated, show nothing (redirect will happen in useEffect)
-  if (isClerkConfigured && isLoaded && !user) {
+  // If Clerk is configured and user is not authenticated, show loading (redirect will happen in useEffect)
+  // 使用 isSignedIn 而不是 user，因为 user 可能还未完全加载
+  if (isClerkConfigured && isLoaded && !isSignedIn) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-gray-600">Redirecting to sign in...</div>
-      </div>
+      <>
+        <Navigation />
+        <div className="min-h-screen flex items-center justify-center bg-white pt-24">
+          <div className="text-center space-y-4">
+            <div className="text-gray-600">正在跳转到登录页面...</div>
+            <div className="w-8 h-8 border-4 border-gray-300 border-t-gray-900 rounded-full animate-spin mx-auto"></div>
+          </div>
+        </div>
+      </>
     )
   }
 
@@ -329,8 +366,8 @@ export default function CheckoutPage() {
   return (
     <div className="min-h-screen bg-white">
       <Navigation />
-      <div className="page-content pb-20 px-4 sm:px-6 lg:px-8 safe-area-bottom">
-        <div className="max-w-6xl mx-auto">
+      <div className="page-content pb-20 px-4 sm:px-4 md:px-6 lg:px-8 safe-area-bottom">
+        <div className="max-w-6xl mx-auto w-full">
           <motion.div
             initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
             animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
@@ -352,15 +389,15 @@ export default function CheckoutPage() {
             </div>
           )}
 
-          <div className="grid lg:grid-cols-3 gap-8 lg:gap-12">
+          <div className="grid lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-12 w-full">
             {/* Shipping Form */}
-            <div className="lg:col-span-2">
-              <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="lg:col-span-2 w-full order-2 lg:order-1">
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 w-full">
                 {error && <FormError error={error} />}
 
                 {/* 保存的地址选择 */}
                 {isSignedIn && savedAddresses.length > 0 && (
-                  <div className="glass rounded-2xl p-6 sm:p-8">
+                  <div className="glass rounded-2xl p-4 sm:p-6 lg:p-8 w-full">
                     <h3 className="text-lg font-semibold mb-4 text-gray-900">
                       Use Saved Address
                     </h3>
@@ -384,8 +421,8 @@ export default function CheckoutPage() {
                 )}
 
                 {(!useSavedAddress || savedAddresses.length === 0) && (
-                  <div className="glass rounded-2xl p-6 sm:p-8 space-y-6">
-                    <h2 className="text-2xl font-semibold mb-6 text-gray-900">
+                  <div className="glass rounded-2xl p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6">
+                    <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-gray-900">
                       Shipping Information
                     </h2>
 
@@ -588,7 +625,7 @@ export default function CheckoutPage() {
                 )}
 
                 {/* 优惠券输入 */}
-                <div className="glass rounded-2xl p-6 sm:p-8">
+                <div className="glass rounded-2xl p-4 sm:p-6 lg:p-8 w-full">
                   <h3 className="text-lg font-semibold mb-4 text-gray-900">
                     Have a Coupon?
                   </h3>
@@ -620,8 +657,8 @@ export default function CheckoutPage() {
             </div>
 
             {/* Order Summary */}
-            <div className="lg:col-span-1">
-              <div className="glass rounded-2xl p-6 sm:p-8 sticky top-24">
+            <div className="lg:col-span-1 w-full order-1 lg:order-2">
+              <div className="glass rounded-2xl p-4 sm:p-6 lg:p-8 sticky top-24 w-full">
                 <h2 className="text-xl font-semibold mb-6 text-gray-900">
                   Order Summary
                 </h2>

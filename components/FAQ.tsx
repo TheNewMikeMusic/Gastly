@@ -18,7 +18,7 @@ const faqs = [
   {
     question: 'How do power and settings work?',
     answer:
-      "Hello1984 runs on standard 5V USB-C power and consumes less than 2W. A real-time clock backup preserves the time, alarms, and brightness even if you unplug it, so there's no setup dance each day.",
+      "Hello1984 runs on standard 5V USB-C power and consumes less than 2W. A real-time clock backup preserves the time, alarms, and brightness even if you unplug it, so there&apos;s no setup dance each day.",
   },
   {
     question: 'Is there an app?',

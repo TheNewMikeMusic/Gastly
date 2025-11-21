@@ -37,6 +37,12 @@ async function checkAdminSession(request: NextRequest): Promise<boolean> {
 export default clerkMiddleware(async (auth, req: NextRequest) => {
   const { pathname } = req.nextUrl
 
+  // API routes should not be protected by Clerk authentication
+  // They handle their own authentication if needed
+  if (pathname.startsWith('/api/')) {
+    return NextResponse.next()
+  }
+
   // Handle admin routes separately
   if (isAdminRoute(pathname)) {
     const hasAdminSession = await checkAdminSession(req)
@@ -49,6 +55,7 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
   }
 
   // Protect routes that are not public (only if Clerk is configured)
+  // Skip protection for API routes (already handled above)
   if (isClerkConfigured && !isPublicRoute(req)) {
     auth().protect()
   }

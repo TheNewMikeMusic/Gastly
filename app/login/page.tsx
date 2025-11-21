@@ -32,11 +32,19 @@ export default function LoginPage() {
   return (
     <>
       <Navigation />
-      <div className="min-h-screen flex items-center justify-center px-4 pt-24">
+      <div className="min-h-screen flex items-center justify-center px-4 pt-24 bg-white">
         <SignIn
           appearance={{
             elements: {
               rootBox: 'mx-auto',
+              card: 'bg-white shadow-lg border border-gray-200/50',
+              headerTitle: 'text-gray-900',
+              headerSubtitle: 'text-gray-600',
+              socialButtonsBlockButton: 'bg-white border-gray-300 text-gray-900 hover:bg-gray-50',
+              formButtonPrimary: 'bg-gray-900 text-white hover:bg-gray-950',
+              formFieldInput: 'bg-white border-gray-300 text-gray-900',
+              formFieldLabel: 'text-gray-700',
+              footerActionLink: 'text-gray-900 hover:text-gray-700',
             },
           }}
         />

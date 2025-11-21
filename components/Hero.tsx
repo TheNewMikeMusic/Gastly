@@ -6,9 +6,24 @@ import { BuyButton } from '@/components/BuyButton'
 import { StockStatus } from '@/components/StockStatus'
 import { useReducedMotion } from '@/lib/hooks'
 import { motion } from 'framer-motion'
+import { useEffect } from 'react'
 
 export function Hero() {
   const prefersReducedMotion = useReducedMotion()
+
+  // 预加载Hero图片
+  useEffect(() => {
+    const link = document.createElement('link')
+    link.rel = 'preload'
+    link.href = '/maclock_hello_retro_apple_style.webp'
+    link.as = 'image'
+    link.setAttribute('fetchpriority', 'high')
+    document.head.appendChild(link)
+    
+    return () => {
+      document.head.removeChild(link)
+    }
+  }, [])
 
   return (
     <section className="relative w-full min-h-screen flex items-center hero-banner mobile-hero pt-10 sm:pt-20 lg:pt-12 safe-area-top">
@@ -23,14 +38,6 @@ export function Hero() {
             className="w-full lg:max-w-lg space-y-8 text-center lg:text-left"
           >
             <div className="hero-panel space-y-8">
-              <motion.span 
-                initial={prefersReducedMotion ? {} : { opacity: 0, y: 12 }}
-                animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-                className="hero-pill inline-flex justify-center lg:justify-start text-sm font-medium tracking-[0.05em]"
-              >
-                Hello1984 · 2025 Edition
-              </motion.span>
               <motion.h1 
                 initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
                 animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}

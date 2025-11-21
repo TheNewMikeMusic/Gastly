@@ -58,7 +58,7 @@ export function FeaturesGrid() {
             Built like a tiny computer.
           </h2>
           <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto leading-[1.6] tracking-[-0.011em]">
-            A precise LCD grid, dependable internals, and interactions that feel analog even though they're digital.
+            A precise LCD grid, dependable internals, and interactions that feel analog even though they&apos;re digital.
           </p>
         </motion.div>
 
@@ -70,6 +70,7 @@ export function FeaturesGrid() {
               index={index}
               prefersReducedMotion={prefersReducedMotion}
               isVisible={isVisible}
+              priority={index < 2} // 前两个图片使用priority
             />
           ))}
         </div>
@@ -83,11 +84,13 @@ function FeatureCard({
   index,
   prefersReducedMotion,
   isVisible,
+  priority = false,
 }: {
   feature: typeof features[0]
   index: number
   prefersReducedMotion: boolean
   isVisible: boolean
+  priority?: boolean
 }) {
   return (
     <motion.div
@@ -104,6 +107,7 @@ function FeatureCard({
           fit="contain"
           sizes="(max-width: 768px) 100vw, 50vw"
           alt={feature.alt}
+          priority={priority}
         />
       </div>
       <h3 className="text-2xl font-semibold mb-4 text-gray-900 tracking-[-0.02em] leading-[1.1]">{feature.title}</h3>
