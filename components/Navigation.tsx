@@ -145,80 +145,147 @@ export function Navigation() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed inset-0 z-40 bg-black/40 backdrop-blur-md md:hidden"
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm md:hidden"
               onClick={() => setMenuOpen(false)}
             />
             <motion.div
-              initial={{ y: -20, opacity: 0, scale: 0.98 }}
-              animate={{ y: 0, opacity: 1, scale: 1 }}
-              exit={{ y: -20, opacity: 0, scale: 0.98 }}
+              initial={{ y: -10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -10, opacity: 0 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed top-[calc(4rem+env(safe-area-inset-top))] right-4 left-4 z-50 rounded-3xl bg-white/95 backdrop-blur-xl shadow-deep border border-gray-200/50 p-6 md:hidden safe-area-inset"
+              className="fixed top-[calc(4rem+env(safe-area-inset-top))] left-4 right-4 z-50 bg-white rounded-3xl shadow-deep md:hidden safe-area-inset overflow-hidden"
               style={{
+                maxHeight: 'calc(100vh - 4rem - env(safe-area-inset-top) - 2rem)',
                 boxShadow: '0 20px 60px -12px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05)',
               }}
               onClick={(e) => e.stopPropagation()}
             >
-              <nav className="space-y-1" aria-label="Mobile navigation">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="block rounded-xl px-4 py-3 text-apple-body-sm font-apple-medium text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-all duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/20 focus-visible:ring-offset-2 touch-manipulation touch-target"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
+              <nav className="px-4 py-2 overflow-y-auto" aria-label="Mobile navigation" style={{ maxHeight: 'inherit' }}>
+                {/* 主导航项 */}
+                <div className="space-y-0.5">
+                  {navItems.map((item, index) => (
+                    <motion.div
+                      key={item.href}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ 
+                        duration: 0.2, 
+                        delay: index * 0.03,
+                        ease: [0.16, 1, 0.3, 1] 
+                      }}
+                    >
+                      <Link
+                        href={item.href}
+                        className="block px-4 py-3.5 text-apple-body font-apple-normal text-[#1d1d1f] hover:bg-[#f5f5f7] active:bg-[#e8e8ed] transition-colors duration-150 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/20 focus-visible:ring-inset touch-manipulation touch-target rounded-lg"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        {item.label}
+                      </Link>
+                    </motion.div>
+                  ))}
+                </div>
                 
                 {/* 分隔线 */}
-                <div className="border-t border-gray-100 my-3" />
+                <div className="h-px bg-[#d2d2d7] my-2 mx-4" />
                 
-                <SignedIn>
-                  <Link
-                    href="/account"
-                    className="block rounded-xl px-4 py-3 text-apple-body-sm font-apple-medium text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-all duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/20 focus-visible:ring-offset-2 touch-manipulation touch-target"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    My Orders
-                  </Link>
-                  <div className="flex items-center justify-center px-4 py-3 rounded-xl bg-gray-50/50 mt-2">
-                    <UserButton 
-                      appearance={{
-                        elements: {
-                          avatarBox: 'w-9 h-9 ring-2 ring-gray-200',
-                          userButtonPopoverCard: 'shadow-deep',
-                        },
+                {/* 用户相关 */}
+                <div className="space-y-0.5">
+                  <SignedIn>
+                    <motion.div
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ 
+                        duration: 0.2, 
+                        delay: navItems.length * 0.03 + 0.05,
+                        ease: [0.16, 1, 0.3, 1] 
                       }}
-                    />
-                  </div>
-                </SignedIn>
-                <SignedOut>
-                  <Link
-                    href="/sign-in"
-                    className="block rounded-xl px-4 py-3 text-apple-body-sm font-apple-medium text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-all duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/20 focus-visible:ring-offset-2 touch-manipulation touch-target"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    href="/contact"
-                    className="block rounded-xl px-4 py-3 text-apple-body-sm font-apple-medium text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-all duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/20 focus-visible:ring-offset-2 touch-manipulation touch-target"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    Contact
-                  </Link>
-                </SignedOut>
+                    >
+                      <Link
+                        href="/account"
+                        className="block px-4 py-3.5 text-apple-body font-apple-normal text-[#1d1d1f] hover:bg-[#f5f5f7] active:bg-[#e8e8ed] transition-colors duration-150 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/20 focus-visible:ring-inset touch-manipulation touch-target rounded-lg"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        My Orders
+                      </Link>
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ 
+                        duration: 0.2, 
+                        delay: navItems.length * 0.03 + 0.08,
+                        ease: [0.16, 1, 0.3, 1] 
+                      }}
+                      className="px-4 py-3.5"
+                    >
+                      <div className="flex items-center justify-start">
+                        <UserButton 
+                          appearance={{
+                            elements: {
+                              avatarBox: 'w-8 h-8',
+                            },
+                          }}
+                        />
+                      </div>
+                    </motion.div>
+                  </SignedIn>
+                  <SignedOut>
+                    <motion.div
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ 
+                        duration: 0.2, 
+                        delay: navItems.length * 0.03 + 0.05,
+                        ease: [0.16, 1, 0.3, 1] 
+                      }}
+                    >
+                      <Link
+                        href="/sign-in"
+                        className="block px-4 py-3.5 text-apple-body font-apple-normal text-[#1d1d1f] hover:bg-[#f5f5f7] active:bg-[#e8e8ed] transition-colors duration-150 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/20 focus-visible:ring-inset touch-manipulation touch-target rounded-lg"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        Sign In
+                      </Link>
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ 
+                        duration: 0.2, 
+                        delay: navItems.length * 0.03 + 0.08,
+                        ease: [0.16, 1, 0.3, 1] 
+                      }}
+                    >
+                      <Link
+                        href="/contact"
+                        className="block px-4 py-3.5 text-apple-body font-apple-normal text-[#1d1d1f] hover:bg-[#f5f5f7] active:bg-[#e8e8ed] transition-colors duration-150 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/20 focus-visible:ring-inset touch-manipulation touch-target rounded-lg"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        Contact
+                      </Link>
+                    </motion.div>
+                  </SignedOut>
+                </div>
                 
-                {/* Buy Button for mobile */}
-                <div className="pt-3 mt-2 border-t border-gray-100">
-                  <BuyButton
-                    size="md"
-                    variant="primary"
-                    className="w-full shadow-medium"
-                    onClick={() => setMenuOpen(false)}
-                  />
+                {/* Buy Button */}
+                <div className="px-4 py-4 pb-6">
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ 
+                      duration: 0.25, 
+                      delay: navItems.length * 0.03 + 0.1,
+                      ease: [0.16, 1, 0.3, 1] 
+                    }}
+                  >
+                    <BuyButton
+                      size="md"
+                      variant="primary"
+                      className="w-full"
+                      onClick={() => setMenuOpen(false)}
+                    />
+                  </motion.div>
                 </div>
               </nav>
             </motion.div>

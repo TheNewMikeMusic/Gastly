@@ -12,26 +12,29 @@ export function ProductPrice({ variant = 'hero', showOriginal = true, className 
 
   if (variant === 'hero') {
     return (
-      <div className={`flex flex-col gap-3 sm:gap-4 ${className}`}>
+      <div className={`flex flex-col gap-4 sm:gap-5 ${className}`}>
         <div className="flex items-baseline gap-3 sm:gap-4 justify-center lg:justify-start">
-          <span className="text-apple-display font-apple-semibold text-[#1d1d1f]">
+          <span className="text-apple-display font-apple-semibold text-[#1d1d1f] tracking-tight">
             ${earlyBirdPrice}
           </span>
           {showOriginal && (
-            <span className="text-apple-headline font-apple-normal text-gray-400 line-through">
+            <span className="text-apple-headline font-apple-normal text-[#86868b] line-through">
               ${originalPrice}
             </span>
           )}
-          <span className="text-apple-title font-apple-normal text-gray-500">
+          <span className="text-apple-title font-apple-normal text-[#6e6e73]">
             USD
           </span>
         </div>
         {showOriginal && (
-          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 justify-center lg:justify-start">
-            <span className="inline-flex items-center px-3 py-1.5 sm:px-3.5 sm:py-2 bg-orange-100 text-orange-800 rounded-full text-apple-caption font-apple-semibold">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 justify-center lg:justify-start">
+            <span className="text-apple-caption font-apple-normal text-[#6e6e73]">
               First 100 Units Special
             </span>
-            <span className="text-apple-caption font-apple-normal text-gray-600">
+            <span className="text-apple-caption font-apple-normal text-[#6e6e73]">
+              ·
+            </span>
+            <span className="text-apple-caption font-apple-normal text-[#6e6e73]">
               Save ${originalPrice - earlyBirdPrice}
             </span>
           </div>
@@ -55,10 +58,13 @@ export function ProductPrice({ variant = 'hero', showOriginal = true, className 
         </div>
         {showOriginal && (
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center px-2.5 py-1 bg-orange-100 text-orange-800 rounded-full text-apple-footnote font-apple-semibold">
+            <span className="text-apple-footnote font-apple-normal text-[#6e6e73]">
               First 100 Units Special
             </span>
-            <span className="text-apple-caption font-apple-normal text-gray-600">
+            <span className="text-apple-footnote font-apple-normal text-[#6e6e73]">
+              ·
+            </span>
+            <span className="text-apple-caption font-apple-normal text-[#6e6e73]">
               Save ${originalPrice - earlyBirdPrice}
             </span>
           </div>

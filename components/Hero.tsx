@@ -38,14 +38,14 @@ export function Hero() {
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
             className="w-full lg:max-w-lg text-center lg:text-left flex flex-col justify-center"
           >
-            <div className="hero-panel h-full space-y-8 sm:space-y-10 lg:space-y-8">
-              {/* 标题区域 - 增加间距 */}
-              <div className="space-y-4 sm:space-y-5">
+            <div className="hero-panel h-full space-y-10 sm:space-y-12 lg:space-y-10">
+              {/* 标题区域 - 更优雅的间距 */}
+              <div className="space-y-5 sm:space-y-6">
                 <motion.h1 
                   initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
                   animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-                  className="text-apple-display font-apple-semibold text-[#1d1d1f]"
+                  className="text-apple-display font-apple-semibold text-[#1d1d1f] tracking-tight"
                 >
                   Introducing
                 </motion.h1>
@@ -53,26 +53,26 @@ export function Hero() {
                   initial={prefersReducedMotion ? {} : { opacity: 0, y: 16 }}
                   animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
-                  className="text-apple-body font-apple-normal text-gray-600 max-w-xl mx-auto lg:mx-0"
+                  className="text-apple-body font-apple-normal text-[#6e6e73] max-w-xl mx-auto lg:mx-0 leading-relaxed"
                 >
                   A miniature Macintosh alarm clock for today — pixel-perfect, gently analog, quietly dependable.
                 </motion.p>
               </div>
               
-              {/* 价格显示 - 更突出的间距 */}
+              {/* 价格显示 - 更简洁的展示 */}
               <motion.div
                 initial={prefersReducedMotion ? {} : { opacity: 0, y: 12 }}
                 animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
-                className="pt-4 sm:pt-6"
+                className="pt-2 sm:pt-3"
               >
                 <ProductPrice variant="hero" />
               </motion.div>
 
-              {/* 按钮和状态信息 - 优化间距和布局 */}
-              <div className="space-y-5 sm:space-y-6 pt-2">
-                {/* 按钮组 - 手机端全宽，更好的间距 */}
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+              {/* 按钮和状态信息 - 更简洁的布局 */}
+              <div className="space-y-6 sm:space-y-7 pt-4 sm:pt-5">
+                {/* 按钮组 - 更优雅的间距 */}
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-3">
                   <BuyButton 
                     size="lg" 
                     variant="primary" 
@@ -80,20 +80,15 @@ export function Hero() {
                   />
                   <Link
                     href="#features"
-                    className="w-full sm:w-auto rounded-full border border-black/12 bg-white/80 backdrop-blur-sm px-6 py-3.5 sm:py-4 text-apple-body font-apple-semibold text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-all duration-200 ease-apple-standard focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/40 focus-visible:ring-offset-2 text-center touch-manipulation min-h-[52px] sm:min-h-[56px] flex items-center justify-center touch-target"
+                    className="w-full sm:w-auto rounded-full border border-black/10 bg-white/80 backdrop-blur-sm px-6 py-3.5 sm:py-4 text-apple-body font-apple-semibold text-[#1d1d1f] hover:bg-white/90 active:bg-white transition-all duration-200 ease-apple-standard focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/30 focus-visible:ring-offset-2 text-center touch-manipulation min-h-[52px] sm:min-h-[56px] flex items-center justify-center touch-target"
                   >
                     Explore features
                   </Link>
                 </div>
                 
-                {/* 库存状态和配送信息 - 更清晰的层次 */}
-                <div className="flex flex-col gap-3 sm:gap-3.5 pt-2">
-                  <div className="flex justify-center lg:justify-start">
-                    <StockStatus productId="maclock-default" />
-                  </div>
-                  <p className="text-apple-caption font-apple-normal text-gray-500">
-                    Worldwide delivery + 30-day returns included.
-                  </p>
+                {/* 库存状态 - 简化显示 */}
+                <div className="flex justify-center lg:justify-start pt-1">
+                  <StockStatus productId="maclock-default" />
                 </div>
               </div>
             </div>

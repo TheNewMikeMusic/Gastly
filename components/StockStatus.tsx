@@ -67,7 +67,7 @@ export function StockStatus({ productId = 'maclock-default' }: StockStatusProps)
 
   if (loading) {
     return (
-      <div className="text-sm text-gray-600">
+      <div className="text-apple-caption font-apple-normal text-[#6e6e73]">
         Checking availability...
       </div>
     )
@@ -80,9 +80,9 @@ export function StockStatus({ productId = 'maclock-default' }: StockStatusProps)
   if (stock === 0) {
     return (
       <div className="space-y-3">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-red-50 border border-red-200 rounded-full">
-          <span className="w-2 h-2 bg-red-500 rounded-full"></span>
-          <span className="text-sm font-medium text-red-900">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5">
+          <span className="w-1.5 h-1.5 bg-[#ff3b30] rounded-full"></span>
+          <span className="text-apple-caption font-apple-normal text-[#6e6e73]">
             Out of Stock
           </span>
         </div>
@@ -141,9 +141,9 @@ export function StockStatus({ productId = 'maclock-default' }: StockStatusProps)
 
   if (stock <= 10) {
     return (
-      <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-yellow-50/80 backdrop-blur-sm border border-yellow-200/60 rounded-full">
-        <span className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></span>
-        <span className="text-apple-caption font-semibold text-yellow-900">
+      <div className="inline-flex items-center gap-2 px-3 py-1.5">
+        <span className="w-1.5 h-1.5 bg-[#ff9500] rounded-full animate-pulse"></span>
+        <span className="text-apple-caption font-apple-normal text-[#6e6e73]">
           Only {stock} left · Order soon
         </span>
       </div>
@@ -151,11 +151,11 @@ export function StockStatus({ productId = 'maclock-default' }: StockStatusProps)
   }
 
   return (
-    <div className="inline-flex items-center gap-2.5 px-4 py-2 bg-green-50/80 backdrop-blur-sm border border-green-200/60 rounded-full">
-      <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-        <span className="text-apple-caption font-semibold text-green-900">
-          In Stock · Ready to ship
-        </span>
+    <div className="inline-flex items-center gap-2 px-3 py-1.5">
+      <span className="w-1.5 h-1.5 bg-[#30d158] rounded-full"></span>
+      <span className="text-apple-caption font-apple-normal text-[#6e6e73]">
+        In Stock · Ready to ship
+      </span>
     </div>
   )
 }
