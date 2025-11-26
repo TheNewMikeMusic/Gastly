@@ -47,7 +47,8 @@ export function FAQ() {
     <section
       ref={sectionRef}
       id="faq"
-      className="py-12 sm:py-16 lg:py-24 px-4 sm:px-6 lg:px-8"
+      className="py-12 sm:py-16 lg:py-24 px-4 sm:px-6 lg:px-8 scroll-mt-20 sm:scroll-mt-24"
+      style={{ scrollMarginTop: 'calc(4rem + env(safe-area-inset-top))' }}
     >
       <div className="max-w-3xl mx-auto">
         <motion.div

@@ -48,7 +48,8 @@ export function SpecStrip() {
     <section
       ref={sectionRef}
       id="specs"
-      className="section-spec py-20 px-4 sm:px-6 lg:px-8 relative"
+      className="section-spec py-20 px-4 sm:px-6 lg:px-8 relative scroll-mt-20 sm:scroll-mt-24"
+      style={{ scrollMarginTop: 'calc(4rem + env(safe-area-inset-top))' }}
     >
       <div className="max-w-7xl mx-auto">
         <motion.div

@@ -8,10 +8,10 @@ import { UserButton, SignedIn, SignedOut } from '@clerk/nextjs'
 
 const navItems = [
   { label: 'Features', href: '/#features' },
-  { label: 'Gallery', href: '/#gallery' },
+  { label: 'Manual', href: '/manual' },
   { label: 'Specs', href: '/#specs' },
-  { label: 'About', href: '/#about' },
   { label: 'FAQ', href: '/#faq' },
+  { label: 'About', href: '/about' },
 ]
 
 
@@ -76,14 +76,6 @@ export function Navigation() {
                   {item.label}
                 </Link>
               ))}
-              <SignedIn>
-                <Link
-                  href="/account"
-                  className="text-gray-700 hover:text-gray-900 rounded-full px-3 py-1.5 text-sm font-medium transition-colors duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/30"
-                >
-                  My Orders
-                </Link>
-              </SignedIn>
               <SignedOut>
                 <Link
                   href="/contact"
@@ -191,15 +183,7 @@ export function Navigation() {
                   >
                     My Orders
                   </Link>
-                  <Link
-                    href="/dashboard"
-                    className="block rounded-xl px-4 py-3 text-[15px] font-medium text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-all duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/20 focus-visible:ring-offset-2 touch-manipulation"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    Dashboard
-                  </Link>
-                  <div className="flex items-center justify-between px-4 py-3 rounded-xl bg-gray-50/50 mt-2">
-                    <span className="text-sm font-medium text-gray-700">Account</span>
+                  <div className="flex items-center justify-center px-4 py-3 rounded-xl bg-gray-50/50 mt-2">
                     <UserButton 
                       appearance={{
                         elements: {

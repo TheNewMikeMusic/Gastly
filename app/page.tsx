@@ -4,7 +4,6 @@ import { TrustStrip } from '@/components/TrustStrip'
 import { ProductSpinVideo } from '@/components/ProductSpinVideo'
 import { NarrativeBlocks } from '@/components/NarrativeBlocks'
 import { FeaturesGrid } from '@/components/FeaturesGrid'
-import { Gallery } from '@/components/Gallery'
 import { SellerReviews } from '@/components/SellerReviews'
 import { SpecStrip } from '@/components/SpecStrip'
 import { FAQ } from '@/components/FAQ'
@@ -80,9 +79,6 @@ export default function HomePage() {
           </div>
           <div className="section-ambient">
             <FeaturesGrid />
-          </div>
-          <div className="section-ambient">
-            <Gallery />
           </div>
           <div className="section-ambient">
             <SellerReviews />

@@ -35,10 +35,18 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/#about"
+                  href="/about"
                   className="text-[#1d1d1f]/70 active:text-[#1d1d1f] hover:text-[#1d1d1f] transition-colors duration-150 ease-apple-standard text-sm focus:outline-none focus:ring-2 focus:ring-[#007aff] focus:ring-offset-2 rounded py-1.5 block touch-manipulation"
                 >
                   About Us
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/manual"
+                  className="text-[#1d1d1f]/70 active:text-[#1d1d1f] hover:text-[#1d1d1f] transition-colors duration-150 ease-apple-standard text-sm focus:outline-none focus:ring-2 focus:ring-[#007aff] focus:ring-offset-2 rounded py-1.5 block touch-manipulation"
+                >
+                  Manual
                 </Link>
               </li>
               <li>
