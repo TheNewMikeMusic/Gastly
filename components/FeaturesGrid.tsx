@@ -1,6 +1,7 @@
 'use client'
 
 import { OptimizedImage } from '@/components/OptimizedImage'
+import { SectionBackground } from '@/components/SectionBackground'
 import { useReducedMotion, useIntersectionObserver } from '@/lib/hooks'
 import { motion } from 'framer-motion'
 import { useRef } from 'react'
@@ -29,7 +30,7 @@ const features = [
   },
   {
     title: 'Soul completion',
-    prefix: 'Hello1084/retro-mac-clock-soul-completion-plan-classic-icon-stickers-back-to-1984.webp',
+    prefix: 'Hello1084/retro-mac-clock-soul-completion-plan-classic-icon-stickers-back-to-1984 (2).webp',
     alt: 'Maclock with classic icon stickers back to 1984',
     description:
       'Classic icon stickers to complete the retro look.',
@@ -66,20 +67,21 @@ export function FeaturesGrid() {
     <section
       ref={sectionRef}
       id="features"
-      className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 scroll-mt-20 sm:scroll-mt-24"
+      className="pt-12 sm:pt-16 lg:pt-20 pb-8 sm:pb-10 lg:pb-12 px-4 sm:px-6 lg:px-8 scroll-mt-20 sm:scroll-mt-24 relative overflow-hidden"
       style={{ scrollMarginTop: 'calc(4rem + env(safe-area-inset-top))' }}
     >
-      <div className="max-w-7xl mx-auto">
+      <SectionBackground variant="subtle" />
+      <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
-          initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 20 }}
+          initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 30 }}
           animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center mb-16 sm:mb-20 lg:mb-24"
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center mb-8 sm:mb-10 lg:mb-12"
         >
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-semibold mb-6 text-gray-900 tracking-[-0.022em] leading-[1.08]">
-            Feels like a Mac.<br className="sm:hidden" /> Works like a clock.
+          <h2 className="text-apple-display font-apple-semibold mb-4 sm:mb-6 text-[#1d1d1f]">
+            Feels like a Mac.<br /> Works like a clock.
           </h2>
-          <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto leading-[1.6] tracking-[-0.011em]">
+          <p className="text-apple-subtitle font-apple-normal text-[#424245] max-w-3xl mx-auto">
             From the system disk and CRT-style display to backlight, alarms, and stickers, every control turns keeping time into a small 1984 ritual.
           </p>
         </motion.div>
@@ -118,11 +120,11 @@ function FeatureCard({
   if (index === 0 || index === 1 || index === 2 || index === 3 || index === 4 || index === 5 || index === 6) {
     return (
       <motion.div
-        initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 24 }}
+        initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 40 }}
         animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.7, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
         whileHover={prefersReducedMotion ? {} : { y: -4, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } }}
-        className="relative aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl"
+        className="group relative aspect-[3/4] rounded-apple sm:rounded-apple-lg overflow-hidden shadow-medium hover:shadow-deep transition-all duration-500 ease-apple-smooth border border-black/[0.06]"
       >
         <OptimizedImage
           prefix={feature.prefix}
@@ -131,7 +133,7 @@ function FeatureCard({
           sizes="(max-width: 768px) 100vw, 50vw"
           alt={feature.alt}
           priority={priority}
-          className="rounded-3xl"
+          className="rounded-[2rem] sm:rounded-[2.5rem]"
         />
       </motion.div>
     )
@@ -144,7 +146,7 @@ function FeatureCard({
       animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
       whileHover={prefersReducedMotion ? {} : { y: -4, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } }}
-      className="glass-card rounded-2xl p-6 lg:p-8 overflow-hidden"
+      className="glass-card rounded-apple p-6 lg:p-8 overflow-hidden"
     >
       <div className="relative aspect-[3/4] mb-6 overflow-hidden image-container-text">
         <OptimizedImage
@@ -156,8 +158,8 @@ function FeatureCard({
           priority={priority}
         />
       </div>
-      <h3 className="text-2xl font-semibold mb-4 text-gray-900 tracking-[-0.02em] leading-[1.1]">{feature.title}</h3>
-      <p className="text-gray-600 leading-[1.6] tracking-[-0.011em]">{feature.description}</p>
+      <h3 className="text-apple-title font-apple-semibold mb-4 text-gray-900">{feature.title}</h3>
+      <p className="text-apple-body font-apple-normal text-gray-600">{feature.description}</p>
     </motion.div>
   )
 }

@@ -160,3 +160,6 @@ python scripts/extract-frames.py
 4. 图片质量是否满足要求
 
 
+
+
+

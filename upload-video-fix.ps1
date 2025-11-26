@@ -8,3 +8,6 @@ Remove-Item $scriptFile -Force -ErrorAction SilentlyContinue
 Write-Host "Video component fix uploaded!" -ForegroundColor Green
 
 
+
+
+

@@ -20,3 +20,6 @@ Write-Host "`nPC fix files uploaded!" -ForegroundColor Yellow
 Write-Host "Please run on server: chmod +x force-rebuild-pc-fix.sh && ./force-rebuild-pc-fix.sh" -ForegroundColor Cyan
 
 
+
+
+

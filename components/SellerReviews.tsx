@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import { SectionBackground } from '@/components/SectionBackground'
 import { useReducedMotion, useIntersectionObserver } from '@/lib/hooks'
 import { motion } from 'framer-motion'
 import { useRef, useState, useEffect } from 'react'
@@ -116,7 +117,7 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
       className={
         isDashboard
           ? 'glass rounded-2xl p-6 sm:p-8'
-          : 'relative rounded-2xl sm:rounded-3xl border border-gray-200/50 bg-white p-4 sm:p-6 lg:p-8 xl:p-12 shadow-[0_20px_60px_rgba(15,23,42,0.12)] w-full'
+          : 'relative rounded-[2rem] sm:rounded-[2.5rem] border border-black/[0.06] bg-white p-6 sm:p-8 lg:p-10 xl:p-12 shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] w-full'
       }
     >
       {!isDashboard && (
@@ -146,14 +147,14 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
           }
         >
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-gray-500 mb-3">
+            <p className="text-apple-footnote font-apple-semibold uppercase tracking-[0.35em] text-gray-500 mb-3">
               Customer Reviews
             </p>
             <h2
               className={
                 isDashboard
-                  ? 'text-2xl font-semibold text-gray-900 tracking-[-0.022em]'
-                  : 'text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-[-0.022em] text-gray-900 leading-[1.08]'
+                  ? 'text-apple-headline-sm font-apple-semibold text-gray-900'
+                  : 'text-apple-display font-apple-semibold text-[#1d1d1f]'
               }
             >
               Loved by collectors worldwide
@@ -161,8 +162,8 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
             <p
               className={
                 isDashboard
-                  ? 'text-sm text-gray-600 mt-3 max-w-2xl leading-relaxed'
-                  : 'text-base sm:text-lg text-gray-600 mt-4 max-w-2xl leading-relaxed'
+                  ? 'text-apple-caption font-apple-normal text-gray-600 mt-3 max-w-2xl'
+                  : 'text-apple-subtitle font-apple-normal text-[#424245] mt-4 sm:mt-6 max-w-3xl'
               }
             >
               Real customers share how Hello1984 fits into their daily lives. Each review highlights 
@@ -171,9 +172,9 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
           </div>
           <div className={`${isDashboard ? 'sm:text-right' : 'lg:text-right'} mt-6 lg:mt-0`}>
             <div className="inline-flex flex-col items-start lg:items-end gap-2">
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Average Rating</p>
+              <p className="text-apple-footnote font-apple-medium text-gray-500 uppercase tracking-wider">Average Rating</p>
               <div className="flex items-baseline gap-3">
-                <div className="text-4xl sm:text-5xl font-semibold text-gray-900 tracking-tight">5.0</div>
+                <div className="text-apple-headline font-apple-semibold text-gray-900">5.0</div>
                 <div className="flex text-amber-500 gap-0.5">
                   {Array.from({ length: 5 }).map((_, index) => (
                     <StarIcon key={index} className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -197,10 +198,19 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
               }
               className={
                 isDashboard
-                  ? 'glass-card rounded-2xl p-5 sm:p-6 space-y-5'
-                  : 'glass-card rounded-2xl p-6 sm:p-7 space-y-5 flex flex-col'
+                  ? 'glass-card rounded-apple p-5 sm:p-6 space-y-5'
+                  : 'group relative bg-white rounded-apple sm:rounded-apple-lg p-6 sm:p-8 shadow-medium hover:shadow-deep transition-all duration-500 ease-apple-smooth border border-black/[0.06] overflow-hidden space-y-5 flex flex-col'
               }
             >
+              {/* Decorative gradient overlay */}
+              {!isDashboard && (
+                <div 
+                  className="absolute top-0 right-0 w-64 h-64 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  style={{
+                    background: 'radial-gradient(circle, rgba(0, 122, 255, 0.05) 0%, transparent 70%)',
+                  }}
+                />
+              )}
               {/* Header with avatar and rating */}
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0">
@@ -211,8 +221,8 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-3 mb-2">
                     <div className="min-w-0">
-                      <p className="text-base font-semibold text-gray-900 truncate">{review.customer}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">{review.date}</p>
+                      <p className="text-apple-body font-apple-semibold text-gray-900 truncate">{review.customer}</p>
+                      <p className="text-apple-footnote font-apple-normal text-gray-500 mt-0.5">{review.date}</p>
                     </div>
                     <div className="flex text-amber-500 shrink-0 gap-0.5">
                       {Array.from({ length: review.rating }).map((_, starIndex) => (
@@ -233,8 +243,8 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
 
               {/* Review content */}
               <div className="flex-shrink-0">
-                <h3 className="text-base font-semibold text-gray-900 mb-2 leading-snug">{review.headline}</h3>
-                <p className="text-sm text-gray-600 leading-relaxed">{review.body}</p>
+                <h3 className="text-apple-title-sm font-apple-semibold text-gray-900 mb-2">{review.headline}</h3>
+                <p className="text-apple-caption font-apple-normal text-gray-600">{review.body}</p>
               </div>
 
               {/* Media gallery */}
@@ -256,7 +266,7 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
                   <div className="w-6 h-6 rounded-full bg-gray-900 flex items-center justify-center">
                     <span className="text-white text-xs font-semibold">A</span>
                   </div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-gray-600">
+                  <p className="text-apple-footnote font-apple-semibold uppercase tracking-wider text-gray-600">
                     Response from Hello1984
                   </p>
                 </div>
@@ -274,8 +284,9 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
   }
 
   return (
-    <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 w-full">
-      <div className="max-w-7xl mx-auto w-full">{content}</div>
+    <section className="py-20 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 w-full relative overflow-hidden">
+      <SectionBackground variant="subtle" />
+      <div className="max-w-7xl mx-auto w-full relative z-10">{content}</div>
     </section>
   )
 }

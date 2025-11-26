@@ -14,8 +14,8 @@ const aboutSections = [
       </svg>
     ),
     content: [
-      'Hello1984 is a limited-run desktop clock built by a small hardware studio in California. We obsess over tactility, not telemetry, and we finish every unit by hand before it leaves the lab.',
-      'Inspired by the revolutionary Macintosh 128K, Hello1984 brings back the charm of 1980s design with modern precision and reliability. Every pixel is carefully crafted to evoke the warmth of classic computing.',
+      'Hello1984 is a limited-run Macintosh-style alarm clock from a small hardware studio in California. We obsess over tactility, not telemetry, and every unit is hand-finished before it leaves the lab.',
+      'Inspired by the original Macintosh 128K, Hello1984 brings the warmth of 1980s desktop computing into a tiny, dependable clock. The proportions, pixel grid, and details are all tuned to feel instantly familiar yet quietly new.',
     ],
   },
   {
@@ -26,8 +26,8 @@ const aboutSections = [
       </svg>
     ),
     content: [
-      'We believe in the power of thoughtful design and intentional craftsmanship. In a world of disposable technology, we create products that are built to last and designed to delight.',
-      'From the pixel smile to the under-chassis brightness wheel, Hello1984 rebuilds the small Macintosh rituals so you don\'t just check the time—you boot it up, dial it in, and let it glow.',
+      'We believe in thoughtful design and intentional craftsmanship. In a world of disposable, data-hungry gadgets, we make objects that are built to last and designed to feel calm in daily use.',
+      'From the pixel smile to the under-chassis brightness wheel, Hello1984 rebuilds the small Macintosh rituals so you don\'t just check the time — you boot it up, dial it in, and let it glow.',
     ],
   },
   {
@@ -39,8 +39,8 @@ const aboutSections = [
       </svg>
     ),
     content: [
-      'Located in Studio 128, San Francisco, CA, we\'re a small team of designers, engineers, and makers who share a passion for retro computing and modern craftsmanship.',
-      'Every Hello1984 clock is assembled and tested by hand, ensuring the highest quality and attention to detail. We take pride in creating products that honor the past while embracing the future.',
+      'Based in Studio 128, San Francisco, we\'re a small team of designers, engineers, and makers with a shared love of retro computing and modern craft.',
+      'Each Hello1984 clock is assembled, calibrated, and tested by hand. We take care to honor the past while embracing the future, one small batch at a time.',
     ],
   },
 ]
@@ -113,8 +113,8 @@ export function AboutPage() {
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-semibold mb-4 sm:mb-6 text-[#1d1d1f] tracking-[-0.022em] leading-[1.08]">
               About Us
             </h1>
-            <p className="text-xl sm:text-2xl lg:text-3xl text-[#424245] max-w-3xl mx-auto leading-[1.4] tracking-[-0.011em] font-light">
-              A small hardware studio crafting thoughtful products with intentional design.
+            <p className="text-xl sm:text-2xl lg:text-3xl text-[#424245] max-w-3xl mx-auto leading-[1.4] tracking-[-0.011em] font-normal">
+              A small hardware studio creating quietly obsessive objects for everyday life.
             </p>
           </motion.div>
 
@@ -158,7 +158,7 @@ export function AboutPage() {
                     {section.content.map((paragraph, pIndex) => (
                       <p
                         key={pIndex}
-                        className="text-lg sm:text-xl lg:text-2xl text-[#424245] leading-[1.6] tracking-[-0.011em] font-light"
+                        className="text-lg sm:text-xl lg:text-2xl text-[#424245] leading-[1.6] tracking-[-0.011em] font-normal"
                       >
                         {paragraph}
                       </p>
@@ -199,7 +199,7 @@ export function AboutPage() {
                   Get in Touch
                 </h2>
                 <p className="text-lg sm:text-xl text-[#424245] leading-[1.6] max-w-2xl mx-auto">
-                  Have questions or want to learn more? We'd love to hear from you.
+                  Have questions or want to learn more? We&apos;d love to hear from you.
                 </p>
                 <Link
                   href="/contact"

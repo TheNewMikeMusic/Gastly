@@ -78,3 +78,6 @@ echo "2. 或使用无痕模式（Ctrl+Shift+N）"
 echo "3. 访问: http://38.175.195.104:3000/admin/login"
 
 
+
+
+

@@ -11,3 +11,6 @@ Write-Host "$file uploaded!" -ForegroundColor Green
 Write-Host "`nPlease rebuild on server: npm run build && pm2 restart maclock" -ForegroundColor Yellow
 
 
+
+
+

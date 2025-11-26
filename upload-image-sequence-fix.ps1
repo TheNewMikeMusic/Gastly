@@ -8,3 +8,6 @@ Remove-Item $scriptFile -Force -ErrorAction SilentlyContinue
 Write-Host "Image sequence component uploaded!" -ForegroundColor Green
 
 
+
+
+

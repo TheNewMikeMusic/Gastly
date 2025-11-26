@@ -8,3 +8,6 @@ Remove-Item $scriptFile -Force -ErrorAction SilentlyContinue
 Write-Host "Trust strip error boundary fix uploaded!" -ForegroundColor Green
 
 
+
+
+

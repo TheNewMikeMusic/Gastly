@@ -8,3 +8,6 @@ Remove-Item $scriptFile -Force -ErrorAction SilentlyContinue
 Write-Host "Files uploaded! Now deploying..." -ForegroundColor Green
 
 
+
+
+

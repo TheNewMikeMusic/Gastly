@@ -18,3 +18,6 @@ foreach ($file in $files) {
 Write-Host "`nAll scripts uploaded! Please run check-server-status.sh on server first." -ForegroundColor Yellow
 
 
+
+
+

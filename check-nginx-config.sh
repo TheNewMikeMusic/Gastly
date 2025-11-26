@@ -32,3 +32,6 @@ nginx -T 2>&1 | grep -A 10 -B 5 "listen\|server_name\|ssl_certificate" | head -3
 echo ""
 
 
+
+
+

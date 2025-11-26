@@ -11,7 +11,7 @@ async function main() {
       id: 'maclock-default',
       name: 'Maclock Digital Clock',
       description: 'Retro Macintosh-style Digital Clock',
-      price: parseInt(process.env.NEXT_PUBLIC_PRODUCT_PRICE || '29900'),
+      price: parseInt(process.env.NEXT_PUBLIC_PRODUCT_PRICE || '9900'), // 前100台特价 $99 (原价 $199)
       currency: 'usd',
       stock: parseInt(process.env.DEFAULT_STOCK || '100'),
       sku: 'MACLOCK-001',

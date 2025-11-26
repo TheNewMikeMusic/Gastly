@@ -8,3 +8,6 @@ Remove-Item $scriptFile -Force -ErrorAction SilentlyContinue
 Write-Host "Hero preload fix uploaded!" -ForegroundColor Green
 
 
+
+
+

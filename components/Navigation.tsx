@@ -61,7 +61,7 @@ export function Navigation() {
           >
             <Link
               href="/"
-              className="text-lg font-semibold tracking-tight text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/40 focus-visible:ring-offset-2 rounded-full"
+              className="text-apple-title-sm font-apple-semibold tracking-apple-tight text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/40 focus-visible:ring-offset-2 rounded-full touch-target"
               aria-label="Hello1984 home"
             >
               Hello1984
@@ -71,7 +71,7 @@ export function Navigation() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="text-gray-700 hover:text-gray-900 rounded-full px-3 py-1.5 text-sm font-medium transition-colors duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/30"
+                  className="text-apple-caption font-apple-medium text-gray-700 hover:text-gray-900 rounded-full px-3 py-1.5 transition-colors duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/30 touch-target"
                 >
                   {item.label}
                 </Link>
@@ -79,7 +79,7 @@ export function Navigation() {
               <SignedOut>
                 <Link
                   href="/contact"
-                  className="text-gray-700 hover:text-gray-900 rounded-full px-3 py-1.5 text-sm font-medium transition-colors duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/30"
+                  className="text-apple-caption font-apple-medium text-gray-700 hover:text-gray-900 rounded-full px-3 py-1.5 transition-colors duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/30 touch-target"
                 >
                   Contact
                 </Link>
@@ -90,7 +90,7 @@ export function Navigation() {
                 <div className="hidden md:flex items-center gap-3">
                   <Link
                     href="/account"
-                    className="text-gray-700 hover:text-gray-900 rounded-full px-3 py-1.5 text-sm font-medium transition-colors duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/30"
+                    className="text-apple-caption font-apple-medium text-gray-700 hover:text-gray-900 rounded-full px-3 py-1.5 transition-colors duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/30 touch-target"
                   >
                     Account
                   </Link>
@@ -107,7 +107,7 @@ export function Navigation() {
                 <div className="hidden md:flex items-center gap-3">
                   <Link
                     href="/sign-in"
-                    className="text-gray-700 hover:text-gray-900 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/30"
+                    className="text-apple-caption font-apple-medium text-gray-700 hover:text-gray-900 rounded-full px-4 py-2 transition-colors duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/30 touch-target"
                   >
                     Sign In
                   </Link>
@@ -121,7 +121,7 @@ export function Navigation() {
               <button
                 type="button"
                 onClick={() => setMenuOpen((prev) => !prev)}
-                className="md:hidden h-11 w-11 rounded-full border border-black/10 bg-white/90 backdrop-blur-[20px] shadow-medium px-0 flex flex-col items-center justify-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/40 focus-visible:ring-offset-2 transition-all duration-200 ease-apple-standard active:bg-white active:scale-95 touch-manipulation"
+                className="md:hidden h-11 w-11 rounded-full border border-black/10 bg-white/90 backdrop-blur-[20px] shadow-medium px-0 flex flex-col items-center justify-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/40 focus-visible:ring-offset-2 transition-all duration-200 ease-apple-standard active:bg-white active:scale-95 touch-manipulation touch-target"
                 aria-label="Toggle navigation menu"
                 aria-expanded={menuOpen}
               >
@@ -165,7 +165,7 @@ export function Navigation() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="block rounded-xl px-4 py-3 text-[15px] font-medium text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-all duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/20 focus-visible:ring-offset-2 touch-manipulation"
+                    className="block rounded-xl px-4 py-3 text-apple-body-sm font-apple-medium text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-all duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/20 focus-visible:ring-offset-2 touch-manipulation touch-target"
                     onClick={() => setMenuOpen(false)}
                   >
                     {item.label}
@@ -178,7 +178,7 @@ export function Navigation() {
                 <SignedIn>
                   <Link
                     href="/account"
-                    className="block rounded-xl px-4 py-3 text-[15px] font-medium text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-all duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/20 focus-visible:ring-offset-2 touch-manipulation"
+                    className="block rounded-xl px-4 py-3 text-apple-body-sm font-apple-medium text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-all duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/20 focus-visible:ring-offset-2 touch-manipulation touch-target"
                     onClick={() => setMenuOpen(false)}
                   >
                     My Orders
@@ -197,14 +197,14 @@ export function Navigation() {
                 <SignedOut>
                   <Link
                     href="/sign-in"
-                    className="block rounded-xl px-4 py-3 text-[15px] font-medium text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-all duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/20 focus-visible:ring-offset-2 touch-manipulation"
+                    className="block rounded-xl px-4 py-3 text-apple-body-sm font-apple-medium text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-all duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/20 focus-visible:ring-offset-2 touch-manipulation touch-target"
                     onClick={() => setMenuOpen(false)}
                   >
                     Sign In
                   </Link>
                   <Link
                     href="/contact"
-                    className="block rounded-xl px-4 py-3 text-[15px] font-medium text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-all duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/20 focus-visible:ring-offset-2 touch-manipulation"
+                    className="block rounded-xl px-4 py-3 text-apple-body-sm font-apple-medium text-gray-900 hover:bg-gray-50 active:bg-gray-100 transition-all duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/20 focus-visible:ring-offset-2 touch-manipulation touch-target"
                     onClick={() => setMenuOpen(false)}
                   >
                     Contact

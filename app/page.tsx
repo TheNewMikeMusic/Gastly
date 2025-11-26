@@ -59,7 +59,7 @@ export default function HomePage() {
           >
             <ProductSpinVideo />
           </ErrorBoundary>
-          <div className="section-ambient">
+          <div className="section-ambient section-ambient--compact-bottom">
             <ErrorBoundary
               fallback={
                 <section className="py-12 sm:py-14 px-4 sm:px-6 lg:px-8">
@@ -74,10 +74,10 @@ export default function HomePage() {
               <TrustStrip />
             </ErrorBoundary>
           </div>
-          <div className="section-ambient">
+          <div className="section-ambient section-ambient--compact-top">
             <NarrativeBlocks />
           </div>
-          <div className="section-ambient">
+          <div className="section-ambient section-ambient--compact-bottom">
             <FeaturesGrid />
           </div>
           <div className="section-ambient">

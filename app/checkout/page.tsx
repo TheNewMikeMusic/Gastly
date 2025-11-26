@@ -50,7 +50,9 @@ export default function CheckoutPage() {
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null)
   const [couponCode, setCouponCode] = useState<string | null>(null)
   const [discountAmount, setDiscountAmount] = useState(0)
-  const [productPrice, setProductPrice] = useState(29900) // $299 in cents
+  const originalPrice = 19900 // 原价 $199 in cents
+  const earlyBirdPrice = 9900 // 前100台特价 $99 in cents
+  const [productPrice, setProductPrice] = useState(earlyBirdPrice) // 使用前100台特价
   const [stock, setStock] = useState<number | null>(null)
   const [formData, setFormData] = useState<ShippingFormData>({
     name: '',
@@ -360,7 +362,7 @@ export default function CheckoutPage() {
     )
   }
 
-  const finalPrice = productPrice - discountAmount
+  const finalPrice = earlyBirdPrice - discountAmount
   const finalPriceDisplay = (finalPrice / 100).toFixed(2)
 
   return (
@@ -673,8 +675,21 @@ export default function CheckoutPage() {
                   </div>
                   <div className="flex justify-between items-center text-sm">
                     <span className="text-gray-600">Subtotal</span>
-                    <span className="font-medium text-gray-900">
-                      ${(productPrice / 100).toFixed(2)}
+                    <div className="flex items-baseline gap-2">
+                      <span className="font-medium text-gray-900">
+                        ${(earlyBirdPrice / 100).toFixed(2)}
+                      </span>
+                      <span className="text-xs text-gray-400 line-through">
+                        ${(originalPrice / 100).toFixed(2)}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs">
+                    <span className="inline-flex items-center px-2 py-0.5 bg-orange-100 text-orange-800 rounded-full font-semibold">
+                      First 100 Units Special
+                    </span>
+                    <span className="text-gray-600">
+                      Save ${((originalPrice - earlyBirdPrice) / 100).toFixed(2)}
                     </span>
                   </div>
                   {discountAmount > 0 && (

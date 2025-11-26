@@ -32,3 +32,6 @@ Remove-Item $scriptFile -Force -ErrorAction SilentlyContinue
 Write-Host "All images uploaded!" -ForegroundColor Green
 
 
+
+
+

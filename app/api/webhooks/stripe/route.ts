@@ -77,7 +77,8 @@ export async function POST(request: NextRequest) {
         break
 
       default:
-        console.log(`Unhandled event type: ${event.type}`)
+        // Log unhandled events for monitoring (use error level for visibility)
+        console.error(`Unhandled webhook event type: ${event.type}`)
     }
 
     return NextResponse.json({ received: true })

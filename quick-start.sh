@@ -47,3 +47,6 @@ echo "如果服务启动成功，请访问: http://38.175.195.104"
 echo "如果仍有问题，请运行: ./force-rebuild-and-restart.sh"
 
 
+
+
+

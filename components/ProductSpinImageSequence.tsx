@@ -128,7 +128,7 @@ export function ProductSpinImageSequence({
         })
       } else {
         // 不支持 decode，直接设置 src，使用 onload
-        img.src = imagePath
+        (img as HTMLImageElement).src = imagePath
       }
       
       img.onerror = (error) => {
@@ -491,6 +491,7 @@ export function ProductSpinImageSequence({
         cancelAnimationFrame(rafIdRef.current)
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, isVisible, prefersReducedMotion, hasError, totalFrames, drawFrame, preloadFrames, isLowEndDevice])
 
   return (
@@ -505,7 +506,7 @@ export function ProductSpinImageSequence({
             ref={canvasRef}
             className="w-full h-full object-cover"
             style={{
-              imageRendering: 'high-quality', // 高质量渲染
+              imageRendering: 'crisp-edges' as any, // 高质量渲染
               display: isLoaded ? 'block' : 'none', // 只在加载完成后显示
             }}
             aria-label="产品旋转动画"

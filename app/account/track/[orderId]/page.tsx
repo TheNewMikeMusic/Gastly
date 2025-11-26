@@ -1,6 +1,8 @@
 import { Navigation } from '@/components/Navigation'
 import { TrackingStatusBadge } from '@/components/TrackingStatusBadge'
 import { TrackingTimeline } from '@/components/TrackingTimeline'
+import { RetryPaymentButton } from '@/components/RetryPaymentButton'
+import { DeleteOrderButton } from '@/components/DeleteOrderButton'
 import { auth } from '@clerk/nextjs/server'
 import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
@@ -222,6 +224,31 @@ export default async function AccountTrackingPage({ params, searchParams }: Trac
               </div>
             )}
           </div>
+
+          {/* 继续支付按钮（如果是pending状态） */}
+          {order.status === 'pending' && (
+            <div className="glass rounded-2xl p-6 sm:p-8">
+              <h2 className="text-xl font-semibold mb-4 text-gray-900">Complete Payment</h2>
+              <p className="text-sm text-gray-600 mb-4">
+                Your order is pending payment. Click the button below to complete your payment.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <RetryPaymentButton orderId={order.id} />
+                <DeleteOrderButton orderId={order.id} orderStatus={order.status} />
+              </div>
+            </div>
+          )}
+
+          {/* 删除订单按钮（如果是cancelled状态） */}
+          {order.status === 'cancelled' && (
+            <div className="glass rounded-2xl p-6 sm:p-8">
+              <h2 className="text-xl font-semibold mb-4 text-gray-900">Delete Order</h2>
+              <p className="text-sm text-gray-600 mb-4">
+                This order has been cancelled. You can delete it to remove it from your order history.
+              </p>
+              <DeleteOrderButton orderId={order.id} orderStatus={order.status} />
+            </div>
+          )}
 
           {/* 发票下载 */}
           {order.status === 'paid' && (

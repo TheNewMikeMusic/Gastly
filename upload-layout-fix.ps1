@@ -10,3 +10,6 @@ Remove-Item $scriptFile -Force -ErrorAction SilentlyContinue
 Write-Host "$file uploaded!" -ForegroundColor Green
 
 
+
+
+

@@ -8,3 +8,6 @@ Remove-Item $scriptFile -Force -ErrorAction SilentlyContinue
 Write-Host "iOS and Android fix uploaded!" -ForegroundColor Green
 
 
+
+
+

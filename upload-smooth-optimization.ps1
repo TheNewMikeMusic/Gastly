@@ -8,3 +8,6 @@ Remove-Item $scriptFile -Force -ErrorAction SilentlyContinue
 Write-Host "Smooth optimization uploaded!" -ForegroundColor Green
 
 
+
+
+

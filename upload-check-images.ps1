@@ -7,3 +7,6 @@ Remove-Item $scriptFile -Force -ErrorAction SilentlyContinue
 Write-Host "Check images script uploaded!" -ForegroundColor Green
 
 
+
+
+

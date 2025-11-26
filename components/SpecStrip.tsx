@@ -1,5 +1,6 @@
 'use client'
 
+import { SectionBackground } from '@/components/SectionBackground'
 import { useReducedMotion, useIntersectionObserver } from '@/lib/hooks'
 import { motion } from 'framer-motion'
 import { useRef } from 'react'
@@ -48,20 +49,21 @@ export function SpecStrip() {
     <section
       ref={sectionRef}
       id="specs"
-      className="section-spec py-20 px-4 sm:px-6 lg:px-8 relative scroll-mt-20 sm:scroll-mt-24"
+      className="section-spec py-20 sm:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden scroll-mt-20 sm:scroll-mt-24"
       style={{ scrollMarginTop: 'calc(4rem + env(safe-area-inset-top))' }}
     >
-      <div className="max-w-7xl mx-auto">
+      <SectionBackground variant="subtle" />
+      <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
-          initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 20 }}
+          initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 30 }}
           animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center mb-20"
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center mb-20 sm:mb-24 lg:mb-28"
         >
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-semibold mb-6 text-gray-900 tracking-[-0.022em] leading-[1.08]">
+          <h2 className="text-apple-display font-apple-semibold mb-4 sm:mb-6 text-[#1d1d1f]">
             Technical specifications
           </h2>
-          <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-[1.6] tracking-[-0.011em]">
+          <p className="text-apple-subtitle font-apple-normal text-[#424245] max-w-3xl mx-auto">
             Modern internals power every ritual: real-time clock backup, efficient LCD driving, and machined controls that
             feel more hi-fi than hobby.
           </p>
@@ -76,19 +78,26 @@ export function SpecStrip() {
           {specs.map((category, categoryIndex) => (
             <motion.div
               key={category.category}
-              initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 20 }}
+              initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 40 }}
               animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: categoryIndex * 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="glass-panel rounded-2xl p-6"
+              transition={{ duration: 0.7, delay: categoryIndex * 0.15, ease: [0.16, 1, 0.3, 1] }}
+              className="group relative bg-white rounded-apple sm:rounded-apple-lg p-6 sm:p-8 shadow-medium hover:shadow-deep transition-all duration-500 ease-apple-smooth border border-black/[0.06] overflow-hidden"
             >
-              <h3 className="text-lg font-semibold mb-4 text-gray-900 border-b border-gray-200 pb-2 tracking-[-0.018em]">
+              {/* Decorative gradient overlay */}
+              <div 
+                className="absolute top-0 right-0 w-64 h-64 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                style={{
+                  background: 'radial-gradient(circle, rgba(0, 122, 255, 0.05) 0%, transparent 70%)',
+                }}
+              />
+              <h3 className="relative z-10 text-apple-title-sm font-apple-semibold mb-4 text-[#1d1d1f] border-b border-[#d2d2d7] pb-2">
                 {category.category}
               </h3>
-              <div className="space-y-3">
+              <div className="relative z-10 space-y-3">
                 {category.items.map((spec) => (
                   <div key={spec.label}>
-                    <div className="text-xs text-gray-500 mb-1">{spec.label}</div>
-                    <div className="text-sm font-medium text-gray-800">{spec.value}</div>
+                    <div className="text-apple-footnote font-apple-normal text-[#6e6e73] mb-1">{spec.label}</div>
+                    <div className="text-apple-caption font-apple-medium text-[#1d1d1f]">{spec.value}</div>
                   </div>
                 ))}
               </div>

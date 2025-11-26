@@ -21,9 +21,9 @@ export function BuyButton({ className = '', variant = 'primary', size = 'md', on
   }
 
   const sizeClasses = {
-    sm: 'px-5 py-2.5 text-sm min-h-[44px]',
-    md: 'px-6 py-3 text-base min-h-[48px]',
-    lg: 'px-8 py-4 text-lg min-h-[52px]',
+    sm: 'px-5 py-2.5 text-apple-caption min-h-[44px] min-w-[44px]',
+    md: 'px-6 py-3 text-apple-body-sm min-h-[48px] min-w-[48px]',
+    lg: 'px-8 py-4 text-apple-body min-h-[52px] min-w-[52px]',
   }
 
   const variantClasses = {
@@ -36,7 +36,7 @@ export function BuyButton({ className = '', variant = 'primary', size = 'md', on
   return (
     <motion.button
       onClick={handleClick}
-      className={`${sizeClasses[size]} ${variantClasses[variant]} font-semibold rounded-full transition-all duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent touch-manipulation ${className}`}
+      className={`${sizeClasses[size]} ${variantClasses[variant]} font-apple-semibold rounded-full transition-all duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent touch-manipulation touch-target ${className}`}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.96 }}
       transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}

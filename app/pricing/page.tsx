@@ -44,8 +44,16 @@ export default function PricingPage() {
               className="glass-card rounded-3xl p-8 sm:p-10 lg:p-12 text-center"
             >
               <div className="mb-6">
-                <div className="text-5xl sm:text-6xl font-bold text-gray-900 mb-2">$299</div>
-                <p className="text-gray-600 text-lg">One-time payment</p>
+                <div className="flex items-baseline justify-center gap-3 mb-2">
+                  <div className="text-5xl sm:text-6xl font-bold text-gray-900">$99</div>
+                  <div className="text-2xl sm:text-3xl text-gray-400 line-through font-medium">$199</div>
+                </div>
+                <div className="flex flex-col items-center gap-2">
+                  <span className="inline-flex items-center px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-semibold">
+                    First 100 Units Special
+                  </span>
+                  <p className="text-gray-600 text-lg">One-time payment</p>
+                </div>
               </div>
               <div className="space-y-4 text-left max-w-md mx-auto">
                 <div className="flex items-start gap-3">

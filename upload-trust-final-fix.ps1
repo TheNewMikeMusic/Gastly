@@ -8,3 +8,6 @@ Remove-Item $scriptFile -Force -ErrorAction SilentlyContinue
 Write-Host "Trust strip final fix uploaded!" -ForegroundColor Green
 
 
+
+
+

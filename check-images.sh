@@ -17,3 +17,6 @@ echo "检查public目录结构..."
 ls -la public/ | head -20
 
 
+
+
+

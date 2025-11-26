@@ -3,6 +3,8 @@ import { auth, currentUser } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
+import { RetryPaymentButton } from '@/components/RetryPaymentButton'
+import { DeleteOrderButton } from '@/components/DeleteOrderButton'
 
 async function getOrders(userId: string) {
   try {
@@ -142,6 +144,18 @@ export default async function DashboardPage() {
                         </div>
                       </div>
                     )}
+                    <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-black/10">
+                      <Link
+                        href={`/account/track/${order.id}`}
+                        className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors text-center"
+                      >
+                        View Details
+                      </Link>
+                      {order.status === 'pending' && (
+                        <RetryPaymentButton orderId={order.id} />
+                      )}
+                      <DeleteOrderButton orderId={order.id} orderStatus={order.status} />
+                    </div>
                   </div>
                 ))}
               </div>

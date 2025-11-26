@@ -8,3 +8,6 @@ Remove-Item $scriptFile -Force -ErrorAction SilentlyContinue
 Write-Host "Mobile image loading fix uploaded!" -ForegroundColor Green
 
 
+
+
+

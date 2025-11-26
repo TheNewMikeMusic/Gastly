@@ -16,7 +16,7 @@ export async function getProductStock(productId: string = DEFAULT_PRODUCT_ID) {
           id: productId,
           name: 'Maclock Digital Clock',
           description: 'Retro Macintosh-style Digital Clock',
-          price: parseInt(process.env.NEXT_PUBLIC_PRODUCT_PRICE || '29900'), // 默认$299
+          price: parseInt(process.env.NEXT_PUBLIC_PRODUCT_PRICE || '9900'), // 默认$99 (前100台特价)
           currency: 'usd',
           stock: parseInt(process.env.DEFAULT_STOCK || '100'),
           sku: 'MACLOCK-001',

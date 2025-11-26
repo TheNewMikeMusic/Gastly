@@ -30,3 +30,6 @@ echo "   4. 复制 'Publishable key'（应该以 pk_test_ 或 pk_live_ 开头）
 echo "   5. 更新 .env.local 文件中的 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY"
 
 
+
+
+

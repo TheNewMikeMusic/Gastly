@@ -7,3 +7,6 @@ Remove-Item $scriptFile -Force -ErrorAction SilentlyContinue
 Write-Host "Diagnose script uploaded!" -ForegroundColor Green
 
 
+
+
+

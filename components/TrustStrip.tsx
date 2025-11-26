@@ -3,86 +3,74 @@
 import { useReducedMotion, useIntersectionObserver } from '@/lib/hooks'
 import { motion } from 'framer-motion'
 import { useRef } from 'react'
-import Link from 'next/link'
 
 const trustItems = [
   {
     icon: 'price',
-    title: 'From $299',
+    title: 'First 100 Units $99',
     description: 'One-time payment. Taxes calculated at checkout—no subscriptions, ever.',
-    href: '/pricing',
   },
   {
     icon: 'truck',
     title: 'Global delivery',
     description: 'Tracked shipping to 40+ countries with carbon-neutral carriers.',
-    href: '/shipping',
   },
   {
     icon: 'shield',
     title: '12-month warranty',
     description: 'Hardware repairs and replacements handled by our in-house team.',
-    href: '/warranty',
-  },
-  {
-    icon: 'return',
-    title: '30-day returns',
-    description: "Try Hello1984 at home. If it&apos;s not love, send it back for a full refund.",
-    href: '/returns',
   },
 ]
 
 const iconMap: Record<string, JSX.Element> = {
   price: (
-    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path
-        d="M12 9h8a3 3 0 0 1 3 3v8.8a3 3 0 0 1-.88 2.12l-6.33 6.33a1.5 1.5 0 0 1-2.12 0l-6.8-6.8a1.5 1.5 0 0 1 0-2.12L14 9Z"
-        stroke="#0f172a"
-        strokeWidth="1.5"
-        fill="rgba(15,23,42,0.04)"
+        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"
+        fill="currentColor"
       />
-      <circle cx="20.5" cy="13.5" r="1.5" fill="#0f172a" />
     </svg>
   ),
   truck: (
-    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path
-        d="M5 12h14v12H5zM19 15h6l3 4v5h-9"
-        stroke="#0f172a"
+        d="M1 3h15v13H1zM16 8h4l3 4v3h-7"
+        stroke="currentColor"
         strokeWidth="1.5"
         strokeLinejoin="round"
         fill="none"
       />
-      <circle cx="11" cy="24" r="2" fill="none" stroke="#0f172a" strokeWidth="1.5" />
-      <circle cx="24" cy="24" r="2" fill="none" stroke="#0f172a" strokeWidth="1.5" />
+      <circle cx="5" cy="18" r="2" fill="none" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="19" cy="18" r="2" fill="none" stroke="currentColor" strokeWidth="1.5" />
     </svg>
   ),
   shield: (
-    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path
-        d="M18 6 9 9v7c0 5.52 3.21 10.58 9 13 5.79-2.42 9-7.48 9-13V9l-9-3Z"
-        stroke="#0f172a"
+        d="M12 2L4 5v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V5l-8-3z"
+        stroke="currentColor"
         strokeWidth="1.5"
         strokeLinejoin="round"
-        fill="rgba(15,23,42,0.03)"
+        fill="none"
       />
-      <path d="m13.5 18.5 2.5 2.5 5-5" stroke="#0f172a" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="m9 12 2 2 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   ),
   return: (
-    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" aria-hidden="true">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path
-        d="M11 15H7V8h7v4"
-        stroke="#0f172a"
+        d="M3 7v6h6M21 17v-6h-6"
+        stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
-        d="M11 24h11a5 5 0 0 0 0-10h-9"
-        stroke="#0f172a"
+        d="M3 13l4-4 4 4M21 11l-4 4-4-4"
+        stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   ),
@@ -99,44 +87,33 @@ export function TrustStrip() {
       initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
       animate={prefersReducedMotion || isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="py-12 sm:py-14 px-4 sm:px-6 lg:px-8"
+      className="pt-8 sm:pt-12 lg:pt-16 pb-16 sm:pb-20 lg:pb-16 px-4 sm:px-6 lg:px-8"
     >
-      <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
+      <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-12 lg:gap-16">
         {trustItems.map((item, index) => (
           <motion.div
             key={item.title}
             initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 20 }}
             animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.08 }}
-            whileHover={prefersReducedMotion ? {} : { y: -4 }}
-            className="h-full"
+            transition={{ duration: 0.5, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
+            className="text-center flex-1 max-w-[280px] sm:max-w-none"
           >
-            <Link
-              href={item.href}
-              className="glass-card rounded-2xl p-5 sm:p-6 h-full flex flex-col shadow-[0_18px_40px_rgba(15,23,42,0.08)] transition-all duration-200 ease-apple-standard active:scale-[0.98] touch-manipulation group"
-            >
-              {/* Icon - 统一对齐和高度，居中 */}
-              <div className="mb-4 flex items-center justify-center h-10">
-                <div className="group-hover:scale-110 transition-transform duration-200 flex-shrink-0">
-                  {iconMap[item.icon]}
-                </div>
+            {/* Icon */}
+            <div className="mb-4 flex items-center justify-center">
+              <div className="text-[#1d1d1f]">
+                {iconMap[item.icon]}
               </div>
-              
-              {/* Title - 统一高度，居中 */}
-              <h3 className="text-base sm:text-lg font-semibold mb-2.5 text-gray-900 group-hover:text-gray-950 transition-colors leading-tight min-h-[2.5rem] sm:min-h-[3rem] text-center">
-                {item.title}
-              </h3>
-              
-              {/* Description - 统一行数和高度，居中 */}
-              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed flex-grow mb-3 min-h-[3rem] sm:min-h-[3.5rem] text-center">
-                {item.description}
-              </p>
-              
-              {/* Learn more - 统一位置，底部对齐，居中 */}
-              <div className="mt-auto pt-2 text-xs text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200 font-medium text-center">
-                Learn more →
-              </div>
-            </Link>
+            </div>
+            
+            {/* Title */}
+            <h3 className="text-apple-title font-apple-semibold mb-2 text-[#1d1d1f]">
+              {item.title}
+            </h3>
+            
+            {/* Description */}
+            <p className="text-apple-body font-apple-normal text-[#424245]">
+              {item.description}
+            </p>
           </motion.div>
         ))}
       </div>

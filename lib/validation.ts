@@ -46,9 +46,21 @@ export function validatePhone(phone: string, country?: string): ValidationResult
 
   // 国家特定验证
   if (country) {
-    const countryRules: Record<string, { min: number; max: number; pattern?: RegExp }> = {
-      US: { min: 10, max: 10, pattern: /^\+?1\d{10}$/ },
-      CA: { min: 10, max: 10, pattern: /^\+?1\d{10}$/ },
+    const countryRules: Record<string, { min: number; max: number; pattern?: RegExp; allowLocal?: boolean }> = {
+      // US: 支持 10位本地号码 (5551234567) 或 11位带国家代码 (+1 或 1)
+      US: { 
+        min: 10, 
+        max: 11, 
+        pattern: /^(\+?1)?\d{10}$/,
+        allowLocal: true 
+      },
+      // CA: 支持 10位本地号码或 11位带国家代码
+      CA: { 
+        min: 10, 
+        max: 11, 
+        pattern: /^(\+?1)?\d{10}$/,
+        allowLocal: true 
+      },
       GB: { min: 10, max: 11, pattern: /^\+?44\d{10,11}$/ },
       CN: { min: 11, max: 11, pattern: /^\+?86\d{11}$/ },
       JP: { min: 10, max: 11, pattern: /^\+?81\d{9,10}$/ },
@@ -57,14 +69,37 @@ export function validatePhone(phone: string, country?: string): ValidationResult
     const rule = countryRules[country]
     if (rule) {
       const digitsOnly = cleaned.replace(/\D/g, '')
-      if (digitsOnly.length < rule.min || digitsOnly.length > rule.max) {
-        return {
-          valid: false,
-          error: `Phone number for ${country} should be ${rule.min}-${rule.max} digits`,
+      
+      // 对于 US/CA，如果允许本地格式，检查是否为10位或11位（带国家代码）
+      if (rule.allowLocal) {
+        // 10位本地号码或11位带国家代码（1开头）
+        if (digitsOnly.length === 10) {
+          // 10位本地号码，验证格式
+          if (!/^\d{10}$/.test(digitsOnly)) {
+            return { valid: false, error: `Invalid phone number format for ${country}` }
+          }
+        } else if (digitsOnly.length === 11 && digitsOnly.startsWith('1')) {
+          // 11位带国家代码，验证格式
+          if (!/^1\d{10}$/.test(digitsOnly)) {
+            return { valid: false, error: `Invalid phone number format for ${country}` }
+          }
+        } else {
+          return {
+            valid: false,
+            error: `Phone number for ${country} should be 10 digits (local) or 11 digits (with country code)`,
+          }
         }
-      }
-      if (rule.pattern && !rule.pattern.test(cleaned)) {
-        return { valid: false, error: `Invalid phone number format for ${country}` }
+      } else {
+        // 其他国家的标准验证
+        if (digitsOnly.length < rule.min || digitsOnly.length > rule.max) {
+          return {
+            valid: false,
+            error: `Phone number for ${country} should be ${rule.min}-${rule.max} digits`,
+          }
+        }
+        if (rule.pattern && !rule.pattern.test(cleaned)) {
+          return { valid: false, error: `Invalid phone number format for ${country}` }
+        }
       }
     }
   }

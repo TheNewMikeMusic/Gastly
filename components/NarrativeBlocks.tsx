@@ -1,24 +1,25 @@
 'use client'
 
 import { OptimizedImage } from '@/components/OptimizedImage'
+import { SectionBackground } from '@/components/SectionBackground'
 import { useReducedMotion, useIntersectionObserver } from '@/lib/hooks'
 import { motion } from 'framer-motion'
 import { useRef } from 'react'
 
 const narratives = [
   {
-    title: 'The startup ritual returns.',
+    title: '',
     description:
-      'Maclock still greets you with the smiling face, floppy disk, and gentle fade that made the first Macintosh feel alive—now tuned to modern hardware so it happens in seconds.',
-    prefix: 'maclock_boot_smile_feature_grid_apple_style.jpg',
+      'From the pixel smile to the under-chassis brightness wheel, Hello 1984 rebuilds the small Macintosh rituals so you don\u2019t just check the time\u2014you boot it up, dial it in, and let it glow.',
+    prefix: 'Hello1084/retro-mac-original-startup-smile-authentic-system-disk-analog-brightness-control.webp',
     alt: 'Maclock showing the smiling Macintosh boot screen beside the system disk animation',
     imageLeft: true,
   },
   {
-    title: 'Industrial warmth for 2025 desks.',
+    title: '',
     description:
-      'A bead-blasted shell, satin lens, and USB-C core feel intentional alongside modern tablets and notebooks while keeping the original Macintosh proportions intact.',
-    prefix: 'maclock_1984_design_reimagined_apple_style',
+      'From playful case stickers to a classic dot-matrix screen, Hello 1984 looks like a Macintosh and reads like a modern clock — clear at a glance, even half asleep.',
+    prefix: 'Hello1084/retro-mac-clock-body-stickers-dot-matrix-vibrant-information-display.webp',
     alt: 'Maclock hardware profile highlighting the vented rear case and curved display glass',
     imageLeft: false,
   },
@@ -28,8 +29,9 @@ export function NarrativeBlocks() {
   const prefersReducedMotion = useReducedMotion()
 
   return (
-    <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-16 lg:space-y-24">
+    <section id="features" className="pt-0 sm:pt-0 lg:pt-0 pb-20 sm:pb-28 lg:pb-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <SectionBackground variant="subtle" />
+      <div className="max-w-7xl mx-auto space-y-16 lg:space-y-24 relative z-10">
         {narratives.map((narrative, index) => (
           <NarrativeBlock
             key={narrative.prefix}
@@ -67,20 +69,20 @@ function NarrativeBlock({
         initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, scale: 0.96 }}
         animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, delay: index * 0.15 + 0.1, ease: [0.16, 1, 0.3, 1] }}
-        className="flex-1 relative aspect-[3/4] image-container-text overflow-hidden"
+        className="flex-1 relative aspect-[3/4] overflow-hidden rounded-apple sm:rounded-apple-lg shadow-medium hover:shadow-deep transition-all duration-500 ease-apple-smooth border border-black/[0.06]"
       >
         <OptimizedImage
           prefix={narrative.prefix}
           fill
-          fit="contain"
+          fit="cover"
           sizes="(max-width: 1024px) 100vw, 50vw"
           alt={narrative.alt}
+          className="rounded-[2rem] sm:rounded-[2.5rem]"
         />
       </motion.div>
       <div className="flex-1 space-y-6 lg:px-8">
-        <p className="text-xs uppercase tracking-[0.15em] text-gray-500 font-medium">Chapter {index + 1}</p>
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-gray-900 tracking-[-0.022em] leading-[1.08]">{narrative.title}</h2>
-        <p className="text-lg sm:text-xl text-gray-600 leading-[1.6] tracking-[-0.011em]">{narrative.description}</p>
+        {narrative.title && <h2 className="text-apple-headline font-apple-semibold text-[#1d1d1f] text-center lg:text-left">{narrative.title}</h2>}
+        <p className={`text-apple-subtitle font-apple-normal text-[#424245] text-center lg:text-left ${!narrative.title ? 'pt-8' : ''}`}>{narrative.description}</p>
       </div>
     </motion.div>
   )

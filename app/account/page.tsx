@@ -2,10 +2,10 @@ import { Navigation } from '@/components/Navigation'
 import { SellerReviews } from '@/components/SellerReviews'
 import { TrackingStatusBadge } from '@/components/TrackingStatusBadge'
 import { SavedAddresses } from '@/components/SavedAddresses'
-import { CancelOrderButton } from '@/components/CancelOrderButton'
 import { OrderSearchFilter } from '@/components/OrderSearchFilter'
 import { Pagination } from '@/components/Pagination'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
+import { OrderActions } from '@/components/OrderActions'
 import { auth, currentUser } from '@clerk/nextjs/server'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
@@ -168,8 +168,8 @@ export default async function AccountPage({
                       key={order.id}
                       className="border border-gray-200 rounded-xl sm:rounded-2xl p-4 sm:p-5 transition-all hover:border-gray-300 hover:shadow-md space-y-4 active:scale-[0.99] touch-manipulation"
                     >
-                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
-                        <div className="flex-1 space-y-2">
+                      <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                        <div className="flex-1 space-y-3">
                           <div className="flex items-center gap-3 flex-wrap">
                             <div className="font-semibold text-gray-900">
                               Order #{order.id.slice(0, 8).toUpperCase()}
@@ -210,21 +210,13 @@ export default async function AccountPage({
                             })}
                           </div>
                         </div>
-                        <div className="flex flex-col gap-2 sm:items-end">
-                          {tracking && tracking.trackingNumber && (
-                            <Link
-                              href={`/account/track/${order.id}`}
-                              className="px-4 py-2.5 sm:py-2 bg-gray-900 text-white text-sm font-medium rounded-lg active:bg-gray-950 transition-colors text-center min-h-[44px] flex items-center justify-center touch-manipulation"
-                            >
-                              Track Package
-                            </Link>
-                          )}
-                          {order.status === 'paid' && !tracking?.trackingNumber && (
-                            <span className="text-sm text-gray-500">Preparing for shipment</span>
-                          )}
-                          {order.status === 'paid' && (
-                            <CancelOrderButton orderId={order.id} />
-                          )}
+                        <div className="w-full lg:w-auto lg:min-w-[200px]">
+                          <OrderActions
+                            orderId={order.id}
+                            orderStatus={order.status}
+                            hasTracking={!!tracking?.trackingNumber}
+                            trackingNumber={tracking?.trackingNumber}
+                          />
                         </div>
                       </div>
 

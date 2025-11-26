@@ -302,3 +302,6 @@ docker-compose exec postgres pg_dump -U maclock maclock > backup_$(date +%Y%m%d)
 
 
 
+
+
+

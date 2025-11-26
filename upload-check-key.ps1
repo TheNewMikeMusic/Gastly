@@ -11,3 +11,6 @@ Write-Host "$file uploaded!" -ForegroundColor Green
 Write-Host "`nPlease run on server: chmod +x check-clerk-key.sh && ./check-clerk-key.sh" -ForegroundColor Yellow
 
 
+
+
+

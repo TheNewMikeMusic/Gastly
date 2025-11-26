@@ -18,25 +18,79 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
+        sans: [
+          '-apple-system',
+          'BlinkMacSystemFont',
+          '"SF Pro Display"',
+          '"SF Pro Text"',
+          '"Helvetica Neue"',
+          'system-ui',
+          'sans-serif',
+        ],
       },
       fontSize: {
-        'display': ['4.5rem', { lineHeight: '1.1', letterSpacing: '-0.02em', fontWeight: '700' }],
-        'display-sm': ['3.5rem', { lineHeight: '1.1', letterSpacing: '-0.02em', fontWeight: '700' }],
+        // Apple-style typography scale - unified system
+        'xs': ['0.75rem', { lineHeight: '1.333', letterSpacing: '-0.01em', fontWeight: '400' }],
+        'sm': ['0.875rem', { lineHeight: '1.429', letterSpacing: '-0.011em', fontWeight: '400' }],
+        'base': ['1rem', { lineHeight: '1.5', letterSpacing: '-0.011em', fontWeight: '400' }],
+        'lg': ['1.125rem', { lineHeight: '1.556', letterSpacing: '-0.011em', fontWeight: '400' }],
+        'xl': ['1.25rem', { lineHeight: '1.5', letterSpacing: '-0.011em', fontWeight: '400' }],
+        '2xl': ['1.5rem', { lineHeight: '1.5', letterSpacing: '-0.011em', fontWeight: '400' }],
+        '3xl': ['1.875rem', { lineHeight: '1.4', letterSpacing: '-0.02em', fontWeight: '400' }],
+        '4xl': ['2.25rem', { lineHeight: '1.333', letterSpacing: '-0.022em', fontWeight: '400' }],
+        '5xl': ['3rem', { lineHeight: '1.2', letterSpacing: '-0.022em', fontWeight: '400' }],
+        '6xl': ['3.75rem', { lineHeight: '1.167', letterSpacing: '-0.022em', fontWeight: '400' }],
+        '7xl': ['4.5rem', { lineHeight: '1.1', letterSpacing: '-0.022em', fontWeight: '400' }],
+        '8xl': ['6rem', { lineHeight: '1', letterSpacing: '-0.022em', fontWeight: '400' }],
+        '9xl': ['8rem', { lineHeight: '1', letterSpacing: '-0.022em', fontWeight: '400' }],
+        // Apple typography system - responsive display sizes
+        'display': ['clamp(2.5rem, 8vw, 4.5rem)', { lineHeight: '1.1', letterSpacing: '-0.022em', fontWeight: '600' }],
+        'display-sm': ['clamp(2rem, 6vw, 3.5rem)', { lineHeight: '1.1', letterSpacing: '-0.022em', fontWeight: '600' }],
+        'headline': ['clamp(1.875rem, 5vw, 3rem)', { lineHeight: '1.2', letterSpacing: '-0.022em', fontWeight: '600' }],
+        'headline-sm': ['clamp(1.5rem, 4vw, 2.5rem)', { lineHeight: '1.2', letterSpacing: '-0.022em', fontWeight: '600' }],
+        'title': ['clamp(1.25rem, 3vw, 1.875rem)', { lineHeight: '1.4', letterSpacing: '-0.02em', fontWeight: '600' }],
+        'title-sm': ['clamp(1.125rem, 2.5vw, 1.5rem)', { lineHeight: '1.4', letterSpacing: '-0.02em', fontWeight: '600' }],
+        'body': ['clamp(1rem, 2vw, 1.125rem)', { lineHeight: '1.5', letterSpacing: '-0.011em', fontWeight: '400' }],
+        'body-sm': ['clamp(0.9375rem, 1.5vw, 1rem)', { lineHeight: '1.5', letterSpacing: '-0.011em', fontWeight: '400' }],
+        'caption': ['clamp(0.875rem, 2vw, 1rem)', { lineHeight: '1.429', letterSpacing: '-0.011em', fontWeight: '400' }],
+        'footnote': ['clamp(0.75rem, 1.5vw, 0.875rem)', { lineHeight: '1.333', letterSpacing: '-0.01em', fontWeight: '400' }],
+      },
+      fontWeight: {
+        'light': '300',
+        'normal': '400',
+        'medium': '500',
+        'semibold': '600',
+        'bold': '700',
+      },
+      letterSpacing: {
+        'tighter': '-0.05em',
+        'tight': '-0.025em',
+        'normal': '-0.011em',
+        'wide': '0.025em',
+        'wider': '0.05em',
+        'widest': '0.1em',
       },
       spacing: {
+        // 8px grid system
         '18': '4.5rem',
         '88': '22rem',
         '128': '32rem',
+        // Safe area insets
         'safe-top': 'env(safe-area-inset-top)',
         'safe-bottom': 'env(safe-area-inset-bottom)',
         'safe-left': 'env(safe-area-inset-left)',
         'safe-right': 'env(safe-area-inset-right)',
+        // Apple standard spacing
+        'touch': '2.75rem', // 44px minimum touch target
       },
       borderRadius: {
+        // Apple standard rounded corners
         'xl': '1rem',
         '2xl': '1.25rem',
         '3xl': '1.5rem',
+        'apple': '1.75rem', // Standard Apple card radius
+        'apple-lg': '2rem', // Large Apple card radius
+        'apple-xl': '2.5rem', // Extra large Apple card radius
       },
       boxShadow: {
         'shallow': '0 1px 3px rgba(0, 0, 0, 0.1)',

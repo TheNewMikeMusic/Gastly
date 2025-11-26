@@ -8,3 +8,6 @@ Remove-Item $scriptFile -Force -ErrorAction SilentlyContinue
 Write-Host "Smooth scrolling fix uploaded!" -ForegroundColor Green
 
 
+
+
+
