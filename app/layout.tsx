@@ -2,10 +2,9 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { defaultMetadata } from '@/lib/config'
 import { Analytics } from '@/components/Analytics'
+import { ClerkProvider } from '@clerk/nextjs'
 
 export const metadata: Metadata = defaultMetadata
-
-import { ClerkProvider } from '@clerk/nextjs'
 
 // Conditional Clerk support - same logic as middleware.ts
 const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
@@ -27,7 +26,12 @@ export default function RootLayout({
         <meta name="color-scheme" content="dark" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+        <link 
+          href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&family=Fredoka+One&display=swap" 
+          rel="stylesheet"
+        />
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
         <link rel="alternate icon" href="/icon.svg" />
       </head>
