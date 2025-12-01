@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { BuyButton } from '@/components/BuyButton'
+import { NeonButton } from '@/components/NeonButton'
+import { useGBASound } from '@/lib/hooks/useGBASound'
 import { UserButton, SignedIn, SignedOut } from '@clerk/nextjs'
 import { isClerkConfigured } from '@/lib/config'
 
@@ -31,16 +33,8 @@ const navItems = [
 
 
 export function Navigation() {
-  const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 40)
-    }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  const { playHoverSound } = useGBASound()
 
   useEffect(() => {
     if (!menuOpen) return
@@ -58,9 +52,8 @@ export function Navigation() {
     }
   }, [menuOpen])
 
-  const shellClass = scrolled
-    ? 'bg-ghost-bg-card/90 md:bg-ghost-bg-card/90 border border-ghost-purple-primary/30 text-ghost-text-primary shadow-glass-dark backdrop-blur-[20px]'
-    : 'bg-ghost-bg-card/75 md:bg-ghost-bg-card/60 border border-ghost-purple-primary/20 text-ghost-text-primary shadow-glass-dark backdrop-blur-[20px]'
+  // 导航栏始终保持滚动后的样式（glass-neon）
+  const shellClass = 'glass-neon border-ghost-purple-primary/40 text-ghost-text-primary shadow-glass-dark backdrop-blur-[20px]'
 
   return (
     <>
@@ -86,9 +79,12 @@ export function Navigation() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="text-apple-caption font-apple-medium text-ghost-text-secondary hover:text-ghost-text-primary rounded-full px-3 py-1.5 transition-colors duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ghost-purple-primary/30 touch-target"
+                  className="text-apple-caption font-apple-medium text-ghost-text-secondary hover:text-ghost-text-primary rounded-full px-3 py-1.5 transition-all duration-300 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ghost-purple-primary/30 touch-target relative group"
+                  onMouseEnter={playHoverSound}
                 >
-                  {item.label}
+                  <span className="relative z-10">{item.label}</span>
+                  <span className="absolute inset-0 rounded-full bg-purple-500/20 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-300" />
+                  <span className="absolute inset-0 rounded-full border border-purple-400/0 group-hover:border-purple-400/50 transition-all duration-300" />
                 </Link>
               ))}
               <ConditionalSignedOut>
@@ -126,11 +122,17 @@ export function Navigation() {
                   >
                     Sign In
                   </Link>
-                  <BuyButton
+                  <NeonButton
                     size="sm"
                     variant="primary"
-                    className={scrolled ? 'bg-ghost-purple-primary text-white hover:bg-ghost-purple-accent shadow-glass-dark' : 'bg-ghost-purple-primary text-white hover:bg-ghost-purple-accent'}
-                  />
+                    glowColor="#7C3AED"
+                    pulse={true}
+                    onClick={() => {
+                      window.location.href = '/checkout'
+                    }}
+                  >
+                    Buy Now
+                  </NeonButton>
                 </div>
               </ConditionalSignedOut>
               <button
@@ -141,11 +143,11 @@ export function Navigation() {
                 aria-expanded={menuOpen}
               >
                 <span
-                  className={`block h-[2.5px] w-5 bg-ghost-text-primary rounded-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] origin-center ${menuOpen ? 'translate-y-[8px] rotate-45' : ''}`}
+                  className={`block h-[2.5px] w-5 bg-white rounded-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] origin-center ${menuOpen ? 'translate-y-[8px] rotate-45' : ''}`}
                 />
-                <span className={`block h-[2.5px] w-5 bg-ghost-text-primary rounded-full transition-all duration-200 ease-apple-standard ${menuOpen ? 'opacity-0 scale-0' : 'opacity-100 scale-100'}`} />
+                <span className={`block h-[2.5px] w-5 bg-white rounded-full transition-all duration-200 ease-apple-standard ${menuOpen ? 'opacity-0 scale-0' : 'opacity-100 scale-100'}`} />
                 <span
-                  className={`block h-[2.5px] w-5 bg-ghost-text-primary rounded-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] origin-center ${menuOpen ? '-translate-y-[8px] -rotate-45' : ''}`}
+                  className={`block h-[2.5px] w-5 bg-white rounded-full transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] origin-center ${menuOpen ? '-translate-y-[8px] -rotate-45' : ''}`}
                 />
               </button>
             </div>
@@ -165,14 +167,14 @@ export function Navigation() {
               onClick={() => setMenuOpen(false)}
             />
             <motion.div
-              initial={{ y: -10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -10, opacity: 0 }}
+              initial={{ y: -10, opacity: 0, scale: 0.95 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              exit={{ y: -10, opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed top-[calc(4rem+env(safe-area-inset-top))] left-4 right-4 z-50 bg-ghost-bg-card rounded-3xl shadow-glass-dark md:hidden safe-area-inset overflow-hidden border border-ghost-purple-primary/30"
+              className="fixed top-[calc(4rem+env(safe-area-inset-top))] left-4 right-4 z-50 glass-neon rounded-3xl shadow-glass-dark md:hidden safe-area-inset overflow-hidden"
               style={{
                 maxHeight: 'calc(100vh - 4rem - env(safe-area-inset-top) - 2rem)',
-                boxShadow: '0 20px 60px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(124, 58, 237, 0.2)',
+                boxShadow: '0 20px 60px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(124, 58, 237, 0.2), 0 0 30px rgba(124, 58, 237, 0.3)',
               }}
               onClick={(e) => e.stopPropagation()}
             >
@@ -192,10 +194,13 @@ export function Navigation() {
                     >
                       <Link
                         href={item.href}
-                        className="block px-4 py-3.5 text-apple-body font-apple-normal text-ghost-text-primary hover:bg-ghost-purple-primary/10 active:bg-ghost-purple-primary/20 transition-colors duration-150 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ghost-purple-primary/20 focus-visible:ring-inset touch-manipulation touch-target rounded-lg"
+                        className="block px-4 py-3.5 text-apple-body font-apple-normal text-ghost-text-primary hover:bg-purple-500/20 hover:text-purple-300 active:bg-purple-500/30 active:scale-95 transition-all duration-300 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400/30 focus-visible:ring-inset touch-manipulation touch-target rounded-lg relative group"
                         onClick={() => setMenuOpen(false)}
+                        onMouseEnter={playHoverSound}
                       >
-                        {item.label}
+                        <span className="relative z-10">{item.label}</span>
+                        <span className="absolute inset-0 rounded-lg bg-purple-500/10 opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-300" />
+                        <span className="absolute left-0 top-0 bottom-0 w-1 bg-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-l-lg" />
                       </Link>
                     </motion.div>
                   ))}
@@ -294,12 +299,19 @@ export function Navigation() {
                       ease: [0.16, 1, 0.3, 1] 
                     }}
                   >
-                    <BuyButton
+                    <NeonButton
                       size="md"
                       variant="primary"
+                      glowColor="#7C3AED"
+                      pulse={true}
                       className="w-full"
-                      onClick={() => setMenuOpen(false)}
-                    />
+                      onClick={() => {
+                        setMenuOpen(false)
+                        window.location.href = '/checkout'
+                      }}
+                    >
+                      Buy Now
+                    </NeonButton>
                   </motion.div>
                 </div>
               </nav>
