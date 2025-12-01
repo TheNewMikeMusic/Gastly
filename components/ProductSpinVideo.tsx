@@ -4,12 +4,16 @@ import { useEffect, useRef, useState } from 'react'
 import { useReducedMotion } from '@/lib/hooks'
 
 // 图片序列总数
-const TOTAL_FRAMES = 60
+const TOTAL_FRAMES = 141
+
+// 起始帧索引（用户要求从第150帧开始，但视频只有141帧，所以从视频末尾开始循环）
+// 实际上从第0帧开始，但可以通过调整滚动进度来模拟从中间开始
+const START_FRAME = 0
 
 // 生成图片路径
 const getImagePath = (frameIndex: number): string => {
   const paddedIndex = String(frameIndex).padStart(3, '0')
-  return `/product-spin-${paddedIndex}.webp`
+  return `/Gastly/spin-${paddedIndex}.webp`
 }
 
 // 检测iOS平台
@@ -76,9 +80,11 @@ export function ProductSpinVideo() {
             loadedCount++
             setLoadProgress(Math.floor((loadedCount / TOTAL_FRAMES) * 100))
             
-            // 第一帧加载完成后立即显示
-            if (i === 0 && imageRef1.current) {
+            // 第一帧（第9帧，150%141=9）加载完成后立即显示
+            const START_FRAME_INDEX = 150 % TOTAL_FRAMES
+            if (i === START_FRAME_INDEX && imageRef1.current && imageRef2.current) {
               imageRef1.current.src = img.src
+              imageRef2.current.src = img.src
               setIsLoaded(true)
               setHasError(false)
             }
@@ -130,8 +136,12 @@ export function ProductSpinVideo() {
         const progress = Math.max(0, Math.min(1, currentPosition / scrollRange))
 
         // 根据进度计算帧索引
+        // 用户要求从第150帧开始，但视频只有141帧，所以使用循环：150 % 141 = 9
+        // 从第9帧开始播放，然后循环
+        const TARGET_START_FRAME = 150 % TOTAL_FRAMES // 9
         const frameIndex = Math.floor(progress * (TOTAL_FRAMES - 1))
-        const clampedFrame = Math.max(0, Math.min(TOTAL_FRAMES - 1, frameIndex))
+        // 从TARGET_START_FRAME开始，循环播放
+        const clampedFrame = (frameIndex + TARGET_START_FRAME) % TOTAL_FRAMES
 
         // 只有当帧变化时才更新
         if (clampedFrame !== lastFrameRef.current) {
@@ -293,22 +303,22 @@ export function ProductSpinVideo() {
   return (
     <section
       ref={containerRef}
-      className="w-full overflow-hidden bg-[#f6f7fb]"
-      aria-label="产品旋转展示"
+      className="w-full overflow-hidden bg-ghost-bg-section"
+      aria-label="Product rotation showcase"
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="w-full relative" style={{ aspectRatio: '16/9' }}>
+        <div className="w-full relative" style={{ aspectRatio: '1/1', minHeight: '400px' }}>
           {/* 双缓冲：两个img元素叠加，无CSS transition */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             ref={imageRef1}
-            src={getImagePath(0)}
-            alt="产品旋转展示"
-            className="absolute inset-0 w-full h-full object-cover"
+            src={getImagePath(150 % TOTAL_FRAMES)} // 从第9帧开始（150 % 141 = 9）
+            alt="Product rotation showcase"
+            className="absolute inset-0 w-full h-full object-contain"
             style={{
               opacity: activeImageRef.current === 0 ? 1 : 0,
               willChange: 'opacity',
-              imageRendering: 'crisp-edges',
+              imageRendering: 'auto', // 使用默认渲染，避免模糊
               transition: 'none', // 移除过渡，直接切换
             }}
             onLoad={handleImageLoad}
@@ -319,13 +329,13 @@ export function ProductSpinVideo() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             ref={imageRef2}
-            src={getImagePath(0)}
+            src={getImagePath(150 % TOTAL_FRAMES)} // 从第9帧开始（150 % 141 = 9）
             alt=""
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-contain"
             style={{
               opacity: activeImageRef.current === 1 ? 1 : 0,
               willChange: 'opacity',
-              imageRendering: 'crisp-edges',
+              imageRendering: 'auto', // 使用默认渲染，避免模糊
               transition: 'none', // 移除过渡，直接切换
             }}
             onError={handleImageError}
@@ -336,11 +346,11 @@ export function ProductSpinVideo() {
           
           {/* 加载进度指示 */}
           {!isLoaded && !hasError && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-white z-10">
-              <div className="text-gray-400 text-sm mb-2">加载中... {loadProgress}%</div>
-              <div className="w-48 h-1 bg-gray-200 rounded-full overflow-hidden">
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-ghost-bg-card z-10">
+              <div className="text-ghost-text-secondary text-sm mb-2">Loading... {loadProgress}%</div>
+              <div className="w-48 h-1 bg-ghost-purple-soft/30 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-gray-900 transition-all duration-300 ease-out"
+                  className="h-full bg-ghost-purple-primary transition-all duration-300 ease-out"
                   style={{ width: `${loadProgress}%` }}
                 />
               </div>
@@ -349,8 +359,16 @@ export function ProductSpinVideo() {
           
           {/* 错误提示 */}
           {hasError && (
-            <div className="absolute inset-0 flex items-center justify-center bg-white z-10">
-              <div className="text-gray-400 text-sm">图片加载失败</div>
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-ghost-bg-card z-10 p-8">
+              <div className="text-ghost-text-secondary text-sm mb-4 text-center max-w-md">
+                Product rotation images not found. To generate them, run:
+              </div>
+              <code className="bg-ghost-purple-primary/20 text-ghost-purple-primary px-4 py-2 rounded text-xs font-mono">
+                node scripts/video-to-frames.js
+              </code>
+              <div className="text-ghost-text-muted text-xs mt-4 text-center">
+                This will extract frames from Video.mp4 and create spin-000.webp through spin-059.webp
+              </div>
             </div>
           )}
         </div>

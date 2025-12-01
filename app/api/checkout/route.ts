@@ -133,7 +133,12 @@ export async function POST(request: Request) {
       return Response.json({ error: 'Price ID not configured' }, { status: 500 })
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'
+    // 在开发环境中，使用请求的 origin 作为 baseUrl，避免跳转到生产服务器
+    // 在生产环境中，使用配置的 NEXT_PUBLIC_URL
+    const isDevelopment = process.env.NODE_ENV === 'development'
+    const baseUrl = isDevelopment 
+      ? (request.headers.get('origin') || 'http://localhost:3000')
+      : (process.env.NEXT_PUBLIC_URL || 'http://localhost:3000')
 
     const stripe = getStripe()
     
@@ -190,20 +195,12 @@ export async function POST(request: Request) {
       currency: 'usd',
       allow_promotion_codes: !couponCode, // 如果已使用优惠券，禁用promotion codes
       ...(discounts ? { discounts } : {}),
-      ...(priceMode === 'payment' ? {
-        // 单次支付模式：收集配送地址
-        shipping_address_collection: {
-          allowed_countries: ['US', 'CA', 'GB', 'AU', 'DE', 'FR', 'JP', 'CN'],
-        },
-        tax_id_collection: {
-          enabled: true,
-        },
-      } : {
-        // 订阅模式：不收集配送地址（订阅通常不需要配送）
-      }),
+      // 不收集配送地址，因为我们已经在自己的表单中收集了
+      // 地址信息已存储在 metadata 中，并在订单创建时保存到数据库
       success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/checkout`,
       customer_email: shippingData.email || userEmail,
+      // 将收货信息存储在 metadata 中（作为备份，主要数据在数据库中）
       metadata: {
         userId: userId,
         shippingName: shippingData.name,

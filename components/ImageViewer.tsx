@@ -52,12 +52,14 @@ export function ImageViewer({ images, currentIndex, onClose, onNext, onPrev }: I
 
   // Handle mouse wheel zoom
   const handleWheel = (e: React.WheelEvent) => {
-    e.preventDefault()
-    const delta = e.deltaY * -0.01
-    const newScale = Math.min(Math.max(scale + delta, 1), 5)
-    setScale(newScale)
-    if (newScale === 1) {
-      setPosition({ x: 0, y: 0 })
+    if (e.deltaY !== 0) {
+      e.preventDefault()
+      const delta = e.deltaY * -0.01
+      const newScale = Math.min(Math.max(scale + delta, 1), 5)
+      setScale(newScale)
+      if (newScale === 1) {
+        setPosition({ x: 0, y: 0 })
+      }
     }
   }
 
@@ -85,7 +87,6 @@ export function ImageViewer({ images, currentIndex, onClose, onNext, onPrev }: I
   // Handle touch events
   const handleTouchStart = (e: React.TouchEvent) => {
     if (e.touches.length === 2) {
-      e.preventDefault()
       const touch1 = e.touches[0]
       const touch2 = e.touches[1]
       const distance = Math.hypot(
@@ -102,7 +103,6 @@ export function ImageViewer({ images, currentIndex, onClose, onNext, onPrev }: I
       const now = Date.now()
       const timeSinceLastTap = now - lastTapTime.current
       if (timeSinceLastTap < 300 && timeSinceLastTap > 0) {
-        e.preventDefault()
         if (scale > 1) {
           setScale(1)
           setPosition({ x: 0, y: 0 })
@@ -124,7 +124,6 @@ export function ImageViewer({ images, currentIndex, onClose, onNext, onPrev }: I
 
   const handleTouchMove = (e: React.TouchEvent) => {
     if (e.touches.length === 2 && lastTouchDistance !== null) {
-      e.preventDefault()
       e.stopPropagation()
       const touch1 = e.touches[0]
       const touch2 = e.touches[1]
@@ -139,7 +138,6 @@ export function ImageViewer({ images, currentIndex, onClose, onNext, onPrev }: I
       })
       setLastTouchDistance(distance)
     } else if (e.touches.length === 1 && scale > 1 && lastTouchCenter) {
-      e.preventDefault()
       e.stopPropagation()
       const touch = e.touches[0]
       setPosition((prev) => ({
@@ -199,6 +197,12 @@ export function ImageViewer({ images, currentIndex, onClose, onNext, onPrev }: I
         className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm"
         onClick={onClose}
         style={{
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          width: '100vw',
+          height: '100vh',
           paddingTop: 'env(safe-area-inset-top)',
           paddingBottom: 'env(safe-area-inset-bottom)',
           paddingLeft: 'env(safe-area-inset-left)',
@@ -272,10 +276,26 @@ export function ImageViewer({ images, currentIndex, onClose, onNext, onPrev }: I
           </>
         )}
 
-        {/* Image Container */}
+        {/* Image Container - 相对于视口居中 */}
         <div
           ref={containerRef}
-          className="absolute inset-0 flex items-center justify-center p-4 sm:p-8"
+          className="absolute flex items-center justify-center"
+          style={{
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: '100vw',
+            height: '100vh',
+            paddingTop: 'max(5rem, calc(env(safe-area-inset-top) + 5rem))',
+            paddingBottom: 'max(10rem, calc(env(safe-area-inset-bottom) + 10rem))',
+            paddingLeft: 'max(1rem, calc(env(safe-area-inset-left) + 1rem))',
+            paddingRight: 'max(1rem, calc(env(safe-area-inset-right) + 1rem))',
+            cursor: scale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default',
+            touchAction: 'none',
+            overflow: 'hidden',
+            boxSizing: 'border-box',
+          }}
           onWheel={handleWheel}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
@@ -289,7 +309,6 @@ export function ImageViewer({ images, currentIndex, onClose, onNext, onPrev }: I
               onClose()
             }
           }}
-          style={{ cursor: scale > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default' }}
         >
           <motion.div
             ref={imageRef}
@@ -297,8 +316,12 @@ export function ImageViewer({ images, currentIndex, onClose, onNext, onPrev }: I
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="relative w-full h-full max-w-5xl max-h-full"
+            className="relative flex items-center justify-center"
             style={{
+              width: 'min(85vw, 1200px)',
+              height: 'min(70vh, 900px)',
+              maxWidth: 'calc(100% - 2rem)',
+              maxHeight: 'calc(100% - 2rem)',
               transform: `scale(${scale}) translate(${position.x}px, ${position.y}px)`,
               transformOrigin: 'center center',
               transition: isDragging ? 'none' : 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
@@ -306,15 +329,37 @@ export function ImageViewer({ images, currentIndex, onClose, onNext, onPrev }: I
             onDoubleClick={handleDoubleClick}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative w-full h-full bg-[#1d1d1f] rounded-2xl sm:rounded-3xl overflow-hidden">
-              <OptimizedImage
-                prefix={currentImage.prefix}
-                fill
-                fit="contain"
-                sizes="100vw"
+            <div className="relative bg-ghost-bg-card rounded-2xl sm:rounded-3xl overflow-hidden border border-ghost-purple-primary/20 flex items-center justify-center" style={{ width: '100%', height: '100%', padding: '1rem' }}>
+              {/* 直接使用 img 标签，因为 OptimizedImage 会尝试添加 .webp 扩展名 */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`/${currentImage.prefix}`}
                 alt={currentImage.alt}
-                priority
-                className="object-contain p-4 sm:p-8 select-none"
+                className="select-none"
+                style={{ 
+                  objectFit: 'contain',
+                  display: 'block',
+                  width: 'auto',
+                  height: 'auto',
+                  maxWidth: '100%',
+                  maxHeight: '100%',
+                }}
+                onLoad={(e) => {
+                  const img = e.target as HTMLImageElement
+                  img.style.visibility = 'visible'
+                }}
+                onError={(e) => {
+                  console.error('Image load error:', currentImage.prefix)
+                  const target = e.target as HTMLImageElement
+                  target.style.display = 'none'
+                  const parent = target.parentElement
+                  if (parent && !parent.querySelector('.error-message')) {
+                    const errorDiv = document.createElement('div')
+                    errorDiv.className = 'error-message absolute inset-0 flex items-center justify-center text-white p-8'
+                    errorDiv.textContent = `Image not found: ${currentImage.prefix}`
+                    parent.appendChild(errorDiv)
+                  }
+                }}
               />
             </div>
           </motion.div>

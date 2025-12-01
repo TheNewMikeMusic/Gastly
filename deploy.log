@@ -1,0 +1,1456 @@
+[0;34m========================================
+🚀 生产环境完整部署
+========================================[0m
+
+[1;33m[1/8] 检查本地构建...[0m
+[0;32m✓ 本地项目检查通过[0m
+
+[1;33m[2/8] 检查环境变量配置...[0m
+[0;32m✓ 环境变量检查通过[0m
+
+[1;33m[3/8] 本地构建测试...[0m
+
+> maclock@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.33
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/47) ...
+Export error: n [Error]: Dynamic server usage: Route /api/admin/orders/export couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/Users/mikexu/Desktop/Maclock/.next/server/chunks/8948.js:1:37220)
+    at f (/Users/mikexu/Desktop/Maclock/.next/server/app/api/admin/cleanup-expired-reservations/route.js:1:4401)
+    at u (/Users/mikexu/Desktop/Maclock/.next/server/app/api/admin/cleanup-expired-reservations/route.js:1:2477)
+    at f (/Users/mikexu/Desktop/Maclock/.next/server/app/api/admin/cleanup-expired-reservations/route.js:1:2593)
+    at c (/Users/mikexu/Desktop/Maclock/.next/server/app/api/admin/orders/export/route.js:1:938)
+    at /Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /Users/mikexu/Desktop/Maclock/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093) {
+  description: "Route /api/admin/orders/export couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Analytics error: n [Error]: Dynamic server usage: Route /api/admin/analytics couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/Users/mikexu/Desktop/Maclock/.next/server/chunks/8948.js:1:37220)
+    at f (/Users/mikexu/Desktop/Maclock/.next/server/app/admin/logout/route.js:1:3689)
+    at c (/Users/mikexu/Desktop/Maclock/.next/server/app/admin/logout/route.js:1:1880)
+    at f (/Users/mikexu/Desktop/Maclock/.next/server/app/admin/logout/route.js:1:1996)
+    at d (/Users/mikexu/Desktop/Maclock/.next/server/app/api/admin/analytics/route.js:1:2205)
+    at /Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /Users/mikexu/Desktop/Maclock/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093) {
+  description: "Route /api/admin/analytics couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Get waitlist error: n [Error]: Dynamic server usage: Route /api/admin/waitlist couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/Users/mikexu/Desktop/Maclock/.next/server/chunks/8948.js:1:37220)
+    at p (/Users/mikexu/Desktop/Maclock/.next/server/app/api/admin/coupons/route.js:1:8543)
+    at l (/Users/mikexu/Desktop/Maclock/.next/server/app/api/admin/coupons/route.js:1:3908)
+    at p (/Users/mikexu/Desktop/Maclock/.next/server/app/api/admin/coupons/route.js:1:4024)
+    at d (/Users/mikexu/Desktop/Maclock/.next/server/app/api/admin/waitlist/route.js:1:937)
+    at /Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /Users/mikexu/Desktop/Maclock/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093) {
+  description: "Route /api/admin/waitlist couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+   Generating static pages (11/47) 
+URL parsing error: B [Error]: Dynamic server usage: Route /api/inventory/check couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at V (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:21778)
+    at Object.get (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:29465)
+    at d (/Users/mikexu/Desktop/Maclock/.next/server/app/api/inventory/check/route.js:1:891)
+    at /Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /Users/mikexu/Desktop/Maclock/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /Users/mikexu/Desktop/Maclock/node_modules/next/dist/server/lib/trace/tracer.js:122:103 {
+  description: "Route /api/inventory/check couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+   Generating static pages (23/47) 
+   Generating static pages (35/47) 
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ ✓ Generating static pages (47/47)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                      Size     First Load JS
+┌ ƒ /                                            10.3 kB         188 kB
+├ ƒ /_not-found                                  137 B          87.5 kB
+├ ƒ /about                                       3.77 kB         176 kB
+├ ƒ /account                                     3.18 kB         183 kB
+├ ƒ /account/track/[orderId]                     1.2 kB          174 kB
+├ ƒ /admin                                       4.37 kB         177 kB
+├ ƒ /admin/analytics                             1.59 kB         174 kB
+├ ƒ /admin/coupons                               2.52 kB         175 kB
+├ ƒ /admin/inventory                             1.76 kB         174 kB
+├ ƒ /admin/login                                 1.21 kB         174 kB
+├ ƒ /admin/logout                                0 B                0 B
+├ ƒ /admin/newsletter                            1.19 kB         174 kB
+├ ƒ /admin/orders/[orderId]                      2.7 kB          175 kB
+├ ƒ /api/addresses                               0 B                0 B
+├ ƒ /api/admin/analytics                         0 B                0 B
+├ ƒ /api/admin/cleanup-expired-reservations      0 B                0 B
+├ ƒ /api/admin/coupons                           0 B                0 B
+├ ƒ /api/admin/inventory/update                  0 B                0 B
+├ ƒ /api/admin/login                             0 B                0 B
+├ ƒ /api/admin/logout                            0 B                0 B
+├ ƒ /api/admin/orders/[orderId]/update-tracking  0 B                0 B
+├ ƒ /api/admin/orders/create-4px                 0 B                0 B
+├ ƒ /api/admin/orders/export                     0 B                0 B
+├ ƒ /api/admin/orders/merge-create-4px           0 B                0 B
+├ ƒ /api/admin/waitlist                          0 B                0 B
+├ ƒ /api/admin/waitlist/notify                   0 B                0 B
+├ ƒ /api/checkout                                0 B                0 B
+├ ƒ /api/coupon/validate                         0 B                0 B
+├ ƒ /api/inventory/check                         0 B                0 B
+├ ƒ /api/messages                                0 B                0 B
+├ ƒ /api/newsletter/subscribe                    0 B                0 B
+├ ƒ /api/newsletter/unsubscribe                  0 B                0 B
+├ ƒ /api/orders/[orderId]/cancel                 0 B                0 B
+├ ƒ /api/orders/[orderId]/delete                 0 B                0 B
+├ ƒ /api/orders/[orderId]/invoice                0 B                0 B
+├ ƒ /api/orders/[orderId]/retry-payment          0 B                0 B
+├ ƒ /api/waitlist/add                            0 B                0 B
+├ ƒ /api/webhooks/stripe                         0 B                0 B
+├ ƒ /api/wishlist                                0 B                0 B
+├ ƒ /checkout                                    6.8 kB          181 kB
+├ ƒ /contact                                     1.05 kB         174 kB
+├ ƒ /dashboard                                   1.2 kB          174 kB
+├ ○ /icon.svg                                    0 B                0 B
+├ ƒ /login                                       35.9 kB         209 kB
+├ ƒ /manual                                      5.24 kB         178 kB
+├ ƒ /pricing                                     3.65 kB         176 kB
+├ ƒ /privacy                                     1.05 kB         174 kB
+├ ƒ /returns                                     3.96 kB         177 kB
+├ ƒ /shipping                                    3.58 kB         176 kB
+├ ƒ /sign-in/[[...sign-in]]                      2.4 kB          175 kB
+├ ƒ /success                                     664 B            88 kB
+├ ƒ /terms                                       1.05 kB         174 kB
+└ ƒ /warranty                                    3.71 kB         176 kB
++ First Load JS shared by all                    87.3 kB
+  ├ chunks/117-0c3bbabcb7a897ca.js               31.7 kB
+  ├ chunks/fd9d1056-6cc8a9b86a0019eb.js          53.7 kB
+  └ other shared chunks (total)                  1.94 kB
+
+
+ƒ Middleware                                     61.2 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+[0;32m✓ 本地构建成功[0m
+
+[1;33m[4/8] 检查 Git 状态...[0m
+[1;33m⚠️  工作目录有未提交的更改，继续部署...[0m
+
+[1;33m[5/8] 上传文件到服务器...[0m
+[0;34m正在同步文件到 root@38.175.195.104:/var/www/maclock[0m
+Permission denied, please try again.
+[0;34m========================================
+🚀 生产环境完整部署
+========================================[0m
+
+[1;33m[1/8] 检查本地构建...[0m
+[0;32m✓ 本地项目检查通过[0m
+
+[1;33m[2/8] 检查环境变量配置...[0m
+[0;32m✓ 环境变量检查通过[0m
+
+[1;33m[3/8] 本地构建测试...[0m
+
+> maclock@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.33
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/47) ...
+Analytics error: n [Error]: Dynamic server usage: Route /api/admin/analytics couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/Users/mikexu/Desktop/Maclock/.next/server/chunks/8948.js:1:37220)
+    at f (/Users/mikexu/Desktop/Maclock/.next/server/app/api/admin/cleanup-expired-reservations/route.js:1:4401)
+    at u (/Users/mikexu/Desktop/Maclock/.next/server/app/api/admin/cleanup-expired-reservations/route.js:1:2477)
+    at f (/Users/mikexu/Desktop/Maclock/.next/server/app/api/admin/cleanup-expired-reservations/route.js:1:2593)
+    at d (/Users/mikexu/Desktop/Maclock/.next/server/app/api/admin/analytics/route.js:1:2205)
+    at /Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /Users/mikexu/Desktop/Maclock/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093) {
+  description: "Route /api/admin/analytics couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+URL parsing error: B [Error]: Dynamic server usage: Route /api/inventory/check couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at V (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:21778)
+    at Object.get (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:29465)
+    at d (/Users/mikexu/Desktop/Maclock/.next/server/app/api/inventory/check/route.js:1:891)
+    at /Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /Users/mikexu/Desktop/Maclock/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /Users/mikexu/Desktop/Maclock/node_modules/next/dist/server/lib/trace/tracer.js:122:103 {
+  description: "Route /api/inventory/check couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+   Generating static pages (11/47) 
+Export error: n [Error]: Dynamic server usage: Route /api/admin/orders/export couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/Users/mikexu/Desktop/Maclock/.next/server/chunks/8948.js:1:37220)
+    at f (/Users/mikexu/Desktop/Maclock/.next/server/app/admin/logout/route.js:1:3689)
+    at c (/Users/mikexu/Desktop/Maclock/.next/server/app/admin/logout/route.js:1:1880)
+    at f (/Users/mikexu/Desktop/Maclock/.next/server/app/admin/logout/route.js:1:1996)
+    at c (/Users/mikexu/Desktop/Maclock/.next/server/app/api/admin/orders/export/route.js:1:938)
+    at /Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /Users/mikexu/Desktop/Maclock/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093) {
+  description: "Route /api/admin/orders/export couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Get waitlist error: n [Error]: Dynamic server usage: Route /api/admin/waitlist couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/Users/mikexu/Desktop/Maclock/.next/server/chunks/8948.js:1:37220)
+    at h (/Users/mikexu/Desktop/Maclock/.next/server/chunks/3891.js:9:23290)
+    at u (/Users/mikexu/Desktop/Maclock/.next/server/app/api/admin/cleanup-expired-reservations/route.js:1:2477)
+    at f (/Users/mikexu/Desktop/Maclock/.next/server/app/api/admin/cleanup-expired-reservations/route.js:1:2593)
+    at d (/Users/mikexu/Desktop/Maclock/.next/server/app/api/admin/waitlist/route.js:1:937)
+    at /Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /Users/mikexu/Desktop/Maclock/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/Users/mikexu/Desktop/Maclock/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093) {
+  description: "Route /api/admin/waitlist couldn't be rendered statically because it used `cookies`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+   Generating static pages (23/47) 
+   Generating static pages (35/47) 
+ ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ ✓ Generating static pages (47/47)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                      Size     First Load JS
+┌ ƒ /                                            10.3 kB         188 kB
+├ ƒ /_not-found                                  137 B          87.5 kB
+├ ƒ /about                                       3.77 kB         176 kB
+├ ƒ /account                                     3.18 kB         183 kB
+├ ƒ /account/track/[orderId]                     1.2 kB          174 kB
+├ ƒ /admin                                       4.37 kB         177 kB
+├ ƒ /admin/analytics                             1.59 kB         174 kB
+├ ƒ /admin/coupons                               2.52 kB         175 kB
+├ ƒ /admin/inventory                             1.76 kB         174 kB
+├ ƒ /admin/login                                 1.21 kB         174 kB
+├ ƒ /admin/logout                                0 B                0 B
+├ ƒ /admin/newsletter                            1.19 kB         174 kB
+├ ƒ /admin/orders/[orderId]                      2.7 kB          175 kB
+├ ƒ /api/addresses                               0 B                0 B
+├ ƒ /api/admin/analytics                         0 B                0 B
+├ ƒ /api/admin/cleanup-expired-reservations      0 B                0 B
+├ ƒ /api/admin/coupons                           0 B                0 B
+├ ƒ /api/admin/inventory/update                  0 B                0 B
+├ ƒ /api/admin/login                             0 B                0 B
+├ ƒ /api/admin/logout                            0 B                0 B
+├ ƒ /api/admin/orders/[orderId]/update-tracking  0 B                0 B
+├ ƒ /api/admin/orders/create-4px                 0 B                0 B
+├ ƒ /api/admin/orders/export                     0 B                0 B
+├ ƒ /api/admin/orders/merge-create-4px           0 B                0 B
+├ ƒ /api/admin/waitlist                          0 B                0 B
+├ ƒ /api/admin/waitlist/notify                   0 B                0 B
+├ ƒ /api/checkout                                0 B                0 B
+├ ƒ /api/coupon/validate                         0 B                0 B
+├ ƒ /api/inventory/check                         0 B                0 B
+├ ƒ /api/messages                                0 B                0 B
+├ ƒ /api/newsletter/subscribe                    0 B                0 B
+├ ƒ /api/newsletter/unsubscribe                  0 B                0 B
+├ ƒ /api/orders/[orderId]/cancel                 0 B                0 B
+├ ƒ /api/orders/[orderId]/delete                 0 B                0 B
+├ ƒ /api/orders/[orderId]/invoice                0 B                0 B
+├ ƒ /api/orders/[orderId]/retry-payment          0 B                0 B
+├ ƒ /api/waitlist/add                            0 B                0 B
+├ ƒ /api/webhooks/stripe                         0 B                0 B
+├ ƒ /api/wishlist                                0 B                0 B
+├ ƒ /checkout                                    6.8 kB          181 kB
+├ ƒ /contact                                     1.05 kB         174 kB
+├ ƒ /dashboard                                   1.2 kB          174 kB
+├ ○ /icon.svg                                    0 B                0 B
+├ ƒ /login                                       35.9 kB         209 kB
+├ ƒ /manual                                      5.24 kB         178 kB
+├ ƒ /pricing                                     3.65 kB         176 kB
+├ ƒ /privacy                                     1.05 kB         174 kB
+├ ƒ /returns                                     3.96 kB         177 kB
+├ ƒ /shipping                                    3.58 kB         176 kB
+├ ƒ /sign-in/[[...sign-in]]                      2.4 kB          175 kB
+├ ƒ /success                                     664 B            88 kB
+├ ƒ /terms                                       1.05 kB         174 kB
+└ ƒ /warranty                                    3.71 kB         176 kB
++ First Load JS shared by all                    87.3 kB
+  ├ chunks/117-0c3bbabcb7a897ca.js               31.7 kB
+  ├ chunks/fd9d1056-6cc8a9b86a0019eb.js          53.7 kB
+  └ other shared chunks (total)                  1.94 kB
+
+
+ƒ Middleware                                     61.2 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+[0;32m✓ 本地构建成功[0m
+
+[1;33m[4/8] 检查 Git 状态...[0m
+[1;33m⚠️  工作目录有未提交的更改，继续部署...[0m
+
+[1;33m[5/8] 上传文件到服务器...[0m
+[0;34m正在同步文件到 root@38.175.195.104:/var/www/maclock[0m
+Transfer starting: 602 files
+./
+.env.local.backup
+           1148 100% 1004.53KB/s   00:00:00 (xfer#1, to-check=1/602)
+.env.local.bak
+           1005 100%    1.79MB/s   00:00:00 (xfer#2, to-check=2/602)
+.eslintrc.json
+             41 100%  177.90KB/s   00:00:00 (xfer#3, to-check=3/602)
+.gitignore
+            402 100%    1.56MB/s   00:00:00 (xfer#4, to-check=4/602)
+CLEAR_BROWSER_CACHE.md
+           2801 100%    4.73MB/s   00:00:00 (xfer#5, to-check=5/602)
+CLERK_DASHBOARD_SETUP.md
+           3389 100%    4.97MB/s   00:00:00 (xfer#6, to-check=6/602)
+CLERK_SETUP_DETAILED.md
+           3962 100%   11.11MB/s   00:00:00 (xfer#7, to-check=7/602)
+CONFIGURE_STRIPE.md
+           2302 100%    3.68MB/s   00:00:00 (xfer#8, to-check=8/602)
+CRITICAL_FIXES_COMPLETED.md
+           4009 100%    7.26MB/s   00:00:00 (xfer#9, to-check=9/602)
+DELETE_ORDER_FEATURE.md
+           4578 100%    7.94MB/s   00:00:00 (xfer#10, to-check=10/602)
+DEPLOY.md
+           5532 100%    8.52MB/s   00:00:00 (xfer#11, to-check=11/602)
+DEPLOYMENT_GUIDE.md
+           5747 100%    9.63MB/s   00:00:00 (xfer#12, to-check=12/602)
+Edge\#346\#265\#217\#350\#247\#210\#345\#231\#250SSL\#344\#277\#256\#345\#244\#215\#346\#214\#207\#345\#215\#227.md
+           3484 100%    5.07MB/s   00:00:00 (xfer#13, to-check=13/602)
+FEATURES_IMPLEMENTED.md
+           4812 100%    6.59MB/s   00:00:00 (xfer#14, to-check=14/602)
+FEATURES_ROUND2.md
+           6195 100%    7.71MB/s   00:00:00 (xfer#15, to-check=15/602)
+FEATURES_ROUND3.md
+           5702 100%    7.50MB/s   00:00:00 (xfer#16, to-check=16/602)
+FIX_CLERK_401.md
+           3819 100%    6.25MB/s   00:00:00 (xfer#17, to-check=17/602)
+HTTPS_SETUP.md
+           3419 100%    7.04MB/s   00:00:00 (xfer#18, to-check=18/602)
+IMAGES_NOTE.md
+            751 100%    1.69MB/s   00:00:00 (xfer#19, to-check=19/602)
+IMPLEMENTATION_SUMMARY.md
+           2960 100%    8.94MB/s   00:00:00 (xfer#20, to-check=20/602)
+MIGRATION_GUIDE.md
+           1513 100%    6.22MB/s   00:00:00 (xfer#21, to-check=21/602)
+NEXT_STEPS.md
+           1458 100%    2.53MB/s   00:00:00 (xfer#22, to-check=22/602)
+PENDING_ORDER_PAYMENT_FIX.md
+           3511 100%    8.07MB/s   00:00:00 (xfer#23, to-check=23/602)
+PHONE_VALIDATION_FIX.md
+           2228 100%    5.28MB/s   00:00:00 (xfer#24, to-check=24/602)
+PRE_DEPLOYMENT_CHECKLIST.md
+           6128 100%   11.07MB/s   00:00:00 (xfer#25, to-check=25/602)
+PRE_LAUNCH_CHECKLIST.md
+           9568 100%   10.37MB/s   00:00:00 (xfer#26, to-check=26/602)
+PRE_LAUNCH_CHECK_REPORT.md
+           7574 100%    9.62MB/s   00:00:00 (xfer#27, to-check=27/602)
+PRE_LAUNCH_SUMMARY.md
+           6083 100%    8.93MB/s   00:00:00 (xfer#28, to-check=28/602)
+PRICE_UPDATE_SUMMARY.md
+           2318 100%    4.80MB/s   00:00:00 (xfer#29, to-check=29/602)
+PRODUCT_SPIN_OPTIMIZATION.md
+           6322 100%   11.04MB/s   00:00:00 (xfer#30, to-check=30/602)
+QUICK_STRIPE_SETUP.md
+           2386 100%    5.85MB/s   00:00:00 (xfer#31, to-check=31/602)
+QUICK_WEBHOOK_SETUP.md
+           4120 100%    8.75MB/s   00:00:00 (xfer#32, to-check=32/602)
+README.md
+           4616 100%    7.51MB/s   00:00:00 (xfer#33, to-check=33/602)
+SETUP.md
+           1636 100%    2.72MB/s   00:00:00 (xfer#34, to-check=34/602)
+SETUP_DATABASE.md
+           2942 100%    7.79MB/s   00:00:00 (xfer#35, to-check=35/602)
+SSL\#350\#257\#201\#344\#271\#246\#351\#227\#256\#351\#242\#230\#345\#267\#262\#344\#277\#256\#345\#244\#215.md
+           2158 100%    5.26MB/s   00:00:00 (xfer#36, to-check=36/602)
+SSL\#350\#257\#201\#344\#271\#246\#351\#227\#256\#351\#242\#230\#346\#216\#222\#346\#237\#245.md
+           2379 100%    5.25MB/s   00:00:00 (xfer#37, to-check=37/602)
+SSL\#351\#205\#215\#347\#275\#256\#345\#256\#214\#346\#210\#220.md
+           2108 100%    5.33MB/s   00:00:00 (xfer#38, to-check=38/602)
+STRIPE_SETUP.md
+           4054 100%    6.34MB/s   00:00:00 (xfer#39, to-check=39/602)
+STRIPE_WEBHOOK_CONFIG.md
+           6436 100%    8.43MB/s   00:00:00 (xfer#40, to-check=40/602)
+TYPOGRAPHY_SYSTEM.md
+           3435 100%   10.11MB/s   00:00:00 (xfer#41, to-check=41/602)
+UPLOAD_GUIDE.md
+           1848 100%    6.60MB/s   00:00:00 (xfer#42, to-check=42/602)
+WEBHOOK_SETUP.md
+           1579 100%    5.45MB/s   00:00:00 (xfer#43, to-check=43/602)
+apply-fixes.sh
+           1423 100%    5.41MB/s   00:00:00 (xfer#44, to-check=44/602)
+auto-upload.ps1
+           3676 100%   13.70MB/s   00:00:00 (xfer#45, to-check=45/602)
+check-api-error.sh
+           1594 100%   10.35MB/s   00:00:00 (xfer#46, to-check=46/602)
+check-browser-ssl.sh
+            955 100%    6.38MB/s   00:00:00 (xfer#47, to-check=47/602)
+check-bt-nginx.sh
+           1419 100%    8.63MB/s   00:00:00 (xfer#48, to-check=48/602)
+check-clerk-api-config.sh
+           1638 100%   10.78MB/s   00:00:00 (xfer#49, to-check=49/602)
+check-clerk-key.sh
+           1084 100%    7.44MB/s   00:00:00 (xfer#50, to-check=50/602)
+check-images.sh
+            399 100%    2.70MB/s   00:00:00 (xfer#51, to-check=51/602)
+check-nginx-config.sh
+            844 100%    5.52MB/s   00:00:00 (xfer#52, to-check=52/602)
+check-nginx-status.sh
+           1001 100%    6.59MB/s   00:00:00 (xfer#53, to-check=53/602)
+check-server-images.sh
+           2524 100%   15.34MB/s   00:00:00 (xfer#54, to-check=54/602)
+check-server-status.sh
+            567 100%    4.16MB/s   00:00:00 (xfer#55, to-check=55/602)
+check-ssl-config.sh
+            845 100%    5.84MB/s   00:00:00 (xfer#56, to-check=56/602)
+cleanup-pm2.sh
+            383 100%    2.99MB/s   00:00:00 (xfer#57, to-check=57/602)
+cleanup-self-signed-cert.sh
+           2848 100%   16.56MB/s   00:00:00 (xfer#58, to-check=58/602)
+configure-clerk-origins.sh
+           1565 100%   10.74MB/s   00:00:00 (xfer#59, to-check=59/602)
+configure-domain.ps1
+           8225 100%   15.47MB/s   00:00:00 (xfer#60, to-check=60/602)
+configure-stripe.ps1
+           1916 100%    7.28MB/s   00:00:00 (xfer#61, to-check=61/602)
+continue-deploy-fixed.sh
+           4353 100%   15.04MB/s   00:00:00 (xfer#62, to-check=62/602)
+continue-deploy.sh
+           4242 100%   14.39MB/s   00:00:00 (xfer#63, to-check=63/602)
+continue-upload.sh
+           2871 100%   17.56MB/s   00:00:00 (xfer#64, to-check=64/602)
+debug-ssl-config.sh
+           1355 100%    9.64MB/s   00:00:00 (xfer#65, to-check=65/602)
+deploy-checkout-fix.sh
+           1571 100%   12.08MB/s   00:00:00 (xfer#66, to-check=66/602)
+deploy-complete-fixed.sh
+           7495 100%   34.38MB/s   00:00:00 (xfer#67, to-check=67/602)
+deploy-complete.sh
+           2862 100%   16.06MB/s   00:00:00 (xfer#68, to-check=68/602)
+deploy-comprehensive-fixes.sh
+           1578 100%    8.85MB/s   00:00:00 (xfer#69, to-check=69/602)
+deploy-decode-fix.sh
+           1507 100%   10.20MB/s   00:00:00 (xfer#70, to-check=70/602)
+deploy-final-fixes.sh
+           1738 100%    5.88MB/s   00:00:00 (xfer#71, to-check=71/602)
+deploy-https.sh
+           2061 100%   10.79MB/s   00:00:00 (xfer#72, to-check=72/602)
+deploy-image-preload.sh
+           1452 100%   10.48MB/s   00:00:00 (xfer#73, to-check=73/602)
+deploy-image-sequence.sh
+           1748 100%    9.64MB/s   00:00:00 (xfer#74, to-check=74/602)
+deploy-ios-fix.sh
+           1452 100%    9.00MB/s   00:00:00 (xfer#75, to-check=75/602)
+deploy-mobile-fix.sh
+           2391 100%   14.43MB/s   00:00:00 (xfer#76, to-check=76/602)
+deploy-nav-fixes.sh
+           1563 100%    5.21MB/s   00:00:00 (xfer#77, to-check=77/602)
+deploy-on-server.ps1
+           1070 100%    3.37MB/s   00:00:00 (xfer#78, to-check=78/602)
+deploy-production.sh
+           6910 100%   30.11MB/s   00:00:00 (xfer#79, to-check=79/602)
+deploy-smooth-final.sh
+           1571 100%    8.93MB/s   00:00:00 (xfer#80, to-check=80/602)
+deploy-smooth.sh
+           1402 100%    8.92MB/s   00:00:00 (xfer#81, to-check=81/602)
+deploy-to-server-fixed.ps1
+          10070 100%   18.61MB/s   00:00:00 (xfer#82, to-check=82/602)
+deploy-ui-fixes.sh
+           1583 100%   13.86MB/s   00:00:00 (xfer#83, to-check=83/602)
+deploy-ultra-smooth.sh
+           1657 100%   15.63MB/s   00:00:00 (xfer#84, to-check=84/602)
+deploy-video-component.sh
+           1475 100%    6.45MB/s   00:00:00 (xfer#85, to-check=85/602)
+deploy-with-sshpass.ps1
+           2214 100%    9.30MB/s   00:00:00 (xfer#86, to-check=86/602)
+deploy-with-sshpass.sh
+           6124 100%   37.69MB/s   00:00:00 (xfer#87, to-check=87/602)
+deploy.ps1
+           4310 100%   30.46MB/s   00:00:00 (xfer#88, to-check=88/602)
+diagnose-500-error.sh
+           2999 100%   25.10MB/s   00:00:00 (xfer#89, to-check=89/602)
+diagnose-deploy.sh
+           1436 100%   13.71MB/s   00:00:00 (xfer#90, to-check=90/602)
+diagnose-https.sh
+           3739 100%   29.50MB/s   00:00:00 (xfer#91, to-check=91/602)
+direct-upload.ps1
+           4701 100%   22.74MB/s   00:00:00 (xfer#92, to-check=92/602)
+do-upload.ps1
+           2132 100%   14.03MB/s   00:00:00 (xfer#93, to-check=93/602)
+docker-compose.yml
+            486 100%    2.59MB/s   00:00:00 (xfer#94, to-check=94/602)
+domain-setup.sh
+           2606 100%   23.06MB/s   00:00:00 (xfer#95, to-check=95/602)
+env.example
+           1771 100%   16.59MB/s   00:00:00 (xfer#96, to-check=96/602)
+final-deploy.sh
+           2461 100%   21.92MB/s   00:00:00 (xfer#97, to-check=97/602)
+final-fix-ssl.sh
+           2985 100%   24.57MB/s   00:00:00 (xfer#98, to-check=98/602)
+final-upload.ps1
+           3956 100%   18.04MB/s   00:00:00 (xfer#99, to-check=99/602)
+fix-and-continue.sh
+           3460 100%   28.71MB/s   00:00:00 (xfer#100, to-check=100/602)
+fix-api-only.sh
+           2566 100%   22.22MB/s   00:00:00 (xfer#101, to-check=101/602)
+fix-chunk-error-admin.sh
+           1703 100%   17.07MB/s   00:00:00 (xfer#102, to-check=102/602)
+fix-chunk-error.sh
+           2542 100%   21.63MB/s   00:00:00 (xfer#103, to-check=103/602)
+fix-clerk-config.sh
+           3790 100%   29.38MB/s   00:00:00 (xfer#104, to-check=104/602)
+fix-https-complete.sh
+           3053 100%   25.08MB/s   00:00:00 (xfer#105, to-check=105/602)
+fix-https-connection.sh
+           4609 100%   19.37MB/s   00:00:00 (xfer#106, to-check=106/602)
+fix-inventory-api.ts
+           1181 100%    5.58MB/s   00:00:00 (xfer#107, to-check=107/602)
+fix-ip-conf.sh
+           1742 100%   16.13MB/s   00:00:00 (xfer#108, to-check=108/602)
+fix-multiple-processes.sh
+           1316 100%   12.56MB/s   00:00:00 (xfer#109, to-check=109/602)
+fix-network-access.sh
+           3735 100%   29.94MB/s   00:00:00 (xfer#110, to-check=110/602)
+fix-nginx-443.sh
+           4271 100%   18.94MB/s   00:00:00 (xfer#111, to-check=111/602)
+fix-nginx-main-conf.sh
+           1226 100%   12.29MB/s   00:00:00 (xfer#112, to-check=112/602)
+fix-nginx-ssl-listen.sh
+           2142 100%   19.43MB/s   00:00:00 (xfer#113, to-check=113/602)
+fix-server-issue.sh
+           2426 100%   21.00MB/s   00:00:00 (xfer#114, to-check=114/602)
+fix-ssl-cert.sh
+           2160 100%   20.19MB/s   00:00:00 (xfer#115, to-check=115/602)
+fix-ssl-default.sh
+           2287 100%   20.56MB/s   00:00:00 (xfer#116, to-check=116/602)
+fix-ssl-labs-issue.sh
+           2493 100%   22.87MB/s   00:00:00 (xfer#117, to-check=117/602)
+force-rebuild-and-restart.sh
+           1010 100%   10.60MB/s   00:00:00 (xfer#118, to-check=118/602)
+force-rebuild-pc-fix.sh
+            986 100%   10.46MB/s   00:00:00 (xfer#119, to-check=119/602)
+force-rebuild.sh
+           2557 100%   22.14MB/s   00:00:00 (xfer#120, to-check=120/602)
+force-restart-api.sh
+           2715 100%   23.30MB/s   00:00:00 (xfer#121, to-check=121/602)
+fpx-api-sdk-1.0.0-SNAPSHOT.jar
+          18885 100%   36.37MB/s   00:00:00 (xfer#122, to-check=122/602)
+generate-image-sequence.ps1
+           3195 100%   15.00MB/s   00:00:00 (xfer#123, to-check=123/602)
+middleware.ts
+           3094 100%    9.11MB/s   00:00:00 (xfer#124, to-check=124/602)
+next-env.d.ts
+            228 100%    2.59MB/s   00:00:00 (xfer#125, to-check=125/602)
+next.config.js
+           1197 100%   15.06MB/s   00:00:00 (xfer#126, to-check=126/602)
+nginx-domain.conf
+           1545 100%    8.32MB/s   00:00:00 (xfer#127, to-check=127/602)
+nginx-maclock.conf
+           2281 100%   11.51MB/s   00:00:00 (xfer#128, to-check=128/602)
+nginx.conf.example
+           1944 100%   10.25MB/s   00:00:00 (xfer#129, to-check=129/602)
+package-lock.json
+         241014 100%   40.04MB/s   00:00:00 (xfer#130, to-check=130/602)
+package.json
+            920 100%    8.20MB/s   00:00:00 (xfer#131, to-check=131/602)
+postcss.config.js
+             83 100%  385.89KB/s   00:00:00 (xfer#132, to-check=132/602)
+prepare-deploy.ps1
+            546 100%    5.43MB/s   00:00:00 (xfer#133, to-check=133/602)
+quick-deploy.sh
+            605 100%    6.47MB/s   00:00:00 (xfer#134, to-check=134/602)
+quick-fix-clerk.sh
+           3016 100%   24.57MB/s   00:00:00 (xfer#135, to-check=135/602)
+quick-setup-domain.bat
+            546 100%    4.96MB/s   00:00:00 (xfer#136, to-check=136/602)
+quick-start.sh
+            947 100%    7.17MB/s   00:00:00 (xfer#137, to-check=137/602)
+restart-app-fixes.sh
+           2155 100%   16.05MB/s   00:00:00 (xfer#138, to-check=138/602)
+restart-app.sh
+           1010 100%    8.52MB/s   00:00:00 (xfer#139, to-check=139/602)
+restart-nginx-ssl.sh
+            922 100%    8.38MB/s   00:00:00 (xfer#140, to-check=140/602)
+restart-server.sh
+           1009 100%    6.97MB/s   00:00:00 (xfer#141, to-check=141/602)
+setup-bt-https.sh
+           6311 100%   14.43MB/s   00:00:00 (xfer#142, to-check=142/602)
+setup-domain-auto.ps1
+           2500 100%   17.27MB/s   00:00:00 (xfer#143, to-check=143/602)
+setup-domain-final.ps1
+           5075 100%   17.61MB/s   00:00:00 (xfer#144, to-check=144/602)
+setup-domain-simple.ps1
+           4302 100%    8.27MB/s   00:00:00 (xfer#145, to-check=145/602)
+setup-domain.ps1
+           2459 100%   19.21MB/s   00:00:00 (xfer#146, to-check=146/602)
+setup-domain.sh
+           3473 100%   26.06MB/s   00:00:00 (xfer#147, to-check=147/602)
+setup-env.sh
+           1559 100%   15.14MB/s   00:00:00 (xfer#148, to-check=148/602)
+setup-hello1984.ps1
+           5324 100%   20.15MB/s   00:00:00 (xfer#149, to-check=149/602)
+setup-https.sh
+           4061 100%   30.03MB/s   00:00:00 (xfer#150, to-check=150/602)
+setup-ssl-complete.sh
+           4566 100%   18.52MB/s   00:00:00 (xfer#151, to-check=151/602)
+setup-ssl.ps1
+           2537 100%   21.41MB/s   00:00:00 (xfer#152, to-check=152/602)
+setup-ssl.sh
+           2913 100%   24.84MB/s   00:00:00 (xfer#153, to-check=153/602)
+setup-stripe.ps1
+           3250 100%   10.73MB/s   00:00:00 (xfer#154, to-check=154/602)
+start-service.sh
+           1307 100%   13.27MB/s   00:00:00 (xfer#155, to-check=155/602)
+start-upload.bat
+           1589 100%   11.00MB/s   00:00:00 (xfer#156, to-check=156/602)
+tailwind.config.ts
+           5688 100%   43.75MB/s   00:00:00 (xfer#157, to-check=157/602)
+tsconfig.json
+            599 100%    7.93MB/s   00:00:00 (xfer#158, to-check=158/602)
+update-nginx-ssl.sh
+           4714 100%   32.79MB/s   00:00:00 (xfer#159, to-check=159/602)
+upload-admin-fix.ps1
+            937 100%    4.43MB/s   00:00:00 (xfer#160, to-check=160/602)
+upload-all-fixes.ps1
+           1289 100%    6.76MB/s   00:00:00 (xfer#161, to-check=161/602)
+upload-all-images.ps1
+           1088 100%    2.47MB/s   00:00:00 (xfer#162, to-check=162/602)
+upload-and-deploy-all.ps1
+            691 100%    5.78MB/s   00:00:00 (xfer#163, to-check=163/602)
+upload-and-run-domain.ps1
+           2054 100%   12.41MB/s   00:00:00 (xfer#164, to-check=164/602)
+upload-api-fix.ps1
+            592 100%    5.82MB/s   00:00:00 (xfer#165, to-check=165/602)
+upload-apply-fixes.ps1
+            501 100%    4.64MB/s   00:00:00 (xfer#166, to-check=166/602)
+upload-bt-https.ps1
+            567 100%    5.52MB/s   00:00:00 (xfer#167, to-check=167/602)
+upload-build-fix.ps1
+            990 100%    8.07MB/s   00:00:00 (xfer#168, to-check=168/602)
+upload-buybutton-fix.ps1
+            594 100%    2.61MB/s   00:00:00 (xfer#169, to-check=169/602)
+upload-check-images.ps1
+            505 100%    4.91MB/s   00:00:00 (xfer#170, to-check=170/602)
+upload-check-key.ps1
+            692 100%    5.90MB/s   00:00:00 (xfer#171, to-check=171/602)
+upload-check-script.ps1
+            498 100%    4.89MB/s   00:00:00 (xfer#172, to-check=172/602)
+upload-checkout-fix.ps1
+            585 100%    5.64MB/s   00:00:00 (xfer#173, to-check=173/602)
+upload-cleanup.ps1
+            489 100%    5.12MB/s   00:00:00 (xfer#174, to-check=174/602)
+upload-clerk-fix.ps1
+           1103 100%   11.20MB/s   00:00:00 (xfer#175, to-check=175/602)
+upload-comprehensive-fixes.ps1
+            684 100%    6.66MB/s   00:00:00 (xfer#176, to-check=176/602)
+upload-configure-clerk.ps1
+            734 100%    6.30MB/s   00:00:00 (xfer#177, to-check=177/602)
+upload-console-fixes.ps1
+            660 100%    6.84MB/s   00:00:00 (xfer#178, to-check=178/602)
+upload-continue-script.ps1
+            497 100%    4.84MB/s   00:00:00 (xfer#179, to-check=179/602)
+upload-decode-fix.ps1
+            599 100%    3.69MB/s   00:00:00 (xfer#180, to-check=180/602)
+upload-deploy-checkout.ps1
+            503 100%    4.90MB/s   00:00:00 (xfer#181, to-check=181/602)
+upload-deploy-complete.ps1
+            517 100%    3.40MB/s   00:00:00 (xfer#182, to-check=182/602)
+upload-deploy-comprehensive.ps1
+            515 100%    4.77MB/s   00:00:00 (xfer#183, to-check=183/602)
+upload-deploy-decode.ps1
+            499 100%    4.36MB/s   00:00:00 (xfer#184, to-check=184/602)
+upload-deploy-final.ps1
+            499 100%    4.10MB/s   00:00:00 (xfer#185, to-check=185/602)
+upload-deploy-https.ps1
+            505 100%    4.01MB/s   00:00:00 (xfer#186, to-check=186/602)
+upload-deploy-image-sequence.ps1
+            525 100%    4.43MB/s   00:00:00 (xfer#187, to-check=187/602)
+upload-deploy-ios.ps1
+            488 100%    4.52MB/s   00:00:00 (xfer#188, to-check=188/602)
+upload-deploy-mobile-fix.ps1
+            518 100%    4.71MB/s   00:00:00 (xfer#189, to-check=189/602)
+upload-deploy-nav.ps1
+            495 100%    4.82MB/s   00:00:00 (xfer#190, to-check=190/602)
+upload-deploy-preload.ps1
+            503 100%    4.48MB/s   00:00:00 (xfer#191, to-check=191/602)
+upload-deploy-script.ps1
+            504 100%    4.22MB/s   00:00:00 (xfer#192, to-check=192/602)
+upload-deploy-smooth-final.ps1
+            519 100%    1.83MB/s   00:00:00 (xfer#193, to-check=193/602)
+upload-deploy-smooth.ps1
+            510 100%    4.27MB/s   00:00:00 (xfer#194, to-check=194/602)
+upload-deploy-ui.ps1
+            493 100%    4.74MB/s   00:00:00 (xfer#195, to-check=195/602)
+upload-deploy-ultra-smooth.ps1
+            507 100%    3.55MB/s   00:00:00 (xfer#196, to-check=196/602)
+upload-diagnose-fix.ps1
+            585 100%    4.04MB/s   00:00:00 (xfer#197, to-check=197/602)
+upload-diagnose-script.ps1
+            499 100%    3.28MB/s   00:00:00 (xfer#198, to-check=198/602)
+upload-direct.ps1
+           4253 100%   22.53MB/s   00:00:00 (xfer#199, to-check=199/602)
+upload-domain-config.ps1
+           2518 100%   10.67MB/s   00:00:00 (xfer#200, to-check=200/602)
+upload-env-file.ps1
+            602 100%    4.45MB/s   00:00:00 (xfer#201, to-check=201/602)
+upload-favicon-fix.ps1
+            611 100%    5.35MB/s   00:00:00 (xfer#202, to-check=202/602)
+upload-files.bat
+            680 100%    4.98MB/s   00:00:00 (xfer#203, to-check=203/602)
+upload-files.ps1
+           2992 100%   13.92MB/s   00:00:00 (xfer#204, to-check=204/602)
+upload-final-deploy.ps1
+            505 100%    2.94MB/s   00:00:00 (xfer#205, to-check=205/602)
+upload-final-fixes.ps1
+            975 100%    8.39MB/s   00:00:00 (xfer#206, to-check=206/602)
+upload-fix-api-only.ps1
+            572 100%    4.70MB/s   00:00:00 (xfer#207, to-check=207/602)
+upload-fix-chunk.ps1
+            709 100%    7.52MB/s   00:00:00 (xfer#208, to-check=208/602)
+upload-fix-https-complete.ps1
+            611 100%    5.72MB/s   00:00:00 (xfer#209, to-check=209/602)
+upload-fix-processes.ps1
+            513 100%    5.04MB/s   00:00:00 (xfer#210, to-check=210/602)
+upload-fix-scripts.ps1
+            519 100%    5.05MB/s   00:00:00 (xfer#211, to-check=211/602)
+upload-fix-server.ps1
+            498 100%    5.09MB/s   00:00:00 (xfer#212, to-check=212/602)
+upload-fixed-components.ps1
+            686 100%    6.96MB/s   00:00:00 (xfer#213, to-check=213/602)
+upload-fixed-continue.ps1
+            514 100%    5.40MB/s   00:00:00 (xfer#214, to-check=214/602)
+upload-fixes.ps1
+            932 100%    5.52MB/s   00:00:00 (xfer#215, to-check=215/602)
+upload-hero-preload.ps1
+            589 100%    4.72MB/s   00:00:00 (xfer#216, to-check=216/602)
+upload-https-code.ps1
+            723 100%    5.44MB/s   00:00:00 (xfer#217, to-check=217/602)
+upload-https-setup.ps1
+            688 100%    4.29MB/s   00:00:00 (xfer#218, to-check=218/602)
+upload-image-preload.ps1
+            662 100%    6.38MB/s   00:00:00 (xfer#219, to-check=219/602)
+upload-image-sequence-fix.ps1
+            625 100%    3.97MB/s   00:00:00 (xfer#220, to-check=220/602)
+upload-ios-android-fix.ps1
+            622 100%    3.27MB/s   00:00:00 (xfer#221, to-check=221/602)
+upload-ios-error-fix.ps1
+            654 100%    4.27MB/s   00:00:00 (xfer#222, to-check=222/602)
+upload-ios-fix.ps1
+            585 100%    1.32MB/s   00:00:00 (xfer#223, to-check=223/602)
+upload-ios-fixes.ps1
+            688 100%    4.43MB/s   00:00:00 (xfer#224, to-check=224/602)
+upload-layout-final.ps1
+            579 100%    4.38MB/s   00:00:00 (xfer#225, to-check=225/602)
+upload-layout-fix.ps1
+            573 100%    4.79MB/s   00:00:00 (xfer#226, to-check=226/602)
+upload-middleware-fix.ps1
+            571 100%    4.61MB/s   00:00:00 (xfer#227, to-check=227/602)
+upload-mobile-fix.ps1
+            627 100%    4.87MB/s   00:00:00 (xfer#228, to-check=228/602)
+upload-nav-fix.ps1
+            592 100%    5.00MB/s   00:00:00 (xfer#229, to-check=229/602)
+upload-nav-fixes.ps1
+            740 100%    5.04MB/s   00:00:00 (xfer#230, to-check=230/602)
+upload-navigation-fix.ps1
+            879 100%    4.90MB/s   00:00:00 (xfer#231, to-check=231/602)
+upload-network-fix.ps1
+            508 100%    3.76MB/s   00:00:00 (xfer#232, to-check=232/602)
+upload-nginx-fix.ps1
+            565 100%    5.18MB/s   00:00:00 (xfer#233, to-check=233/602)
+upload-now.bat
+           1277 100%    9.90MB/s   00:00:00 (xfer#234, to-check=234/602)
+upload-page-fix.ps1
+            555 100%    5.24MB/s   00:00:00 (xfer#235, to-check=235/602)
+upload-pc-fix.ps1
+           1051 100%    8.02MB/s   00:00:00 (xfer#236, to-check=236/602)
+upload-quick-fix.ps1
+            499 100%    5.05MB/s   00:00:00 (xfer#237, to-check=237/602)
+upload-quick-start.ps1
+            676 100%    6.64MB/s   00:00:00 (xfer#238, to-check=238/602)
+upload-rebuild-script.ps1
+            574 100%    5.83MB/s   00:00:00 (xfer#239, to-check=239/602)
+upload-restart-script.ps1
+            583 100%    6.39MB/s   00:00:00 (xfer#240, to-check=240/602)
+upload-restart-scripts.ps1
+            668 100%    6.13MB/s   00:00:00 (xfer#241, to-check=241/602)
+upload-review-image-fix.ps1
+            661 100%    5.30MB/s   00:00:00 (xfer#242, to-check=242/602)
+upload-scripts.ps1
+            867 100%    5.01MB/s   00:00:00 (xfer#243, to-check=243/602)
+upload-signin-debug.ps1
+            735 100%    5.79MB/s   00:00:00 (xfer#244, to-check=244/602)
+upload-signin-fix.ps1
+            717 100%    7.05MB/s   00:00:00 (xfer#245, to-check=245/602)
+upload-smooth-fix.ps1
+            619 100%    5.90MB/s   00:00:00 (xfer#246, to-check=246/602)
+upload-smooth-optimization.ps1
+            617 100%    6.12MB/s   00:00:00 (xfer#247, to-check=247/602)
+upload-smooth-video.ps1
+            613 100%    6.02MB/s   00:00:00 (xfer#248, to-check=248/602)
+upload-start-script.ps1
+            494 100%    5.12MB/s   00:00:00 (xfer#249, to-check=249/602)
+upload-to-server.ps1
+           4982 100%   22.09MB/s   00:00:00 (xfer#250, to-check=250/602)
+upload-trust-center.ps1
+            613 100%    5.85MB/s   00:00:00 (xfer#251, to-check=251/602)
+upload-trust-error-boundary.ps1
+            683 100%    6.80MB/s   00:00:00 (xfer#252, to-check=252/602)
+upload-trust-error-fix.ps1
+            614 100%    5.58MB/s   00:00:00 (xfer#253, to-check=253/602)
+upload-trust-final-fix.ps1
+            614 100%    6.30MB/s   00:00:00 (xfer#254, to-check=254/602)
+upload-trust-mobile-center.ps1
+            634 100%    5.35MB/s   00:00:00 (xfer#255, to-check=255/602)
+upload-ui-fixes.ps1
+            763 100%    4.55MB/s   00:00:00 (xfer#256, to-check=256/602)
+upload-ultra-smooth.ps1
+            631 100%    5.72MB/s   00:00:00 (xfer#257, to-check=257/602)
+upload-verify-script.ps1
+            696 100%    5.35MB/s   00:00:00 (xfer#258, to-check=258/602)
+upload-video-component.ps1
+            636 100%    3.59MB/s   00:00:00 (xfer#259, to-check=259/602)
+upload-video-fix-autoplay.ps1
+            623 100%    3.78MB/s   00:00:00 (xfer#260, to-check=260/602)
+upload-video-fix.ps1
+            616 100%    4.70MB/s   00:00:00 (xfer#261, to-check=261/602)
+upload-winscp-session.ps1
+           3210 100%   24.50MB/s   00:00:00 (xfer#262, to-check=262/602)
+upload-winscp.ps1
+           3929 100%   29.27MB/s   00:00:00 (xfer#263, to-check=263/602)
+upload-with-password.ps1
+           2018 100%   13.57MB/s   00:00:00 (xfer#264, to-check=264/602)
+verify-clerk-config.sh
+            998 100%    8.15MB/s   00:00:00 (xfer#265, to-check=265/602)
+verify-ssl-final.sh
+           1691 100%   12.88MB/s   00:00:00 (xfer#266, to-check=266/602)
+verify-ssl-fix.sh
+           1008 100%    8.82MB/s   00:00:00 (xfer#267, to-check=267/602)
+verify-ssl.sh
+            762 100%    7.56MB/s   00:00:00 (xfer#268, to-check=268/602)
+\#344\#270\#212\#347\#272\#277\#345\#211\#215\#346\#225\#260\#346\#215\#256\#345\#272\#223\#347\#241\#256\#350\#256\#244.md
+           5527 100%   15.64MB/s   00:00:00 (xfer#269, to-check=269/602)
+\#344\#273\#216\#346\#234\#254\#345\#234\#260Windows\#351\#203\#250\#347\#275\#262\#345\#221\#275\#344\#273\#244.md
+           3536 100%   15.54MB/s   00:00:00 (xfer#270, to-check=270/602)
+\#344\#275\#277\#347\#224\#250\#345\#233\#276\#347\#211\#207\#345\#272\#217\#345\#210\#227\#344\#274\#230\#345\#214\#226\#344\#272\#247\#345\#223\#201\#346\#227\#213\#350\#275\#254.md
+           3401 100%   15.02MB/s   00:00:00 (xfer#271, to-check=271/602)
+\#345\#277\#253\#351\#200\#237\#344\#277\#256\#345\#244\#215\#351\#203\#250\#347\#275\#262.md
+           2853 100%   14.96MB/s   00:00:00 (xfer#272, to-check=272/602)
+\#345\#277\#253\#351\#200\#237\#345\#274\#200\#345\#247\#213-\#345\#233\#276\#347\#211\#207\#345\#272\#217\#345\#210\#227.md
+           2532 100%   14.55MB/s   00:00:00 (xfer#273, to-check=273/602)
+\#346\#211\#213\#345\#212\#250\#351\#203\#250\#347\#275\#262\#345\#221\#275\#344\#273\#244.md
+           3683 100%   20.55MB/s   00:00:00 (xfer#274, to-check=274/602)
+\#346\#211\#213\#345\#212\#250\#351\#205\#215\#347\#275\#256Stripe.md
+           1801 100%    7.57MB/s   00:00:00 (xfer#275, to-check=275/602)
+\#346\#216\#247\#345\#210\#266\#345\#217\#260\#350\#255\#246\#345\#221\#212\#350\#257\#264\#346\#230\#216.md
+           2429 100%   15.45MB/s   00:00:00 (xfer#276, to-check=276/602)
+\#346\#234\#215\#345\#212\#241\#345\#231\#250\#347\#253\#257\#351\#203\#250\#347\#275\#262\#345\#221\#275\#344\#273\#244.md
+           3433 100%   19.70MB/s   00:00:00 (xfer#277, to-check=277/602)
+\#346\#234\#254\#345\#234\#260\#345\#274\#200\#345\#217\#221\#346\#224\#257\#344\#273\#230\#351\#227\#256\#351\#242\#230\#344\#277\#256\#345\#244\#215.md
+           4804 100%   15.42MB/s   00:00:00 (xfer#278, to-check=278/602)
+\#346\#234\#254\#345\#234\#260\#345\#274\#200\#345\#217\#221\#350\#256\#242\#345\#215\#225\#351\#227\#256\#351\#242\#230\#344\#277\#256\#345\#244\#215.md
+           3023 100%   11.12MB/s   00:00:00 (xfer#279, to-check=279/602)
+\#346\#265\#213\#350\#257\#225\#345\#234\#260\#345\#235\#200\#344\#277\#241\#346\#201\#257.md
+           3127 100%   11.52MB/s   00:00:00 (xfer#280, to-check=280/602)
+\#346\#265\#213\#350\#257\#225\#346\#224\#257\#344\#273\#230.md
+           2013 100%   10.32MB/s   00:00:00 (xfer#281, to-check=281/602)
+\#346\#270\#205\#351\#231\#244\#346\#265\#217\#350\#247\#210\#345\#231\#250SSL\#347\#274\#223\#345\#255\#230.md
+           3415 100%   18.61MB/s   00:00:00 (xfer#282, to-check=282/602)
+\#347\#253\#213\#345\#215\#263\#351\#203\#250\#347\#275\#262\#346\#214\#207\#345\#215\#227.md
+           2000 100%   13.25MB/s   00:00:00 (xfer#283, to-check=283/602)
+\#350\#216\#267\#345\#217\#226PriceID.md
+           1408 100%    6.00MB/s   00:00:00 (xfer#284, to-check=284/602)
+\#351\#203\#250\#347\#275\#262\#345\#256\#214\#346\#210\#220\#346\#214\#207\#345\#215\#227.md
+           4320 100%   14.20MB/s   00:00:00 (xfer#285, to-check=285/602)
+\#351\#203\#250\#347\#275\#262\#346\#210\#220\#345\#212\#237\#346\#200\#273\#347\#273\#223.md
+           5100 100%   18.30MB/s   00:00:00 (xfer#286, to-check=286/602)
+\#351\#203\#250\#347\#275\#262\#350\#257\#264\#346\#230\#216.md
+           3244 100%   18.41MB/s   00:00:00 (xfer#287, to-check=287/602)
+\#351\#205\#215\#347\#275\#256\#345\#237\#237\#345\#220\#215-\#346\#211\#213\#345\#212\#250\#346\#211\#247\#350\#241\#214.md
+           3043 100%   10.18MB/s   00:00:00 (xfer#288, to-check=288/602)
+\#351\#205\#215\#347\#275\#256\#345\#237\#237\#345\#220\#215.md
+           3568 100%   17.36MB/s   00:00:00 (xfer#289, to-check=289/602)
+Maclock/
+app/
+app/error.tsx
+           2383 100%   23.89MB/s   00:00:00 (xfer#290, to-check=292/602)
+app/global-error.tsx
+           2025 100%   12.22MB/s   00:00:00 (xfer#291, to-check=293/602)
+app/globals.css
+          26838 100%   33.15MB/s   00:00:00 (xfer#292, to-check=294/602)
+app/icon.svg
+           1250 100%   10.75MB/s   00:00:00 (xfer#293, to-check=295/602)
+app/layout-no-clerk.tsx
+            997 100%    9.34MB/s   00:00:00 (xfer#294, to-check=296/602)
+app/layout.tsx
+           1850 100%   16.19MB/s   00:00:00 (xfer#295, to-check=297/602)
+app/not-found.tsx
+           1260 100%   10.02MB/s   00:00:00 (xfer#296, to-check=298/602)
+app/page.tsx
+           3442 100%   25.83MB/s   00:00:00 (xfer#297, to-check=299/602)
+app/about/
+app/about/page.tsx
+            541 100%    6.62MB/s   00:00:00 (xfer#298, to-check=301/602)
+app/account/
+app/account/page.tsx
+          16388 100%   50.12MB/s   00:00:00 (xfer#299, to-check=303/602)
+app/account/track/
+app/account/track/[orderId]/
+app/account/track/[orderId]/page.tsx
+          12778 100%   36.82MB/s   00:00:00 (xfer#300, to-check=306/602)
+app/admin/
+app/admin/page.tsx
+           5421 100%   27.76MB/s   00:00:00 (xfer#301, to-check=308/602)
+app/admin/analytics/
+app/admin/analytics/page.tsx
+           2421 100%   23.33MB/s   00:00:00 (xfer#302, to-check=310/602)
+app/admin/coupons/
+app/admin/coupons/page.tsx
+           2754 100%   27.89MB/s   00:00:00 (xfer#303, to-check=312/602)
+app/admin/inventory/
+app/admin/inventory/page.tsx
+           2775 100%   27.61MB/s   00:00:00 (xfer#304, to-check=314/602)
+app/admin/login/
+app/admin/login/page.tsx
+           3856 100%   29.60MB/s   00:00:00 (xfer#305, to-check=316/602)
+app/admin/logout/
+app/admin/logout/route.ts
+            378 100%    4.62MB/s   00:00:00 (xfer#306, to-check=318/602)
+app/admin/newsletter/
+app/admin/newsletter/page.tsx
+           2842 100%   31.15MB/s   00:00:00 (xfer#307, to-check=320/602)
+app/admin/orders/
+app/admin/orders/[orderId]/
+app/admin/orders/[orderId]/page.tsx
+           1917 100%   20.29MB/s   00:00:00 (xfer#308, to-check=323/602)
+app/api/
+app/api/addresses/
+app/api/addresses/route.ts
+           2641 100%   21.38MB/s   00:00:00 (xfer#309, to-check=326/602)
+app/api/admin/
+app/api/admin/analytics/
+app/api/admin/analytics/route.ts
+            903 100%    8.44MB/s   00:00:00 (xfer#310, to-check=329/602)
+app/api/admin/cleanup-expired-reservations/
+app/api/admin/cleanup-expired-reservations/route.ts
+           1394 100%   11.67MB/s   00:00:00 (xfer#311, to-check=331/602)
+app/api/admin/coupons/
+app/api/admin/coupons/route.ts
+           3350 100%   25.14MB/s   00:00:00 (xfer#312, to-check=333/602)
+app/api/admin/inventory/
+app/api/admin/inventory/update/
+app/api/admin/inventory/update/route.ts
+           1050 100%   10.02MB/s   00:00:00 (xfer#313, to-check=336/602)
+app/api/admin/login/
+app/api/admin/login/route.ts
+           1337 100%   10.03MB/s   00:00:00 (xfer#314, to-check=338/602)
+app/api/admin/logout/
+app/api/admin/logout/route.ts
+            205 100%    2.10MB/s   00:00:00 (xfer#315, to-check=340/602)
+app/api/admin/orders/
+app/api/admin/orders/[orderId]/
+app/api/admin/orders/[orderId]/update-tracking/
+app/api/admin/orders/[orderId]/update-tracking/route.ts
+           1817 100%   12.73MB/s   00:00:00 (xfer#316, to-check=344/602)
+app/api/admin/orders/create-4px/
+app/api/admin/orders/create-4px/route.ts
+           5007 100%   22.01MB/s   00:00:00 (xfer#317, to-check=346/602)
+app/api/admin/orders/export/
+app/api/admin/orders/export/route.ts
+           1975 100%   15.34MB/s   00:00:00 (xfer#318, to-check=348/602)
+app/api/admin/orders/merge-create-4px/
+app/api/admin/orders/merge-create-4px/route.ts
+           6625 100%   25.38MB/s   00:00:00 (xfer#319, to-check=350/602)
+app/api/admin/waitlist/
+app/api/admin/waitlist/route.ts
+            659 100%    7.69MB/s   00:00:00 (xfer#320, to-check=352/602)
+app/api/admin/waitlist/notify/
+app/api/admin/waitlist/notify/route.ts
+            627 100%    7.65MB/s   00:00:00 (xfer#321, to-check=354/602)
+app/api/checkout/
+app/api/checkout/route.ts
+          12738 100%   42.18MB/s   00:00:00 (xfer#322, to-check=356/602)
+app/api/coupon/
+app/api/coupon/validate/
+app/api/coupon/validate/route.ts
+            727 100%    7.53MB/s   00:00:00 (xfer#323, to-check=359/602)
+app/api/inventory/
+app/api/inventory/check/
+app/api/inventory/check/route.ts
+           2684 100%   27.18MB/s   00:00:00 (xfer#324, to-check=362/602)
+app/api/messages/
+app/api/messages/route.ts
+           1922 100%   16.50MB/s   00:00:00 (xfer#325, to-check=364/602)
+app/api/newsletter/
+app/api/newsletter/subscribe/
+app/api/newsletter/subscribe/route.ts
+            769 100%    5.43MB/s   00:00:00 (xfer#326, to-check=367/602)
+app/api/newsletter/unsubscribe/
+app/api/newsletter/unsubscribe/route.ts
+            700 100%    5.97MB/s   00:00:00 (xfer#327, to-check=369/602)
+app/api/orders/
+app/api/orders/[orderId]/
+app/api/orders/[orderId]/cancel/
+app/api/orders/[orderId]/cancel/route.ts
+           2531 100%   16.62MB/s   00:00:00 (xfer#328, to-check=373/602)
+app/api/orders/[orderId]/delete/
+app/api/orders/[orderId]/delete/route.ts
+           1536 100%   12.85MB/s   00:00:00 (xfer#329, to-check=375/602)
+app/api/orders/[orderId]/invoice/
+app/api/orders/[orderId]/invoice/route.ts
+           1307 100%   12.60MB/s   00:00:00 (xfer#330, to-check=377/602)
+app/api/orders/[orderId]/retry-payment/
+app/api/orders/[orderId]/retry-payment/route.ts
+           4682 100%   22.32MB/s   00:00:00 (xfer#331, to-check=379/602)
+app/api/waitlist/
+app/api/waitlist/add/
+app/api/waitlist/add/route.ts
+           1001 100%    9.47MB/s   00:00:00 (xfer#332, to-check=382/602)
+app/api/webhooks/
+app/api/webhooks/stripe/
+app/api/webhooks/stripe/route.ts
+           2968 100%   18.49MB/s   00:00:00 (xfer#333, to-check=385/602)
+app/api/wishlist/
+app/api/wishlist/route.ts
+           2177 100%   18.22MB/s   00:00:00 (xfer#334, to-check=387/602)
+app/checkout/
+app/checkout/page.tsx
+          31199 100%   42.38MB/s   00:00:00 (xfer#335, to-check=389/602)
+app/contact/
+app/contact/page.tsx
+           4288 100%   33.76MB/s   00:00:00 (xfer#336, to-check=391/602)
+app/dashboard/
+app/dashboard/page.tsx
+           7920 100%   41.52MB/s   00:00:00 (xfer#337, to-check=393/602)
+app/login/
+app/login/page.tsx
+           1850 100%   19.17MB/s   00:00:00 (xfer#338, to-check=395/602)
+app/manual/
+app/manual/page.tsx
+            550 100%    6.47MB/s   00:00:00 (xfer#339, to-check=397/602)
+app/pricing/
+app/pricing/page.tsx
+           8242 100%   42.76MB/s   00:00:00 (xfer#340, to-check=399/602)
+app/privacy/
+app/privacy/page.tsx
+           3193 100%   35.77KB/s   00:00:00 (xfer#341, to-check=401/602)
+app/returns/
+app/returns/page.tsx
+          12680 100%   12.93MB/s   00:00:00 (xfer#342, to-check=403/602)
+app/shipping/
+app/shipping/page.tsx
+           8186 100%   10.25MB/s   00:00:00 (xfer#343, to-check=405/602)
+app/sign-in/
+app/sign-in/[[...sign-in]]/
+app/sign-in/[[...sign-in]]/page.tsx
+           3441 100%    7.17MB/s   00:00:00 (xfer#344, to-check=408/602)
+app/success/
+app/success/metadata.ts
+            146 100%  588.60KB/s   00:00:00 (xfer#345, to-check=410/602)
+app/success/page.tsx
+          12423 100%   18.51MB/s   00:00:00 (xfer#346, to-check=411/602)
+app/terms/
+app/terms/page.tsx
+           2575 100%    8.16MB/s   00:00:00 (xfer#347, to-check=413/602)
+app/warranty/
+app/warranty/page.tsx
+          11160 100%   11.92MB/s   00:00:00 (xfer#348, to-check=415/602)
+components/
+components/AboutPage.tsx
+          10674 100%   20.00MB/s   00:00:00 (xfer#349, to-check=417/602)
+components/AboutUs.tsx
+           4641 100%   10.79MB/s   00:00:00 (xfer#350, to-check=418/602)
+components/AdminAnalytics.tsx
+           6997 100%   10.11MB/s   00:00:00 (xfer#351, to-check=419/602)
+components/AdminCouponsList.tsx
+          15307 100%   24.91MB/s   00:00:00 (xfer#352, to-check=420/602)
+components/AdminInventoryManagement.tsx
+           7465 100%   14.50MB/s   00:00:00 (xfer#353, to-check=421/602)
+components/AdminNewsletterManagement.tsx
+           5360 100%   15.22MB/s   00:00:00 (xfer#354, to-check=422/602)
+components/AdminOrdersList.tsx
+          13519 100%   23.79MB/s   00:00:00 (xfer#355, to-check=423/602)
+components/Analytics.tsx
+            273 100%    1.21MB/s   00:00:00 (xfer#356, to-check=424/602)
+components/BuyButton.tsx
+           1547 100%    4.48MB/s   00:00:00 (xfer#357, to-check=425/602)
+components/CancelOrderButton.tsx
+           1383 100%    5.78MB/s   00:00:00 (xfer#358, to-check=426/602)
+components/CouponInput.tsx
+           3003 100%   10.30MB/s   00:00:00 (xfer#359, to-check=427/602)
+components/DeleteOrderButton.tsx
+           2870 100%    9.78MB/s   00:00:00 (xfer#360, to-check=428/602)
+components/ErrorBoundary.tsx
+           2993 100%   10.58MB/s   00:00:00 (xfer#361, to-check=429/602)
+components/FAQ.tsx
+           6321 100%   12.28MB/s   00:00:00 (xfer#362, to-check=430/602)
+components/FeaturesGrid.tsx
+           6741 100%   12.15MB/s   00:00:00 (xfer#363, to-check=431/602)
+components/Footer.tsx
+           6268 100%   13.47MB/s   00:00:00 (xfer#364, to-check=432/602)
+components/FormError.tsx
+           1253 100%    5.95MB/s   00:00:00 (xfer#365, to-check=433/602)
+components/Gallery.tsx
+          11337 100%   13.43MB/s   00:00:00 (xfer#366, to-check=434/602)
+components/Hero.tsx
+           5976 100%   11.80MB/s   00:00:00 (xfer#367, to-check=435/602)
+components/ImageViewer.tsx
+          13810 100%   23.31MB/s   00:00:00 (xfer#368, to-check=436/602)
+components/LoadingSkeleton.tsx
+           2443 100%    6.20MB/s   00:00:00 (xfer#369, to-check=437/602)
+components/ManualPage.tsx
+           9126 100%   15.05MB/s   00:00:00 (xfer#370, to-check=438/602)
+components/MergeOrdersButton.tsx
+           7605 100%   14.34MB/s   00:00:00 (xfer#371, to-check=439/602)
+components/NarrativeBlocks.tsx
+           3707 100%    8.62MB/s   00:00:00 (xfer#372, to-check=440/602)
+components/Navigation.tsx
+          14322 100%   16.30MB/s   00:00:00 (xfer#373, to-check=441/602)
+components/NewsletterSignup.tsx
+           2709 100%   11.18MB/s   00:00:00 (xfer#374, to-check=442/602)
+components/OptimizedImage.tsx
+           4058 100%   11.12MB/s   00:00:00 (xfer#375, to-check=443/602)
+components/OrderActions.tsx
+           2396 100%   10.43MB/s   00:00:00 (xfer#376, to-check=444/602)
+components/OrderDetail.tsx
+          15514 100%   29.41MB/s   00:00:00 (xfer#377, to-check=445/602)
+components/OrderSearchFilter.tsx
+           5959 100%   17.76MB/s   00:00:00 (xfer#378, to-check=446/602)
+components/Pagination.tsx
+           4228 100%   15.33MB/s   00:00:00 (xfer#379, to-check=447/602)
+components/PaymentProcessing.tsx
+           1145 100%    2.63MB/s   00:00:00 (xfer#380, to-check=448/602)
+components/ProductPrice.tsx
+           2999 100%   11.36MB/s   00:00:00 (xfer#381, to-check=449/602)
+components/ProductSpinImageSequence.tsx
+          19015 100%   17.78MB/s   00:00:00 (xfer#382, to-check=450/602)
+components/ProductSpinVideo.tsx
+          12986 100%   17.37MB/s   00:00:00 (xfer#383, to-check=451/602)
+components/RetryPaymentButton.tsx
+           1527 100%    7.67MB/s   00:00:00 (xfer#384, to-check=452/602)
+components/SavedAddresses.tsx
+          12117 100%   27.38MB/s   00:00:00 (xfer#385, to-check=453/602)
+components/SectionBackground.tsx
+            830 100%    4.21MB/s   00:00:00 (xfer#386, to-check=454/602)
+components/SellerReviews.tsx
+          16809 100%   13.71MB/s   00:00:00 (xfer#387, to-check=455/602)
+components/SpecStrip.tsx
+           4670 100%    9.36MB/s   00:00:00 (xfer#388, to-check=456/602)
+components/StockStatus.tsx
+           4967 100%   10.01MB/s   00:00:00 (xfer#389, to-check=457/602)
+components/TrackingStatusBadge.tsx
+           1218 100%    5.61MB/s   00:00:00 (xfer#390, to-check=458/602)
+components/TrackingTimeline.tsx
+           3888 100%   10.75MB/s   00:00:00 (xfer#391, to-check=459/602)
+components/TrustStrip.tsx
+           4419 100%   11.21MB/s   00:00:00 (xfer#392, to-check=460/602)
+components/WishlistButton.tsx
+           3204 100%    8.73MB/s   00:00:00 (xfer#393, to-check=461/602)
+lib/
+lib/addresses.ts
+           1594 100%    4.49MB/s   00:00:00 (xfer#394, to-check=463/602)
+lib/admin-auth.ts
+           2000 100%    5.42MB/s   00:00:00 (xfer#395, to-check=464/602)
+lib/analytics.ts
+           3095 100%    5.44MB/s   00:00:00 (xfer#396, to-check=465/602)
+lib/config.ts
+           1792 100%    7.18MB/s   00:00:00 (xfer#397, to-check=466/602)
+lib/coupon.ts
+           5772 100%   11.07MB/s   00:00:00 (xfer#398, to-check=467/602)
+lib/email.ts
+          12652 100%   20.95MB/s   00:00:00 (xfer#399, to-check=468/602)
+lib/export.ts
+           2648 100%   11.64MB/s   00:00:00 (xfer#400, to-check=469/602)
+lib/fourpx.ts
+          10767 100%   33.78MB/s   00:00:00 (xfer#401, to-check=470/602)
+lib/hooks.ts
+           1050 100%    5.11MB/s   00:00:00 (xfer#402, to-check=471/602)
+lib/images.ts
+           2942 100%   10.80MB/s   00:00:00 (xfer#403, to-check=472/602)
+lib/inventory.ts
+           6109 100%   17.71MB/s   00:00:00 (xfer#404, to-check=473/602)
+lib/invoice.ts
+           7311 100%   18.35MB/s   00:00:00 (xfer#405, to-check=474/602)
+lib/newsletter.ts
+           2026 100%    9.91MB/s   00:00:00 (xfer#406, to-check=475/602)
+lib/prisma.ts
+            362 100%    4.32MB/s   00:00:00 (xfer#407, to-check=476/602)
+lib/refunds.ts
+           2525 100%   10.94MB/s   00:00:00 (xfer#408, to-check=477/602)
+lib/stripe-webhook.ts
+           8691 100%   25.49MB/s   00:00:00 (xfer#409, to-check=478/602)
+lib/tracking.ts
+          13837 100%   31.96MB/s   00:00:00 (xfer#410, to-check=479/602)
+lib/validation.ts
+           8403 100%   24.52MB/s   00:00:00 (xfer#411, to-check=480/602)
+prisma/
+prisma/schema.prisma
+           4844 100%   12.09MB/s   00:00:00 (xfer#412, to-check=482/602)
+public/
+public/iap_1000x1000.7133129332_7ugtj81k.avif
+          28179 100%   38.39MB/s   00:00:00 (xfer#413, to-check=484/602)
+public/iap_1000x1000.7133129332_7ugtj81k.webp
+          32076 100%   61.16MB/s   00:00:00 (xfer#414, to-check=485/602)
+public/iap_1000x1000.7228009722_h2ekbf1s.avif
+          28181 100%   59.99MB/s   00:00:00 (xfer#415, to-check=486/602)
+public/iap_1000x1000.7228009722_h2ekbf1s.webp
+          36004 100%   61.44MB/s   00:00:00 (xfer#416, to-check=487/602)
+public/iap_300x300.7241535096_dvmyoc4g.webp
+          24592 100%   55.99MB/s   00:00:00 (xfer#417, to-check=488/602)
+public/iap_300x300.7307396637_refzr49b.avif
+          13012 100%   35.67MB/s   00:00:00 (xfer#418, to-check=489/602)
+public/iap_300x300.7307396637_refzr49b.webp
+          10010 100%   30.80MB/s   00:00:00 (xfer#419, to-check=490/602)
+public/icon.svg
+           1250 100%    7.95MB/s   00:00:00 (xfer#420, to-check=491/602)
+public/maclock_1984_design_reimagined_apple_style.webp
+         159924 100%   60.54MB/s   00:00:00 (xfer#421, to-check=492/602)
+public/maclock_alarm_modes_apple_style.webp
+         246304 100%   60.24MB/s   00:00:00 (xfer#422, to-check=493/602)
+public/maclock_backlight_adjust_apple_style.webp
+          92974 100%   65.78MB/s   00:00:00 (xfer#423, to-check=494/602)
+public/maclock_boot_ceremony_apple_style.webp
+         179734 100%   64.85MB/s   00:00:00 (xfer#424, to-check=495/602)
+public/maclock_boot_smile_feature_grid_apple_style.jpg
+         596900 100%   63.45MB/s   00:00:00 (xfer#425, to-check=496/602)
+public/maclock_boot_smile_feature_grid_apple_style.webp
+         197640 100%   56.03MB/s   00:00:00 (xfer#426, to-check=497/602)
+public/maclock_boot_smile_features_apple_style.webp
+          58868 100%   47.99MB/s   00:00:00 (xfer#427, to-check=498/602)
+public/maclock_hello_retro_apple_style.jpg
+         540524 100%   64.91MB/s   00:00:00 (xfer#428, to-check=499/602)
+public/maclock_hello_retro_apple_style.webp
+         184502 100%   55.33MB/s   00:00:00 (xfer#429, to-check=500/602)
+public/maclock_hello_retro_dawn_apple_style.webp
+         141086 100%   45.99MB/s   00:00:00 (xfer#430, to-check=501/602)
+public/maclock_hello_retro_dawn_apple_style34.jpg
+         357773 100%   60.63MB/s   00:00:00 (xfer#431, to-check=502/602)
+public/maclock_pixel_perfect_detail_apple_clean.jpg.webp
+          90232 100%   50.47MB/s   00:00:00 (xfer#432, to-check=503/602)
+public/placeholder.svg
+            292 100%  744.73KB/s   00:00:00 (xfer#433, to-check=504/602)
+public/product-spin-000.webp
+          14542 100%   27.03MB/s   00:00:00 (xfer#434, to-check=505/602)
+public/product-spin-001.webp
+          14406 100%   29.67MB/s   00:00:00 (xfer#435, to-check=506/602)
+public/product-spin-002.webp
+          14274 100%   51.35MB/s   00:00:00 (xfer#436, to-check=507/602)
+public/product-spin-003.webp
+          14078 100%   53.02MB/s   00:00:00 (xfer#437, to-check=508/602)
+public/product-spin-004.webp
+          13690 100%   53.06MB/s   00:00:00 (xfer#438, to-check=509/602)
+public/product-spin-005.webp
+          12904 100%   52.35MB/s   00:00:00 (xfer#439, to-check=510/602)
+public/product-spin-006.webp
+          12946 100%   53.00MB/s   00:00:00 (xfer#440, to-check=511/602)
+public/product-spin-007.webp
+          12886 100%   52.33MB/s   00:00:00 (xfer#441, to-check=512/602)
+public/product-spin-008.webp
+          12912 100%   51.96MB/s   00:00:00 (xfer#442, to-check=513/602)
+public/product-spin-009.webp
+          12592 100%   34.91MB/s   00:00:00 (xfer#443, to-check=514/602)
+public/product-spin-010.webp
+          12872 100%   51.80MB/s   00:00:00 (xfer#444, to-check=515/602)
+public/product-spin-011.webp
+          11410 100%   35.66MB/s   00:00:00 (xfer#445, to-check=516/602)
+public/product-spin-012.webp
+          11124 100%   31.29MB/s   00:00:00 (xfer#446, to-check=517/602)
+public/product-spin-013.webp
+          11214 100%   44.77MB/s   00:00:00 (xfer#447, to-check=518/602)
+public/product-spin-014.webp
+          11620 100%   50.36MB/s   00:00:00 (xfer#448, to-check=519/602)
+public/product-spin-015.webp
+          11410 100%   49.72MB/s   00:00:00 (xfer#449, to-check=520/602)
+public/product-spin-016.webp
+          11928 100%   50.60MB/s   00:00:00 (xfer#450, to-check=521/602)
+public/product-spin-017.webp
+          11764 100%   50.76MB/s   00:00:00 (xfer#451, to-check=522/602)
+public/product-spin-018.webp
+          12284 100%   51.83MB/s   00:00:00 (xfer#452, to-check=523/602)
+public/product-spin-019.webp
+          13452 100%   53.43MB/s   00:00:00 (xfer#453, to-check=524/602)
+public/product-spin-020.webp
+          13654 100%   54.02MB/s   00:00:00 (xfer#454, to-check=525/602)
+public/product-spin-021.webp
+          14270 100%   54.88MB/s   00:00:00 (xfer#455, to-check=526/602)
+public/product-spin-022.webp
+          14862 100%   38.60MB/s   00:00:00 (xfer#456, to-check=527/602)
+public/product-spin-023.webp
+          15630 100%   51.58MB/s   00:00:00 (xfer#457, to-check=528/602)
+public/product-spin-024.webp
+          16178 100%   55.50MB/s   00:00:00 (xfer#458, to-check=529/602)
+public/product-spin-025.webp
+          16022 100%   47.90MB/s   00:00:00 (xfer#459, to-check=530/602)
+public/product-spin-026.webp
+          16696 100%   28.18MB/s   00:00:00 (xfer#460, to-check=531/602)
+public/product-spin-027.webp
+          17212 100%   31.99MB/s   00:00:00 (xfer#461, to-check=532/602)
+public/product-spin-028.webp
+          17458 100%   26.86MB/s   00:00:00 (xfer#462, to-check=533/602)
+public/product-spin-029.webp
+          17260 100%   33.38MB/s   00:00:00 (xfer#463, to-check=534/602)
+public/product-spin-030.webp
+          17414 100%   52.73MB/s   00:00:00 (xfer#464, to-check=535/602)
+public/product-spin-031.webp
+          17056 100%   36.98MB/s   00:00:00 (xfer#465, to-check=536/602)
+public/product-spin-032.webp
+          17800 100%   36.27MB/s   00:00:00 (xfer#466, to-check=537/602)
+public/product-spin-033.webp
+          17018 100%   48.87MB/s   00:00:00 (xfer#467, to-check=538/602)
+public/product-spin-034.webp
+          17572 100%   47.33MB/s   00:00:00 (xfer#468, to-check=539/602)
+public/product-spin-035.webp
+          17062 100%   35.68MB/s   00:00:00 (xfer#469, to-check=540/602)
+public/product-spin-036.webp
+          16598 100%   50.11MB/s   00:00:00 (xfer#470, to-check=541/602)
+public/product-spin-037.webp
+          15762 100%   41.18MB/s   00:00:00 (xfer#471, to-check=542/602)
+public/product-spin-038.webp
+          15712 100%   34.92MB/s   00:00:00 (xfer#472, to-check=543/602)
+public/product-spin-039.webp
+          15046 100%   31.61MB/s   00:00:00 (xfer#473, to-check=544/602)
+public/product-spin-040.webp
+          14744 100%   50.93MB/s   00:00:00 (xfer#474, to-check=545/602)
+public/product-spin-041.webp
+          13484 100%   52.93MB/s   00:00:00 (xfer#475, to-check=546/602)
+public/product-spin-042.webp
+          13094 100%   54.33MB/s   00:00:00 (xfer#476, to-check=547/602)
+public/product-spin-043.webp
+          12036 100%   36.81MB/s   00:00:00 (xfer#477, to-check=548/602)
+public/product-spin-044.webp
+          11194 100%   34.34MB/s   00:00:00 (xfer#478, to-check=549/602)
+public/product-spin-045.webp
+          10110 100%   47.30MB/s   00:00:00 (xfer#479, to-check=550/602)
+public/product-spin-046.webp
+          10184 100%   48.32MB/s   00:00:00 (xfer#480, to-check=551/602)
+public/product-spin-047.webp
+          11276 100%   51.20MB/s   00:00:00 (xfer#481, to-check=552/602)
+public/product-spin-048.webp
+          12674 100%   36.08MB/s   00:00:00 (xfer#482, to-check=553/602)
+public/product-spin-049.webp
+          13668 100%   39.28MB/s   00:00:00 (xfer#483, to-check=554/602)
+public/product-spin-050.webp
+          14838 100%   49.13MB/s   00:00:00 (xfer#484, to-check=555/602)
+public/product-spin-051.webp
+          15178 100%   45.79MB/s   00:00:00 (xfer#485, to-check=556/602)
+public/product-spin-052.webp
+          15718 100%   40.83MB/s   00:00:00 (xfer#486, to-check=557/602)
+public/product-spin-053.webp
+          17124 100%   50.07MB/s   00:00:00 (xfer#487, to-check=558/602)
+public/product-spin-054.webp
+          16574 100%   50.03MB/s   00:00:00 (xfer#488, to-check=559/602)
+public/product-spin-055.webp
+          16852 100%   51.81MB/s   00:00:00 (xfer#489, to-check=560/602)
+public/product-spin-056.webp
+          17056 100%   46.73MB/s   00:00:00 (xfer#490, to-check=561/602)
+public/product-spin-057.webp
+          17222 100%   52.99MB/s   00:00:00 (xfer#491, to-check=562/602)
+public/product-spin-058.webp
+          17594 100%   54.30MB/s   00:00:00 (xfer#492, to-check=563/602)
+public/product-spin-059.webp
+          18020 100%   52.88MB/s   00:00:00 (xfer#493, to-check=564/602)
+public/test.html
+           2533 100%    8.94MB/s   00:00:00 (xfer#494, to-check=565/602)
+public/Hello1084/
+public/Hello1084/retro-mac-clock-backlight-adjustable-brightness-knob-handheld.webp
+          56236 100%   46.59MB/s   00:00:00 (xfer#495, to-check=567/602)
+public/Hello1084/retro-mac-clock-body-stickers-dot-matrix-vibrant-information-display.webp
+          76748 100%   58.98MB/s   00:00:00 (xfer#496, to-check=568/602)
+public/Hello1084/retro-mac-clock-crt-screen-pixel-level-tribute-lcd-classic-design.webp
+          40474 100%   51.18MB/s   00:00:00 (xfer#497, to-check=569/602)
+public/Hello1084/retro-mac-clock-four-alarm-modes-knob-morning-dusk-time-order.webp
+          51526 100%   58.57MB/s   00:00:00 (xfer#498, to-check=570/602)
+public/Hello1084/retro-mac-clock-hello-1984-classic-smiley-icon.webp
+          26762 100%   55.73MB/s   00:00:00 (xfer#499, to-check=571/602)
+public/Hello1084/retro-mac-clock-main-screen-time-year-smiley-three-modes-vintage.webp
+          50872 100%   41.29MB/s   00:00:00 (xfer#500, to-check=572/602)
+public/Hello1084/retro-mac-clock-push-to-start-original-startup-ritual-floppy-disk.webp
+          39772 100%   60.01MB/s   00:00:00 (xfer#501, to-check=573/602)
+public/Hello1084/retro-mac-clock-put-1984-design-on-your-desk-classic-hello-1984.webp
+          49938 100%   64.71MB/s   00:00:00 (xfer#502, to-check=574/602)
+public/Hello1084/retro-mac-clock-soul-completion-plan-classic-icon-stickers-back-to-1984 (2).webp
+          42584 100%   38.78MB/s   00:00:00 (xfer#503, to-check=575/602)
+public/Hello1084/retro-mac-clock-soul-completion-plan-classic-icon-stickers-back-to-1984.webp
+          52738 100%   48.79MB/s   00:00:00 (xfer#504, to-check=576/602)
+public/Hello1084/retro-mac-clock-stickers-position-front-back-disk-labels-layout.webp
+          37632 100%   60.43MB/s   00:00:00 (xfer#505, to-check=577/602)
+public/Hello1084/retro-mac-clock-user-manual-buttons-backlight-time-setting-alarm-setting.png
+        4692650 100%   97.72MB/s   00:00:00 (xfer#506, to-check=578/602)
+public/Hello1084/retro-mac-clock-user-manual-hello1984-alarm-power-screen-stickers.png
+        5035570 100%   98.61MB/s   00:00:00 (xfer#507, to-check=579/602)
+public/Hello1084/retro-mac-original-startup-smile-authentic-system-disk-analog-brightness-control.webp
+          54692 100%   39.28MB/s   00:00:00 (xfer#508, to-check=580/602)
+public/videos/
+public/videos/product-spin.mp4
+         965171 100%   73.94MB/s   00:00:00 (xfer#509, to-check=582/602)
+scripts/
+scripts/check-database-production.ts
+           6054 100%   15.91MB/s   00:00:00 (xfer#510, to-check=584/602)
+scripts/check-env-production.sh
+           2265 100%    9.56MB/s   00:00:00 (xfer#511, to-check=585/602)
+scripts/create-stripe-price.ts
+           3645 100%   15.51MB/s   00:00:00 (xfer#512, to-check=586/602)
+scripts/extract-frames.py
+           4858 100%   13.87MB/s   00:00:00 (xfer#513, to-check=587/602)
+scripts/generate-image-sequence.md
+           4098 100%   10.94MB/s   00:00:00 (xfer#514, to-check=588/602)
+scripts/list-recent-sessions.ts
+           2076 100%    8.80MB/s   00:00:00 (xfer#515, to-check=589/602)
+scripts/manual-create-order-from-session.ts
+           4692 100%   19.80MB/s   00:00:00 (xfer#516, to-check=590/602)
+scripts/pre-launch-check.js
+           6545 100%   18.04MB/s   00:00:00 (xfer#517, to-check=591/602)
+scripts/pre-launch-checklist.md
+           3377 100%    8.82MB/s   00:00:00 (xfer#518, to-check=592/602)
+scripts/quick-db-check.sh
+           3112 100%    9.70MB/s   00:00:00 (xfer#519, to-check=593/602)
+scripts/seed-default-product.ts
+            841 100%    3.43MB/s   00:00:00 (xfer#520, to-check=594/602)
+scripts/test-fourpx.ts
+           1055 100%    5.56MB/s   00:00:00 (xfer#521, to-check=595/602)
+scripts/test-phone-validation.js
+           2474 100%    9.92MB/s   00:00:00 (xfer#522, to-check=596/602)
+scripts/test-webhook.js
+           4435 100%   14.24MB/s   00:00:00 (xfer#523, to-check=597/602)
+scripts/test-webhook.ts
+           3590 100%   15.08MB/s   00:00:00 (xfer#524, to-check=598/602)
+scripts/update-db-from-server.sh
+           2071 100%   11.22MB/s   00:00:00 (xfer#525, to-check=599/602)
+scripts/update-paid-orders.ts
+           3698 100%   15.89MB/s   00:00:00 (xfer#526, to-check=600/602)
+scripts/verify-deployment.ts
+           8535 100%   32.30MB/s   00:00:00 (xfer#527, to-check=601/602)
+
+sent 451321 bytes  received 96730 bytes  372798 bytes/sec
+total size is 16739406  speedup is 30.54
+[0;32m✓ 文件上传成功[0m
+
+[1;33m[6/8] 在服务器上执行部署...[0m
+./deploy-production.sh: line 251: syntax error: unexpected end of file

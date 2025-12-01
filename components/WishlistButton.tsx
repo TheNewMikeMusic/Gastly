@@ -2,6 +2,18 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useAuth } from '@clerk/nextjs'
+import { isClerkConfigured } from '@/lib/config'
+
+// Safe hook wrapper - always call hooks, but return safe defaults if Clerk not configured
+function useSafeAuth() {
+  // Always call the hook (required by React rules)
+  const clerkAuth = useAuth()
+  // Return safe defaults if Clerk not configured
+  if (!isClerkConfigured()) {
+    return { isSignedIn: false }
+  }
+  return clerkAuth
+}
 
 interface WishlistButtonProps {
   productId?: string
@@ -9,7 +21,7 @@ interface WishlistButtonProps {
 }
 
 export function WishlistButton({ productId = 'maclock-default', variant = 'icon' }: WishlistButtonProps) {
-  const { isSignedIn } = useAuth()
+  const { isSignedIn } = useSafeAuth()
   const [isInWishlist, setIsInWishlist] = useState(false)
   const [loading, setLoading] = useState(false)
 

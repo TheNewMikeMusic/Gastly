@@ -2,6 +2,18 @@
 
 import { useState, useEffect } from 'react'
 import { useAuth } from '@clerk/nextjs'
+import { isClerkConfigured } from '@/lib/config'
+
+// Safe hook wrapper - always call hooks, but return safe defaults if Clerk not configured
+function useSafeAuth() {
+  // Always call the hook (required by React rules)
+  const clerkAuth = useAuth()
+  // Return safe defaults if Clerk not configured
+  if (!isClerkConfigured()) {
+    return { isSignedIn: false }
+  }
+  return clerkAuth
+}
 
 interface Address {
   id: string
@@ -23,7 +35,7 @@ interface SavedAddressesProps {
 }
 
 export function SavedAddresses({ onSelect, showAddButton = true }: SavedAddressesProps) {
-  const { isSignedIn } = useAuth()
+  const { isSignedIn } = useSafeAuth()
   const [addresses, setAddresses] = useState<Address[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)

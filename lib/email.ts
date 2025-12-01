@@ -30,7 +30,7 @@ export async function sendEmail(options: EmailOptions): Promise<boolean> {
         const resendClient = new resend.Resend(process.env.RESEND_API_KEY)
         
         await resendClient.emails.send({
-          from: process.env.EMAIL_FROM || 'noreply@hello1984.com',
+          from: process.env.EMAIL_FROM || 'mikeshyu@proton.me',
           to: options.to,
           subject: options.subject,
           html: options.html,
@@ -110,7 +110,7 @@ export async function sendOrderConfirmationEmail(order: Order) {
           
           <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
           <p style="color: #999; font-size: 12px; text-align: center;">
-            If you have any questions, please contact us at <a href="mailto:support@hello1984.com">support@hello1984.com</a>
+            If you have any questions, please contact us at <a href="mailto:mikeshyu@proton.me">mikeshyu@proton.me</a>
           </p>
         </div>
       </body>
@@ -163,7 +163,7 @@ export async function sendShippingNotificationEmail(order: Order) {
           
           <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
           <p style="color: #999; font-size: 12px; text-align: center;">
-            Questions? Contact us at <a href="mailto:support@hello1984.com">support@hello1984.com</a>
+            Questions? Contact us at <a href="mailto:mikeshyu@proton.me">mikeshyu@proton.me</a>
           </p>
         </div>
       </body>

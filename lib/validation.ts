@@ -36,13 +36,9 @@ export function validatePhone(phone: string, country?: string): ValidationResult
     return { valid: false, error: 'Phone number is required' }
   }
 
-  // 移除空格、连字符、括号等
-  const cleaned = phone.replace(/[\s\-\(\)]/g, '')
-
-  // 基本格式检查：至少7位数字，最多15位（E.164标准）
-  if (!/^\+?[1-9]\d{6,14}$/.test(cleaned)) {
-    return { valid: false, error: 'Please enter a valid phone number' }
-  }
+  // 移除所有非数字字符（保留+号）
+  const digitsOnly = phone.replace(/[^\d+]/g, '')
+  const cleaned = digitsOnly.replace(/^\+/, '') // 移除开头的+号用于验证
 
   // 国家特定验证
   if (country) {
@@ -68,40 +64,49 @@ export function validatePhone(phone: string, country?: string): ValidationResult
 
     const rule = countryRules[country]
     if (rule) {
-      const digitsOnly = cleaned.replace(/\D/g, '')
-      
       // 对于 US/CA，如果允许本地格式，检查是否为10位或11位（带国家代码）
       if (rule.allowLocal) {
         // 10位本地号码或11位带国家代码（1开头）
-        if (digitsOnly.length === 10) {
-          // 10位本地号码，验证格式
-          if (!/^\d{10}$/.test(digitsOnly)) {
-            return { valid: false, error: `Invalid phone number format for ${country}` }
+        if (cleaned.length === 10) {
+          // 10位本地号码，验证格式（必须是纯数字）
+          if (!/^\d{10}$/.test(cleaned)) {
+            return { valid: false, error: `Invalid phone number format for ${country}. Please enter 10 digits.` }
           }
-        } else if (digitsOnly.length === 11 && digitsOnly.startsWith('1')) {
+          return { valid: true }
+        } else if (cleaned.length === 11 && cleaned.startsWith('1')) {
           // 11位带国家代码，验证格式
-          if (!/^1\d{10}$/.test(digitsOnly)) {
+          if (!/^1\d{10}$/.test(cleaned)) {
             return { valid: false, error: `Invalid phone number format for ${country}` }
           }
+          return { valid: true }
         } else {
           return {
             valid: false,
-            error: `Phone number for ${country} should be 10 digits (local) or 11 digits (with country code)`,
+            error: `Phone number for ${country} should be 10 digits (e.g., 5551234567) or 11 digits with country code (e.g., 15551234567)`,
           }
         }
       } else {
         // 其他国家的标准验证
-        if (digitsOnly.length < rule.min || digitsOnly.length > rule.max) {
+        if (cleaned.length < rule.min || cleaned.length > rule.max) {
           return {
             valid: false,
             error: `Phone number for ${country} should be ${rule.min}-${rule.max} digits`,
           }
         }
-        if (rule.pattern && !rule.pattern.test(cleaned)) {
+        if (rule.pattern && !rule.pattern.test(phone.replace(/[\s\-\(\)]/g, ''))) {
           return { valid: false, error: `Invalid phone number format for ${country}` }
         }
       }
     }
+  }
+
+  // 基本格式检查：至少7位数字，最多15位（E.164标准）
+  if (cleaned.length < 7 || cleaned.length > 15) {
+    return { valid: false, error: 'Please enter a valid phone number (7-15 digits)' }
+  }
+
+  if (!/^\d+$/.test(cleaned)) {
+    return { valid: false, error: 'Phone number should contain only digits' }
   }
 
   return { valid: true }
@@ -147,8 +152,21 @@ export function validateZip(zip: string, country?: string): ValidationResult {
     }
 
     const pattern = countryPatterns[country]
-    if (pattern && !pattern.test(cleaned)) {
-      return { valid: false, error: `Invalid ZIP/Postal code format for ${country}` }
+    if (pattern) {
+      if (!pattern.test(cleaned)) {
+        // 提供更友好的错误提示
+        const errorMessages: Record<string, string> = {
+          US: 'US ZIP code must be 5 digits (e.g., 12345) or 5+4 digits (e.g., 12345-6789)',
+          CA: 'Canadian postal code must be in format A1A 1A1',
+          GB: 'UK postcode must be in format SW1A 1AA',
+          CN: 'Chinese postal code must be 6 digits',
+          JP: 'Japanese postal code must be in format 123-4567',
+        }
+        return { 
+          valid: false, 
+          error: errorMessages[country] || `Invalid ZIP/Postal code format for ${country}` 
+        }
+      }
     }
   }
 
@@ -171,9 +189,11 @@ export function validateName(name: string): ValidationResult {
     return { valid: false, error: 'Name is too long' }
   }
 
-  // 检查是否包含有效字符（字母、空格、连字符、撇号）
-  if (!/^[a-zA-Z\s\-'\.]+$/.test(name)) {
-    return { valid: false, error: 'Name contains invalid characters' }
+  // 检查是否包含有效字符（字母、空格、连字符、撇号、点号）
+  // 允许单字母名字（如 "A"）和常见名字格式
+  const trimmedName = name.trim()
+  if (!/^[a-zA-Z]+([\s\-'\.][a-zA-Z]+)*$/.test(trimmedName)) {
+    return { valid: false, error: 'Name can only contain letters, spaces, hyphens, apostrophes, and periods' }
   }
 
   return { valid: true }

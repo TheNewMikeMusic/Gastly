@@ -11,6 +11,28 @@ import { useUser, useAuth } from '@clerk/nextjs'
 import { SavedAddresses } from '@/components/SavedAddresses'
 import { CouponInput } from '@/components/CouponInput'
 import { StockStatus } from '@/components/StockStatus'
+import { isClerkConfigured } from '@/lib/config'
+
+// Safe hooks wrapper for Clerk - always call hooks, but return safe defaults if Clerk not configured
+function useSafeUser() {
+  // Always call the hook (required by React rules)
+  const clerkUser = useUser()
+  // Return safe defaults if Clerk not configured
+  if (!isClerkConfigured()) {
+    return { user: null, isLoaded: true }
+  }
+  return clerkUser
+}
+
+function useSafeAuth() {
+  // Always call the hook (required by React rules)
+  const clerkAuth = useAuth()
+  // Return safe defaults if Clerk not configured
+  if (!isClerkConfigured()) {
+    return { isSignedIn: false }
+  }
+  return clerkAuth
+}
 
 interface ShippingFormData {
   name: string
@@ -39,8 +61,9 @@ interface Address {
 
 export default function CheckoutPage() {
   const router = useRouter()
-  const { user, isLoaded } = useUser()
-  const { isSignedIn } = useAuth()
+  const { user, isLoaded } = useSafeUser()
+  const { isSignedIn } = useSafeAuth()
+  const isClerkConfiguredValue = isClerkConfigured()
   const prefersReducedMotion = useReducedMotion()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -50,9 +73,9 @@ export default function CheckoutPage() {
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null)
   const [couponCode, setCouponCode] = useState<string | null>(null)
   const [discountAmount, setDiscountAmount] = useState(0)
-  const originalPrice = 19900 // 原价 $199 in cents
-  const earlyBirdPrice = 9900 // 前100台特价 $99 in cents
-  const [productPrice, setProductPrice] = useState(earlyBirdPrice) // 使用前100台特价
+  const originalPrice = 10800 // Original price $108 in cents
+  const currentPrice = 7800 // Current price $78 in cents
+  const [productPrice, setProductPrice] = useState(currentPrice) // Use current price
   const [stock, setStock] = useState<number | null>(null)
   const [formData, setFormData] = useState<ShippingFormData>({
     name: '',
@@ -86,7 +109,7 @@ export default function CheckoutPage() {
       const data = await response.json()
       setSavedAddresses(data.addresses || [])
       
-      // 如果有默认地址，自动选择
+      // Auto-select default address if available
       const defaultAddress = data.addresses?.find((a: Address) => a.isDefault)
       if (defaultAddress) {
         handleSelectAddress(defaultAddress)
@@ -107,25 +130,22 @@ export default function CheckoutPage() {
   }, [])
 
   useEffect(() => {
-    const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
-    const isClerkConfigured = publishableKey && publishableKey !== 'pk_test_dummy' && !publishableKey.includes('你的Clerk')
-    
-    if (isClerkConfigured) {
-      // 等待Clerk完全加载
+    if (isClerkConfiguredValue) {
+      // Wait for Clerk to fully load
       if (!isLoaded) {
         return
       }
       
-      // 如果已加载但用户未登录，重定向到登录页
+      // If loaded but user not signed in, redirect to sign in page
       if (!user && !isSignedIn) {
-        // 使用setTimeout避免在重定向过程中触发错误
+        // Use setTimeout to avoid errors during redirect
         const timer = setTimeout(() => {
           router.push('/sign-in?redirect_url=/checkout')
         }, 100)
         return () => clearTimeout(timer)
       }
       
-      // 如果用户已登录，填充表单数据
+      // If user is signed in, populate form data
       if (user && isSignedIn) {
         try {
           setFormData((prev) => ({
@@ -139,7 +159,7 @@ export default function CheckoutPage() {
       }
     }
 
-    // 加载保存的地址（仅在已登录时）
+    // Load saved addresses (only when signed in)
     if (isSignedIn && isLoaded) {
       try {
         loadSavedAddresses()
@@ -148,13 +168,13 @@ export default function CheckoutPage() {
       }
     }
 
-    // 检查库存
+    // Check stock
     try {
       checkStock()
     } catch (error) {
       console.error('Error checking stock:', error)
     }
-  }, [user, isLoaded, isSignedIn, router, loadSavedAddresses, checkStock])
+  }, [user, isLoaded, isSignedIn, router, loadSavedAddresses, checkStock, isClerkConfiguredValue])
 
   const handleCouponApply = (code: string, discount: number) => {
     setCouponCode(code)
@@ -272,7 +292,7 @@ export default function CheckoutPage() {
       return false
     }
 
-    // 检查库存
+    // Check stock
     if (stock !== null && stock <= 0) {
       setError('Product is out of stock')
       return false
@@ -284,7 +304,7 @@ export default function CheckoutPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    // 验证所有字段
+    // Validate all fields
     if (!validateForm()) {
       setError('Please fix the errors in the form')
       return
@@ -294,9 +314,9 @@ export default function CheckoutPage() {
     setError(null)
 
     try {
-      // 如果有优惠券，需要先验证并应用到订单
-      // 注意：实际应用中，优惠券应该在Stripe Checkout中处理
-      // 这里我们只是将优惠券代码传递到后端
+      // If coupon exists, validate and apply to order
+      // Note: In production, coupons should be handled in Stripe Checkout
+      // Here we just pass the coupon code to the backend
       const checkoutData = {
         ...formData,
         couponCode: couponCode || undefined,
@@ -327,19 +347,16 @@ export default function CheckoutPage() {
     }
   }
 
-  const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
-  const isClerkConfigured = publishableKey && publishableKey !== 'pk_test_dummy' && !publishableKey.includes('你的Clerk')
-  
   // Show loading state while checking authentication
-  // 在手机端登录后重定向时，给Clerk更多时间加载
-  if (isClerkConfigured && !isLoaded) {
+  // Give Clerk more time to load when redirecting after mobile login
+  if (isClerkConfiguredValue && !isLoaded) {
     return (
       <>
         <Navigation />
-        <div className="min-h-screen flex items-center justify-center bg-background pt-24">
+        <div className="min-h-screen flex items-center justify-center bg-ghost-bg-page pt-24">
           <div className="text-center space-y-4">
-            <div className="text-gray-600">正在加载...</div>
-            <div className="w-8 h-8 border-4 border-gray-300 border-t-gray-900 rounded-full animate-spin mx-auto"></div>
+            <div className="text-ghost-text-secondary">Loading...</div>
+            <div className="w-8 h-8 border-4 border-ghost-purple-primary/30 border-t-ghost-purple-primary rounded-full animate-spin mx-auto"></div>
           </div>
         </div>
       </>
@@ -347,26 +364,26 @@ export default function CheckoutPage() {
   }
 
   // If Clerk is configured and user is not authenticated, show loading (redirect will happen in useEffect)
-  // 使用 isSignedIn 而不是 user，因为 user 可能还未完全加载
-  if (isClerkConfigured && isLoaded && !isSignedIn) {
+  // Use isSignedIn instead of user, because user may not be fully loaded yet
+  if (isClerkConfiguredValue && isLoaded && !isSignedIn) {
     return (
       <>
         <Navigation />
-        <div className="min-h-screen flex items-center justify-center bg-white pt-24">
+        <div className="min-h-screen flex items-center justify-center bg-ghost-bg-page pt-24">
           <div className="text-center space-y-4">
-            <div className="text-gray-600">正在跳转到登录页面...</div>
-            <div className="w-8 h-8 border-4 border-gray-300 border-t-gray-900 rounded-full animate-spin mx-auto"></div>
+            <div className="text-ghost-text-secondary">Redirecting to sign in page...</div>
+            <div className="w-8 h-8 border-4 border-ghost-purple-primary/30 border-t-ghost-purple-primary rounded-full animate-spin mx-auto"></div>
           </div>
         </div>
       </>
     )
   }
 
-  const finalPrice = earlyBirdPrice - discountAmount
+  const finalPrice = currentPrice - discountAmount
   const finalPriceDisplay = (finalPrice / 100).toFixed(2)
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-ghost-bg-page">
       <Navigation />
       <div className="page-content pb-20 px-4 sm:px-4 md:px-6 lg:px-8 safe-area-bottom">
         <div className="max-w-6xl mx-auto w-full">
@@ -376,15 +393,15 @@ export default function CheckoutPage() {
             transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
             className="mb-12 text-center"
           >
-            <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-gray-900">
+            <h1 className="text-4xl sm:text-5xl font-display font-bold mb-4 text-ghost-text-primary">
               Checkout
             </h1>
-            <p className="text-lg text-gray-700 max-w-2xl mx-auto">
+            <p className="text-lg font-body text-ghost-text-secondary max-w-2xl mx-auto">
               Please provide your shipping information to complete your order.
             </p>
           </motion.div>
 
-          {/* 库存状态 */}
+          {/* Stock Status */}
           {stock !== null && (
             <div className="mb-6">
               <StockStatus productId="maclock-default" />
@@ -397,24 +414,24 @@ export default function CheckoutPage() {
               <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 w-full">
                 {error && <FormError error={error} />}
 
-                {/* 保存的地址选择 */}
+                {/* Saved Address Selection */}
                 {isSignedIn && savedAddresses.length > 0 && (
-                  <div className="glass rounded-2xl p-4 sm:p-6 lg:p-8 w-full">
-                    <h3 className="text-lg font-semibold mb-4 text-gray-900">
+                  <div className="bg-ghost-bg-card border border-ghost-purple-primary/20 rounded-2xl p-4 sm:p-6 lg:p-8 w-full">
+                    <h3 className="text-lg font-semibold mb-4 text-ghost-text-primary">
                       Use Saved Address
                     </h3>
                     <SavedAddresses
                       onSelect={handleSelectAddress}
                       showAddButton={false}
                     />
-                    <div className="mt-4 pt-4 border-t border-gray-200">
+                    <div className="mt-4 pt-4 border-t border-ghost-purple-primary/20">
                       <button
                         type="button"
                         onClick={() => {
                           setUseSavedAddress(false)
                           setSelectedAddressId(null)
                         }}
-                        className="text-sm text-gray-600 hover:text-gray-900"
+                        className="text-sm text-ghost-text-secondary hover:text-ghost-text-primary"
                       >
                         Or enter a new address →
                       </button>
@@ -423,14 +440,14 @@ export default function CheckoutPage() {
                 )}
 
                 {(!useSavedAddress || savedAddresses.length === 0) && (
-                  <div className="glass rounded-2xl p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6">
-                    <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-gray-900">
+                  <div className="bg-ghost-bg-card border border-ghost-purple-primary/20 rounded-2xl p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6">
+                    <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-ghost-text-primary">
                       Shipping Information
                     </h2>
 
                     <div>
-                      <label htmlFor="name" className="block text-sm font-semibold mb-2.5 text-gray-900">
-                        Full Name <span className="text-red-500">*</span>
+                      <label htmlFor="name" className="block text-sm font-semibold mb-2.5 text-ghost-text-primary">
+                        Full Name <span className="text-red-400">*</span>
                       </label>
                       <input
                         type="text"
@@ -441,22 +458,22 @@ export default function CheckoutPage() {
                         onBlur={() => validateField('name', formData.name)}
                         required
                         autoComplete="name"
-                        className={`w-full px-4 py-3.5 sm:py-3 rounded-xl border bg-white text-gray-900 placeholder-gray-400 text-base focus:outline-none focus:ring-2 transition-all duration-200 ease-apple-standard min-h-[48px] touch-manipulation ${
+                        className={`w-full px-4 py-3.5 sm:py-3 rounded-xl border bg-ghost-bg-section text-ghost-text-primary placeholder-ghost-text-muted text-base focus:outline-none focus:ring-2 transition-all duration-200 ease-apple-standard min-h-[48px] touch-manipulation ${
                           fieldErrors.name
                             ? 'border-red-400 focus:ring-red-500/30 focus:border-red-500'
-                            : 'border-gray-300 focus:ring-gray-900/20 focus:border-gray-900/40'
+                            : 'border-ghost-purple-primary/30 focus:ring-ghost-purple-primary/30 focus:border-ghost-purple-primary/50'
                         }`}
                         placeholder="John Doe"
                       />
                       {fieldErrors.name && (
-                        <p className="mt-1.5 text-sm text-red-600 font-medium">{fieldErrors.name}</p>
+                        <p className="mt-1.5 text-sm text-red-400 font-medium">{fieldErrors.name}</p>
                       )}
                     </div>
 
                     <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
                       <div>
-                        <label htmlFor="phone" className="block text-sm font-semibold mb-2.5 text-gray-900">
-                          Phone Number <span className="text-red-500">*</span>
+                        <label htmlFor="phone" className="block text-sm font-semibold mb-2.5 text-ghost-text-primary">
+                          Phone Number <span className="text-red-400">*</span>
                         </label>
                         <input
                           type="tel"
@@ -468,21 +485,21 @@ export default function CheckoutPage() {
                           required
                           autoComplete="tel"
                           inputMode="tel"
-                          className={`w-full px-4 py-3.5 sm:py-3 rounded-xl border bg-white text-gray-900 placeholder-gray-400 text-base focus:outline-none focus:ring-2 transition-all duration-200 ease-apple-standard min-h-[48px] touch-manipulation ${
+                          className={`w-full px-4 py-3.5 sm:py-3 rounded-xl border bg-ghost-bg-section text-ghost-text-primary placeholder-ghost-text-muted text-base focus:outline-none focus:ring-2 transition-all duration-200 ease-apple-standard min-h-[48px] touch-manipulation ${
                             fieldErrors.phone
                               ? 'border-red-400 focus:ring-red-500/30 focus:border-red-500'
-                              : 'border-gray-300 focus:ring-gray-900/20 focus:border-gray-900/40'
+                              : 'border-ghost-purple-primary/30 focus:ring-ghost-purple-primary/30 focus:border-ghost-purple-primary/50'
                           }`}
                           placeholder="+1 (555) 123-4567"
                         />
                         {fieldErrors.phone && (
-                          <p className="mt-1.5 text-sm text-red-600 font-medium">{fieldErrors.phone}</p>
+                          <p className="mt-1.5 text-sm text-red-400 font-medium">{fieldErrors.phone}</p>
                         )}
                       </div>
 
                       <div>
-                        <label htmlFor="email" className="block text-sm font-semibold mb-2.5 text-gray-900">
-                          Email Address <span className="text-red-500">*</span>
+                        <label htmlFor="email" className="block text-sm font-semibold mb-2.5 text-ghost-text-primary">
+                          Email Address <span className="text-red-400">*</span>
                         </label>
                         <input
                           type="email"
@@ -494,22 +511,22 @@ export default function CheckoutPage() {
                           required
                           autoComplete="email"
                           inputMode="email"
-                          className={`w-full px-4 py-3.5 sm:py-3 rounded-xl border bg-white text-gray-900 placeholder-gray-400 text-base focus:outline-none focus:ring-2 transition-all duration-200 ease-apple-standard min-h-[48px] touch-manipulation ${
+                          className={`w-full px-4 py-3.5 sm:py-3 rounded-xl border bg-ghost-bg-section text-ghost-text-primary placeholder-ghost-text-muted text-base focus:outline-none focus:ring-2 transition-all duration-200 ease-apple-standard min-h-[48px] touch-manipulation ${
                             fieldErrors.email
                               ? 'border-red-400 focus:ring-red-500/30 focus:border-red-500'
-                              : 'border-gray-300 focus:ring-gray-900/20 focus:border-gray-900/40'
+                              : 'border-ghost-purple-primary/30 focus:ring-ghost-purple-primary/30 focus:border-ghost-purple-primary/50'
                           }`}
                           placeholder="john@example.com"
                         />
                         {fieldErrors.email && (
-                          <p className="mt-1.5 text-sm text-red-600 font-medium">{fieldErrors.email}</p>
+                          <p className="mt-1.5 text-sm text-red-400 font-medium">{fieldErrors.email}</p>
                         )}
                       </div>
                     </div>
 
                     <div>
-                      <label htmlFor="country" className="block text-sm font-semibold mb-2.5 text-gray-900">
-                        Country <span className="text-red-500">*</span>
+                      <label htmlFor="country" className="block text-sm font-semibold mb-2.5 text-ghost-text-primary">
+                        Country <span className="text-red-400">*</span>
                       </label>
                       <select
                         id="country"
@@ -518,7 +535,7 @@ export default function CheckoutPage() {
                         onChange={handleInputChange}
                         required
                         autoComplete="country"
-                        className="w-full px-4 py-3.5 sm:py-3 rounded-xl border border-gray-300 bg-white text-gray-900 text-base focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/40 transition-all duration-200 ease-apple-standard min-h-[48px] touch-manipulation appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22currentColor%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpolyline points=%226 9 12 15 18 9%22%3E%3C/polyline%3E%3C/svg%3E')] bg-no-repeat bg-right-4 bg-[length:20px] pr-10"
+                        className="w-full px-4 py-3.5 sm:py-3 rounded-xl border border-ghost-purple-primary/30 bg-ghost-bg-section text-ghost-text-primary text-base focus:outline-none focus:ring-2 focus:ring-ghost-purple-primary/30 focus:border-ghost-purple-primary/50 transition-all duration-200 ease-apple-standard min-h-[48px] touch-manipulation appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23F9FAFB%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpolyline points=%226 9 12 15 18 9%22%3E%3C/polyline%3E%3C/svg%3E')] bg-no-repeat bg-right-4 bg-[length:20px] pr-10"
                       >
                         <option value="US">United States</option>
                         <option value="CA">Canada</option>
@@ -532,8 +549,8 @@ export default function CheckoutPage() {
                     </div>
 
                     <div>
-                      <label htmlFor="address" className="block text-sm font-semibold mb-2.5 text-gray-900">
-                        Street Address <span className="text-red-500">*</span>
+                      <label htmlFor="address" className="block text-sm font-semibold mb-2.5 text-ghost-text-primary">
+                        Street Address <span className="text-red-400">*</span>
                       </label>
                       <textarea
                         id="address"
@@ -544,22 +561,22 @@ export default function CheckoutPage() {
                         required
                         autoComplete="street-address"
                         rows={3}
-                        className={`w-full px-4 py-3.5 sm:py-3 rounded-xl border bg-white text-gray-900 placeholder-gray-400 text-base focus:outline-none focus:ring-2 transition-all duration-200 ease-apple-standard resize-none min-h-[48px] touch-manipulation ${
+                        className={`w-full px-4 py-3.5 sm:py-3 rounded-xl border bg-ghost-bg-section text-ghost-text-primary placeholder-ghost-text-muted text-base focus:outline-none focus:ring-2 transition-all duration-200 ease-apple-standard resize-none min-h-[48px] touch-manipulation ${
                           fieldErrors.address
                             ? 'border-red-400 focus:ring-red-500/30 focus:border-red-500'
-                            : 'border-gray-300 focus:ring-gray-900/20 focus:border-gray-900/40'
+                            : 'border-ghost-purple-primary/30 focus:ring-ghost-purple-primary/30 focus:border-ghost-purple-primary/50'
                         }`}
                         placeholder="123 Main Street, Apt 4B"
                       />
                       {fieldErrors.address && (
-                        <p className="mt-1.5 text-sm text-red-600 font-medium">{fieldErrors.address}</p>
+                        <p className="mt-1.5 text-sm text-red-400 font-medium">{fieldErrors.address}</p>
                       )}
                     </div>
 
                     <div className="grid sm:grid-cols-3 gap-4 sm:gap-5">
                       <div>
-                        <label htmlFor="state" className="block text-sm font-semibold mb-2.5 text-gray-900">
-                          State / Province <span className="text-red-500">*</span>
+                        <label htmlFor="state" className="block text-sm font-semibold mb-2.5 text-ghost-text-primary">
+                          State / Province <span className="text-red-400">*</span>
                         </label>
                         <input
                           type="text"
@@ -569,14 +586,14 @@ export default function CheckoutPage() {
                           onChange={handleInputChange}
                           required
                           autoComplete="address-level1"
-                          className="w-full px-4 py-3.5 sm:py-3 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 text-base focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/40 transition-all duration-200 ease-apple-standard min-h-[48px] touch-manipulation"
+                          className="w-full px-4 py-3.5 sm:py-3 rounded-xl border border-ghost-purple-primary/30 bg-ghost-bg-section text-ghost-text-primary placeholder-ghost-text-muted text-base focus:outline-none focus:ring-2 focus:ring-ghost-purple-primary/30 focus:border-ghost-purple-primary/50 transition-all duration-200 ease-apple-standard min-h-[48px] touch-manipulation"
                           placeholder="CA"
                         />
                       </div>
 
                       <div>
-                        <label htmlFor="city" className="block text-sm font-semibold mb-2.5 text-gray-900">
-                          City <span className="text-red-500">*</span>
+                        <label htmlFor="city" className="block text-sm font-semibold mb-2.5 text-ghost-text-primary">
+                          City <span className="text-red-400">*</span>
                         </label>
                         <input
                           type="text"
@@ -586,14 +603,14 @@ export default function CheckoutPage() {
                           onChange={handleInputChange}
                           required
                           autoComplete="address-level2"
-                          className="w-full px-4 py-3.5 sm:py-3 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 text-base focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/40 transition-all duration-200 ease-apple-standard min-h-[48px] touch-manipulation"
+                          className="w-full px-4 py-3.5 sm:py-3 rounded-xl border border-ghost-purple-primary/30 bg-ghost-bg-section text-ghost-text-primary placeholder-ghost-text-muted text-base focus:outline-none focus:ring-2 focus:ring-ghost-purple-primary/30 focus:border-ghost-purple-primary/50 transition-all duration-200 ease-apple-standard min-h-[48px] touch-manipulation"
                           placeholder="San Francisco"
                         />
                       </div>
 
                       <div>
-                        <label htmlFor="zip" className="block text-sm font-semibold mb-2.5 text-gray-900">
-                          Postal Code <span className="text-red-500">*</span>
+                        <label htmlFor="zip" className="block text-sm font-semibold mb-2.5 text-ghost-text-primary">
+                          Postal Code <span className="text-red-400">*</span>
                         </label>
                         <input
                           type="text"
@@ -601,24 +618,32 @@ export default function CheckoutPage() {
                           name="zip"
                           value={formData.zip}
                           onChange={handleInputChange}
+                          onBlur={() => validateField('zip', formData.zip)}
                           required
                           autoComplete="postal-code"
                           inputMode="numeric"
-                          className="w-full px-4 py-3.5 sm:py-3 rounded-xl border border-gray-300 bg-white text-gray-900 placeholder-gray-400 text-base focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-900/40 transition-all duration-200 ease-apple-standard min-h-[48px] touch-manipulation"
+                          className={`w-full px-4 py-3.5 sm:py-3 rounded-xl border bg-ghost-bg-section text-ghost-text-primary placeholder-ghost-text-muted text-base focus:outline-none focus:ring-2 transition-all duration-200 ease-apple-standard min-h-[48px] touch-manipulation ${
+                            fieldErrors.zip
+                              ? 'border-red-400 focus:ring-red-500/30 focus:border-red-500'
+                              : 'border-ghost-purple-primary/30 focus:ring-ghost-purple-primary/30 focus:border-ghost-purple-primary/50'
+                          }`}
                           placeholder="94102"
                         />
+                        {fieldErrors.zip && (
+                          <p className="mt-1.5 text-sm text-red-400 font-medium">{fieldErrors.zip}</p>
+                        )}
                       </div>
                     </div>
 
-                    {/* 保存地址选项 */}
+                    {/* Save Address Option */}
                     {isSignedIn && (
-                      <div className="flex items-center pt-4 border-t border-gray-200">
+                      <div className="flex items-center pt-4 border-t border-ghost-purple-primary/20">
                         <input
                           type="checkbox"
                           id="saveAddress"
-                          className="mr-2"
+                          className="mr-2 accent-ghost-purple-primary"
                         />
-                        <label htmlFor="saveAddress" className="text-sm text-gray-700">
+                        <label htmlFor="saveAddress" className="text-sm text-ghost-text-secondary">
                           Save this address for future orders
                         </label>
                       </div>
@@ -626,9 +651,9 @@ export default function CheckoutPage() {
                   </div>
                 )}
 
-                {/* 优惠券输入 */}
-                <div className="glass rounded-2xl p-4 sm:p-6 lg:p-8 w-full">
-                  <h3 className="text-lg font-semibold mb-4 text-gray-900">
+                {/* Coupon Input */}
+                <div className="bg-ghost-bg-card border border-ghost-purple-primary/20 rounded-2xl p-4 sm:p-6 lg:p-8 w-full">
+                  <h3 className="text-lg font-semibold mb-4 text-ghost-text-primary">
                     Have a Coupon?
                   </h3>
                   <CouponInput
@@ -643,14 +668,14 @@ export default function CheckoutPage() {
                   <button
                     type="button"
                     onClick={() => router.back()}
-                    className="flex-1 px-6 py-3.5 sm:py-3 rounded-full border border-gray-300 bg-white text-gray-900 font-semibold active:bg-gray-50 transition-all duration-150 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/40 focus-visible:ring-offset-2 min-h-[48px] touch-manipulation"
+                    className="flex-1 px-6 py-3.5 sm:py-3 rounded-full border border-ghost-purple-primary/30 bg-ghost-bg-card text-ghost-text-primary font-semibold hover:bg-ghost-bg-section active:bg-ghost-bg-section transition-all duration-150 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ghost-purple-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-ghost-bg-page min-h-[48px] touch-manipulation"
                   >
                     Back
                   </button>
                   <button
                     type="submit"
                     disabled={loading || (stock !== null && stock <= 0)}
-                    className="flex-1 px-6 py-3.5 sm:py-3 rounded-full bg-gray-900 text-white font-semibold active:bg-gray-950 shadow-deep transition-all duration-150 ease-apple-standard disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900/60 focus-visible:ring-offset-2 min-h-[48px] touch-manipulation"
+                    className="flex-1 px-6 py-3.5 sm:py-3 rounded-full bg-ghost-purple-primary text-white font-semibold hover:bg-ghost-purple-accent active:bg-ghost-purple-accent shadow-lg transition-all duration-150 ease-apple-standard disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ghost-purple-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-ghost-bg-page min-h-[48px] touch-manipulation"
                   >
                     {loading ? 'Processing...' : stock !== null && stock <= 0 ? 'Out of Stock' : 'Continue to Payment'}
                   </button>
@@ -660,54 +685,54 @@ export default function CheckoutPage() {
 
             {/* Order Summary */}
             <div className="lg:col-span-1 w-full order-1 lg:order-2">
-              <div className="glass rounded-2xl p-4 sm:p-6 lg:p-8 sticky top-24 w-full">
-                <h2 className="text-xl font-semibold mb-6 text-gray-900">
+              <div className="bg-ghost-bg-card border border-ghost-purple-primary/20 rounded-2xl p-4 sm:p-6 lg:p-8 sticky top-24 w-full">
+                <h2 className="text-xl font-semibold mb-6 text-ghost-text-primary">
                   Order Summary
                 </h2>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-600">Product</span>
-                    <span className="font-medium text-gray-900">Hello1984</span>
+                    <span className="text-ghost-text-secondary">Product</span>
+                    <span className="font-medium text-ghost-text-primary">Gastly Humidifier 2.1</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-600">Quantity</span>
-                    <span className="font-medium text-gray-900">1</span>
+                    <span className="text-ghost-text-secondary">Quantity</span>
+                    <span className="font-medium text-ghost-text-primary">1</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-gray-600">Subtotal</span>
+                    <span className="text-ghost-text-secondary">Subtotal</span>
                     <div className="flex items-baseline gap-2">
-                      <span className="font-medium text-gray-900">
-                        ${(earlyBirdPrice / 100).toFixed(2)}
+                      <span className="font-medium text-ghost-text-primary">
+                        ${(currentPrice / 100).toFixed(2)}
                       </span>
-                      <span className="text-xs text-gray-400 line-through">
+                      <span className="text-xs text-ghost-text-muted line-through">
                         ${(originalPrice / 100).toFixed(2)}
                       </span>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 text-xs">
-                    <span className="inline-flex items-center px-2 py-0.5 bg-orange-100 text-orange-800 rounded-full font-semibold">
+                    <span className="inline-flex items-center px-2 py-0.5 bg-ghost-purple-primary/20 text-ghost-purple-accent rounded-full font-semibold">
                       First 100 Units Special
                     </span>
-                    <span className="text-gray-600">
-                      Save ${((originalPrice - earlyBirdPrice) / 100).toFixed(2)}
+                    <span className="text-ghost-text-secondary">
+                      Save ${((originalPrice - currentPrice) / 100).toFixed(2)}
                     </span>
                   </div>
                   {discountAmount > 0 && (
-                    <div className="flex justify-between items-center text-sm text-green-600">
+                    <div className="flex justify-between items-center text-sm text-green-400">
                       <span>Discount ({couponCode})</span>
                       <span className="font-medium">
                         -${(discountAmount / 100).toFixed(2)}
                       </span>
                     </div>
                   )}
-                  <div className="border-t border-black/10 pt-4 mt-4">
+                  <div className="border-t border-ghost-purple-primary/20 pt-4 mt-4">
                     <div className="flex justify-between items-baseline mb-2">
-                      <span className="text-lg font-semibold text-gray-900">Total</span>
-                      <span className="text-lg font-semibold text-gray-900">
+                      <span className="text-lg font-semibold text-ghost-text-primary">Total</span>
+                      <span className="text-lg font-semibold text-ghost-text-primary">
                         ${finalPriceDisplay}
                       </span>
                     </div>
-                    <p className="text-xs text-gray-500 mt-2">
+                    <p className="text-xs text-ghost-text-muted mt-2">
                       Payment will be completed on the next step
                     </p>
                   </div>

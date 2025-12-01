@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
     const senderInfo = {
       name: process.env.FOURPX_SENDER_NAME || 'Hello1984',
       phone: process.env.FOURPX_SENDER_PHONE || '13800138000',
-      email: process.env.FOURPX_SENDER_EMAIL || 'support@hello1984.com',
+      email: process.env.FOURPX_SENDER_EMAIL || 'mikeshyu@proton.me',
       country: process.env.FOURPX_SENDER_COUNTRY || 'CN',
       state: process.env.FOURPX_SENDER_STATE || 'Guangdong',
       city: process.env.FOURPX_SENDER_CITY || 'Shenzhen',

@@ -20,10 +20,22 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   static getDerivedStateFromError(error: Error): State {
+    // Only catch errors that are not React Context errors
+    // Context errors usually indicate a setup issue, not a component error
+    if (error.message?.includes('useContext') || error.message?.includes('Context')) {
+      console.error('React Context error detected, this may be a setup issue:', error)
+      // Don't catch context errors, let them propagate
+      throw error
+    }
     return { hasError: true, error }
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    // Don't catch React Context errors
+    if (error.message?.includes('useContext') || error.message?.includes('Context')) {
+      throw error
+    }
+    
     console.error('ErrorBoundary caught an error:', error, errorInfo)
     if (this.props.onError) {
       this.props.onError(error, errorInfo)
@@ -31,6 +43,14 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   render() {
+    // If this is a context error, don't render fallback
+    if (this.state.error && (
+      this.state.error.message?.includes('useContext') || 
+      this.state.error.message?.includes('Context')
+    )) {
+      throw this.state.error
+    }
+
     if (this.state.hasError) {
       if (this.props.fallback) {
         return this.props.fallback

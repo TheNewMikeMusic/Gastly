@@ -3,24 +3,24 @@
 @tailwind utilities;
 
 :root {
-  /* Apple standard colors - precise values */
-  --background: #fbfbfd;
-  --foreground: #1d1d1f;
-  --text-primary: #1d1d1f;
-  --text-secondary: #424245;
-  --text-tertiary: #6e6e73;
-  --text-muted: #86868b;
-  --text-soft: #a1a1a6;
-  --text-disabled: #d2d2d7;
-  --surface-hero: #04050f;
-  --surface-hero-secondary: #111432;
-  --surface-light: rgba(255, 255, 255, 0.9);
-  --surface-glass-border: rgba(0, 0, 0, 0.08);
+  /* Gastly dark ghost theme colors */
+  --background: #05010A;
+  --foreground: #F9FAFB;
+  --text-primary: #F9FAFB;
+  --text-secondary: #D1D5DB;
+  --text-tertiary: #9CA3AF;
+  --text-muted: #9CA3AF;
+  --text-soft: #D1D5DB;
+  --text-disabled: #6B7280;
+  --surface-hero: #05010A;
+  --surface-hero-secondary: #0B0215;
+  --surface-light: rgba(11, 2, 21, 0.9);
+  --surface-glass-border: rgba(255, 255, 255, 0.1);
   --surface-glass-border-dark: rgba(255, 255, 255, 0.15);
-  --surface-glow-purple: #a855f7;
-  --surface-glow-cyan: #38bdf8;
-  --accent-blue: #007aff;
-  --accent-blue-hover: #0051d5;
+  --surface-glow-purple: #A855F7;
+  --surface-glow-cyan: #8B5CF6;
+  --accent-blue: #8B5CF6;
+  --accent-blue-hover: #7C3AED;
   /* Apple standard shadows - refined */
   --shadow-shallow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.1);
   --shadow-medium: 0 2px 8px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -71,7 +71,7 @@ html {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', system-ui, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -79,6 +79,7 @@ body {
   font-kerning: normal;
   font-weight: 400;
   letter-spacing: -0.011em;
+  background-color: #05010A;
 }
 
 /* Apple-style typography utilities - unified system */
@@ -374,11 +375,11 @@ button:active, a:active {
 }
 
 .glass-card {
-  background: linear-gradient(165deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 255, 255, 0.85) 60%, rgba(248, 248, 255, 0.78) 100%);
+  background: linear-gradient(165deg, rgba(11, 2, 21, 0.95) 0%, rgba(15, 3, 25, 0.85) 60%, rgba(5, 1, 10, 0.9) 100%);
   backdrop-filter: blur(30px) saturate(190%);
   -webkit-backdrop-filter: blur(30px) saturate(190%);
-  border: 1px solid var(--surface-glass-border);
-  box-shadow: var(--shadow-medium);
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2);
   isolation: isolate;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -387,7 +388,7 @@ button:active, a:active {
   content: '';
   position: absolute;
   inset: 1px;
-  background: radial-gradient(circle at 12% 12%, rgba(255, 255, 255, 0.7), transparent 45%);
+  background: radial-gradient(circle at 12% 12%, rgba(124, 58, 237, 0.3), transparent 45%);
   mix-blend-mode: screen;
   z-index: -1;
   pointer-events: none;
@@ -518,13 +519,13 @@ button:active, a:active {
   z-index: 1;
 }
 
-/* Hero background system - soft grey with rainbow accent */
+/* Hero background system - dark ghost theme with purple glow */
 .hero-bg-dark {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 35% -20%, rgba(255, 255, 255, 0.9), transparent 60%),
-    radial-gradient(circle at 85% 20%, rgba(255, 255, 255, 0.7), transparent 65%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(247, 247, 249, 0.4));
+  background: radial-gradient(circle at 35% -20%, rgba(124, 58, 237, 0.2), transparent 60%),
+    radial-gradient(circle at 85% 20%, rgba(139, 92, 246, 0.15), transparent 65%),
+    linear-gradient(180deg, #05010A 0%, #0B0215 50%, #0F0319 100%);
 }
 
 .hero-bg-dark::before {
@@ -532,10 +533,10 @@ button:active, a:active {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(transparent 92%, rgba(0, 0, 0, 0.04) 100%),
-    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.02) 0px, rgba(0, 0, 0, 0.02) 1px, transparent 1px, transparent 160px);
+    linear-gradient(transparent 92%, rgba(124, 58, 237, 0.1) 100%),
+    repeating-linear-gradient(90deg, rgba(124, 58, 237, 0.05) 0px, rgba(124, 58, 237, 0.05) 1px, transparent 1px, transparent 160px);
   background-size: 100% 160px, 100% 100%;
-  opacity: 0.25;
+  opacity: 0.3;
   pointer-events: none;
 }
 
@@ -545,8 +546,8 @@ button:active, a:active {
   inset: auto auto 12% -10%;
   width: 140%;
   height: 60px;
-  background: linear-gradient(90deg, #f66a5b, #f5c350, #66d672, #5ac1ff, #c084fc);
-  opacity: 0.25;
+  background: linear-gradient(90deg, #7C3AED, #8B5CF6, #A855F7, #7C3AED);
+  opacity: 0.3;
   filter: blur(20px);
   transform: rotate(-3deg);
   pointer-events: none;
@@ -559,7 +560,7 @@ button:active, a:active {
   right: 10%;
   width: 220px;
   height: 220px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, transparent 70%);
   pointer-events: none;
   animation: lightPulse 12s ease-in-out infinite;
   filter: blur(60px);
@@ -584,24 +585,24 @@ button:active, a:active {
 }
 
 .hero-panel {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(11, 2, 21, 0.95);
   backdrop-filter: blur(40px) saturate(200%);
   -webkit-backdrop-filter: blur(40px) saturate(200%);
-  border: 1px solid var(--surface-glass-border);
+  border: 1px solid rgba(124, 58, 237, 0.3);
   border-radius: 1.75rem;
   padding: clamp(1.5rem, 4vw, 2.8rem);
   color: var(--foreground);
-  box-shadow: var(--shadow-deep);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3);
   transition: all 0.3s var(--ease-standard);
 }
 
 .hero-panel h1 {
-  color: #1d1d1f;
+  color: #F9FAFB;
   font-weight: 700;
 }
 
 .hero-panel p {
-  color: #1d1d1f;
+  color: #D1D5DB;
 }
 
 .hero-panel::before {
@@ -609,7 +610,7 @@ button:active, a:active {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.25), transparent 55%);
+  background: radial-gradient(circle at 20% 20%, rgba(124, 58, 237, 0.2), transparent 55%);
   pointer-events: none;
 }
 
@@ -638,7 +639,7 @@ button:active, a:active {
 }
 
 .page-stack {
-  background: linear-gradient(180deg, #fbfbfd 0%, #f5f6fa 45%, #ffffff 100%);
+  background: linear-gradient(180deg, #05010A 0%, #0B0215 45%, #0F0319 100%);
 }
 
 .page-stack__glow {
@@ -655,19 +656,19 @@ button:active, a:active {
 .page-stack__glow--one {
   top: 10%;
   left: -5%;
-  background: radial-gradient(circle, rgba(141, 166, 255, 0.6), transparent 60%);
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.4), transparent 60%);
 }
 
 .page-stack__glow--two {
   bottom: 20%;
   right: -5%;
-  background: radial-gradient(circle, rgba(255, 193, 168, 0.6), transparent 60%);
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.4), transparent 60%);
 }
 
 .section-ambient {
   position: relative;
   padding: clamp(1.75rem, 5vw, 4rem) 0;
-  background: #f6f7fb;
+  background: #0B0215;
   z-index: 1;
 }
 
@@ -685,7 +686,7 @@ button:active, a:active {
 }
 
 .section-ambient--footer {
-  background: #f6f7fb;
+  background: #0B0215;
   padding-top: clamp(2rem, 5vw, 3rem);
   padding-bottom: 0;
 }
@@ -779,7 +780,7 @@ button:active, a:active {
 
 .section-spec {
   position: relative;
-  background: linear-gradient(180deg, #f4f5f7 0%, #edeff2 100%);
+  background: linear-gradient(180deg, #0B0215 0%, #0F0319 100%);
   overflow: hidden;
 }
 
@@ -788,9 +789,9 @@ button:active, a:active {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(transparent 95%, rgba(0, 0, 0, 0.03) 100%),
-    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.02) 1px, transparent 1px, transparent 80px);
-  opacity: 0.7;
+    linear-gradient(transparent 95%, rgba(124, 58, 237, 0.1) 100%),
+    repeating-linear-gradient(90deg, rgba(124, 58, 237, 0.05), rgba(124, 58, 237, 0.05) 1px, transparent 1px, transparent 80px);
+  opacity: 0.3;
   pointer-events: none;
 }
 

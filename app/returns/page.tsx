@@ -143,7 +143,7 @@ export default function ReturnsPage() {
                     <h3 className="font-semibold text-gray-900 mb-1">Request Return</h3>
                     <p className="text-gray-600 leading-relaxed">
                       Log into your account and go to &quot;My Orders&quot;. Click &quot;Return&quot; on your Hello1984 order 
-                      or email us at <a href="mailto:support@hello1984.com" className="text-gray-900 underline">support@hello1984.com</a> with your order number.
+                      or email us at <a href="mailto:mikeshyu@proton.me" className="text-gray-900 underline">mikeshyu@proton.me</a> with your order number.
                     </p>
                   </div>
                 </div>

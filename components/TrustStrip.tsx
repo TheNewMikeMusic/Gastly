@@ -7,17 +7,17 @@ import { useRef } from 'react'
 const trustItems = [
   {
     icon: 'price',
-    title: 'First 100 Units $99',
-    description: 'One-time payment. Taxes calculated at checkout—no subscriptions, ever.',
+    title: 'Limited Time Offer',
+    description: 'One-time payment, no subscription fees. Taxes calculated at checkout.',
   },
   {
     icon: 'truck',
-    title: 'Global delivery',
+    title: 'Global Delivery',
     description: 'Tracked shipping to 40+ countries with carbon-neutral carriers.',
   },
   {
     icon: 'shield',
-    title: '12-month warranty',
+    title: '12-Month Warranty',
     description: 'Hardware repairs and replacements handled by our in-house team.',
   },
 ]
@@ -100,18 +100,18 @@ export function TrustStrip() {
           >
             {/* Icon */}
             <div className="mb-4 flex items-center justify-center">
-              <div className="text-[#1d1d1f]">
+              <div className="text-ghost-purple-primary">
                 {iconMap[item.icon]}
               </div>
             </div>
             
             {/* Title */}
-            <h3 className="text-apple-title font-apple-semibold mb-2 text-[#1d1d1f]">
+            <h3 className="text-apple-title font-display mb-2 text-ghost-text-primary">
               {item.title}
             </h3>
             
             {/* Description */}
-            <p className="text-apple-body font-apple-normal text-[#424245]">
+            <p className="text-apple-body font-body text-ghost-text-secondary">
               {item.description}
             </p>
           </motion.div>

@@ -36,10 +36,10 @@ export default function ContactPage() {
                 <div className="flex-1">
                   <h2 className="text-xl font-semibold mb-2 text-gray-900">Email</h2>
                   <a
-                    href="mailto:support@hello1984.com"
+                    href="mailto:mikeshyu@proton.me"
                     className="text-gray-700 hover:text-gray-900 transition-colors text-lg"
                   >
-                    support@hello1984.com
+                    mikeshyu@proton.me
                   </a>
                 </div>
               </div>

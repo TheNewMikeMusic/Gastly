@@ -151,7 +151,7 @@ export default function WarrantyPage() {
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">Contact Support</h3>
                     <p className="text-gray-600 leading-relaxed">
-                      Email us at <a href="mailto:support@hello1984.com" className="text-gray-900 underline">support@hello1984.com</a> with your order number and a description of the issue.
+                      Email us at <a href="mailto:mikeshyu@proton.me" className="text-gray-900 underline">mikeshyu@proton.me</a> with your order number and a description of the issue.
                     </p>
                   </div>
                 </div>

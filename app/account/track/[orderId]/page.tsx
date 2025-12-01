@@ -10,6 +10,16 @@ import { notFound, redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import { getTrackingSnapshotForOrder } from '@/lib/tracking'
 
+type OrderWithShipping = Awaited<ReturnType<typeof prisma.order.findFirst>> & {
+  shippingName?: string | null
+  shippingAddress?: string | null
+  shippingCity?: string | null
+  shippingState?: string | null
+  shippingZip?: string | null
+  shippingCountry?: string | null
+  shippingPhone?: string | null
+}
+
 interface TrackingPageProps {
   params: { orderId: string }
   searchParams: { refresh?: string }
@@ -32,6 +42,8 @@ export default async function AccountTrackingPage({ params, searchParams }: Trac
   if (!order) {
     notFound()
   }
+
+  const orderWithShipping = order as OrderWithShipping
 
   const tracking = await getTrackingSnapshotForOrder(order, {
     force: searchParams?.refresh === '1',
@@ -150,33 +162,33 @@ export default async function AccountTrackingPage({ params, searchParams }: Trac
           </div>
 
           {/* 收货地址信息 */}
-          {(order.shippingName ||
-            order.shippingAddress ||
-            order.shippingCity ||
-            order.shippingZip) && (
+          {(orderWithShipping.shippingName ||
+            orderWithShipping.shippingAddress ||
+            orderWithShipping.shippingCity ||
+            orderWithShipping.shippingZip) && (
             <div className="glass rounded-2xl p-6 sm:p-8">
               <h2 className="text-xl font-semibold mb-4 text-gray-900">Shipping Address</h2>
               <div className="space-y-2 text-gray-700">
-                {order.shippingName && (
-                  <p className="text-base font-medium text-gray-900">{order.shippingName}</p>
+                {orderWithShipping.shippingName && (
+                  <p className="text-base font-medium text-gray-900">{orderWithShipping.shippingName}</p>
                 )}
-                {order.shippingPhone && (
-                  <p className="text-sm text-gray-600">{order.shippingPhone}</p>
+                {orderWithShipping.shippingPhone && (
+                  <p className="text-sm text-gray-600">{orderWithShipping.shippingPhone}</p>
                 )}
-                {(order.shippingAddress ||
-                  order.shippingCity ||
-                  order.shippingState ||
-                  order.shippingZip) && (
+                {(orderWithShipping.shippingAddress ||
+                  orderWithShipping.shippingCity ||
+                  orderWithShipping.shippingState ||
+                  orderWithShipping.shippingZip) && (
                   <p className="text-sm text-gray-600">
                     {[
-                      order.shippingAddress,
-                      order.shippingCity,
-                      order.shippingState,
-                      order.shippingZip,
+                      orderWithShipping.shippingAddress,
+                      orderWithShipping.shippingCity,
+                      orderWithShipping.shippingState,
+                      orderWithShipping.shippingZip,
                     ]
                       .filter(Boolean)
                       .join(', ')}
-                    {order.shippingCountry && `, ${order.shippingCountry}`}
+                    {orderWithShipping.shippingCountry && `, ${orderWithShipping.shippingCountry}`}
                   </p>
                 )}
               </div>

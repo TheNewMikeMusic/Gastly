@@ -4,6 +4,7 @@ import { TrustStrip } from '@/components/TrustStrip'
 import { ProductSpinVideo } from '@/components/ProductSpinVideo'
 import { NarrativeBlocks } from '@/components/NarrativeBlocks'
 import { FeaturesGrid } from '@/components/FeaturesGrid'
+import { LifestyleScenarios } from '@/components/LifestyleScenarios'
 import { SellerReviews } from '@/components/SellerReviews'
 import { SpecStrip } from '@/components/SpecStrip'
 import { FAQ } from '@/components/FAQ'
@@ -13,7 +14,7 @@ import type { Metadata } from 'next'
 import { siteConfig } from '@/lib/config'
 
 export const metadata: Metadata = {
-  title: 'Hello1984 - Retro Macintosh-style Digital Clock',
+  title: 'Gastly Humidifier 2.1 - Ghost-Type Desktop Humidifier',
   description: siteConfig.description,
   openGraph: {
     title: siteConfig.name,
@@ -22,10 +23,10 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     images: [
       {
-        url: '/maclock_hello_retro_apple_style.webp',
+        url: '/Gastly/Front.png',
         width: 1200,
         height: 630,
-        alt: 'Hello1984 retro hello screen',
+        alt: 'Gastly Humidifier 2.1',
       },
     ],
     locale: 'en_US',
@@ -35,7 +36,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: siteConfig.name,
     description: siteConfig.description,
-    images: ['/maclock_hello_retro_apple_style.webp'],
+    images: ['/Gastly/Front.png'],
   },
 }
 
@@ -50,9 +51,9 @@ export default function HomePage() {
           <Hero />
           <ErrorBoundary
             fallback={
-              <section className="w-full overflow-hidden bg-[#f6f7fb] py-20">
+              <section className="w-full overflow-hidden bg-ghost-bg-section py-20">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                  <p className="text-gray-500">产品旋转组件暂时无法加载</p>
+                  <p className="text-ghost-text-secondary">产品旋转组件暂时不可用</p>
                 </div>
               </section>
             }
@@ -65,7 +66,7 @@ export default function HomePage() {
                 <section className="py-12 sm:py-14 px-4 sm:px-6 lg:px-8">
                   <div className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
                     <div className="glass-card rounded-2xl p-5 sm:p-6 text-center">
-                      <p className="text-sm text-gray-600">信任卡片暂时无法加载</p>
+                      <p className="text-sm text-gray-600">Trust cards temporarily unavailable</p>
                     </div>
                   </div>
                 </section>
@@ -79,6 +80,9 @@ export default function HomePage() {
           </div>
           <div className="section-ambient section-ambient--compact-bottom">
             <FeaturesGrid />
+          </div>
+          <div className="section-ambient">
+            <LifestyleScenarios />
           </div>
           <div className="section-ambient">
             <SellerReviews />

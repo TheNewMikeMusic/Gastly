@@ -15,6 +15,12 @@ import { enrichOrdersWithTracking } from '@/lib/tracking'
 
 type OrderWithShipping = Awaited<ReturnType<typeof prisma.order.findMany>>[0] & {
   shippingName?: string | null
+  shippingAddress?: string | null
+  shippingCity?: string | null
+  shippingState?: string | null
+  shippingZip?: string | null
+  shippingCountry?: string | null
+  shippingPhone?: string | null
 }
 
 type OrderWithTracking = Awaited<ReturnType<typeof enrichOrdersWithTracking>>[number]

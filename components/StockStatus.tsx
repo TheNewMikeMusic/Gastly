@@ -16,11 +16,28 @@ export function StockStatus({ productId = 'maclock-default' }: StockStatusProps)
 
   const checkStock = useCallback(async () => {
     try {
-      const response = await fetch(`/api/inventory/check?productId=${productId}&quantity=1`)
+      // 添加超时控制
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 5000) // 5秒超时
+      
+      const response = await fetch(`/api/inventory/check?productId=${productId}&quantity=1`, {
+        signal: controller.signal,
+      })
+      
+      clearTimeout(timeoutId)
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
       const data = await response.json()
       setStock(data.stock)
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to check stock:', error)
+      // 如果请求失败，设置默认库存值，避免一直显示 "Checking availability"
+      if (error.name !== 'AbortError') {
+        setStock(100) // 默认有库存
+      }
     } finally {
       setLoading(false)
     }

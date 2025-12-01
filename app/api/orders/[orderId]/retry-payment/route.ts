@@ -106,18 +106,24 @@ export async function POST(
       ],
       currency: order.currency || 'usd',
       allow_promotion_codes: true,
-      shipping_address_collection: {
-        allowed_countries: ['US', 'CA', 'GB', 'AU', 'DE', 'FR', 'JP', 'CN'],
-      },
-      tax_id_collection: {
-        enabled: true,
-      },
+      // 不收集配送地址，因为订单中已经包含了地址信息
+      // 地址信息已在订单创建时保存，不需要在 Stripe Checkout 中再次收集
       success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/account`,
       customer_email: order.shippingEmail || undefined,
       metadata: {
         userId: userId,
         orderId: orderId,
+        // 将订单中的地址信息也存储在 metadata 中（作为备份）
+        shippingName: order.shippingName || '',
+        shippingPhone: order.shippingPhone || '',
+        shippingEmail: order.shippingEmail || '',
+        shippingAddress: order.shippingAddress || '',
+        shippingCity: order.shippingCity || '',
+        shippingState: order.shippingState || '',
+        shippingZip: order.shippingZip || '',
+        shippingCountry: order.shippingCountry || '',
+        couponCode: order.couponCode || '',
       },
       // 如果有优惠券，应用到session
       ...(order.couponCode && {

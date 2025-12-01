@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
+import { useGBASound } from '@/lib/hooks/useGBASound'
 
 interface BuyButtonProps {
   className?: string
@@ -12,8 +13,10 @@ interface BuyButtonProps {
 
 export function BuyButton({ className = '', variant = 'primary', size = 'md', onClick }: BuyButtonProps) {
   const router = useRouter()
+  const { playHoverSound, playClickSound } = useGBASound()
 
   const handleClick = () => {
+    playClickSound()
     if (onClick) {
       onClick()
     }
@@ -36,6 +39,7 @@ export function BuyButton({ className = '', variant = 'primary', size = 'md', on
   return (
     <motion.button
       onClick={handleClick}
+      onMouseEnter={playHoverSound}
       className={`${sizeClasses[size]} ${variantClasses[variant]} font-apple-semibold rounded-full transition-all duration-200 ease-apple-standard focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent touch-manipulation touch-target ${className}`}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.96 }}

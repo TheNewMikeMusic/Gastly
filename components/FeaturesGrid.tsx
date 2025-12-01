@@ -3,58 +3,24 @@
 import { OptimizedImage } from '@/components/OptimizedImage'
 import { SectionBackground } from '@/components/SectionBackground'
 import { useReducedMotion, useIntersectionObserver } from '@/lib/hooks'
+import { useGBASound } from '@/lib/hooks/useGBASound'
 import { motion } from 'framer-motion'
 import { useRef } from 'react'
 
 const features = [
   {
-    title: 'Push to start',
-    prefix: 'Hello1084/retro-mac-clock-push-to-start-original-startup-ritual-floppy-disk.webp',
-    alt: 'Maclock push to start button with floppy disk',
+    title: 'Core Features',
+    prefix: 'Gastly/card4.png',
+    alt: 'Gastly Humidifier 2.1 core features showcase',
     description:
-      'Push to start the original startup ritual.',
+      'Big tank lasts all night. Timer so you don\'t have to remember to turn it off. Actually quiet.',
   },
   {
-    title: 'The smile sequence',
-    prefix: 'Hello1084/retro-mac-clock-main-screen-time-year-smiley-three-modes-vintage.webp',
-    alt: 'Maclock smiling face animation with "hello" glyph on screen',
+    title: 'RGB Mood Lighting Modes',
+    prefix: 'Gastly/card5.png',
+    alt: 'Gastly Humidifier 2.1 RGB mood lighting multiple modes showcase',
     description:
-      'Maclock wakes with the smile and floppy disk dance in under seven seconds, matched frame-for-frame to the original Macintosh hello.',
-  },
-  {
-    title: 'Adjustable brightness',
-    prefix: 'Hello1084/retro-mac-clock-backlight-adjustable-brightness-knob-handheld.webp',
-    alt: 'Maclock backlight adjustable brightness knob handheld',
-    description:
-      'Adjustable brightness knob for comfortable viewing.',
-  },
-  {
-    title: 'Soul completion',
-    prefix: 'Hello1084/retro-mac-clock-soul-completion-plan-classic-icon-stickers-back-to-1984 (2).webp',
-    alt: 'Maclock with classic icon stickers back to 1984',
-    description:
-      'Classic icon stickers to complete the retro look.',
-  },
-  {
-    title: 'Analog brightness dial',
-    prefix: 'Hello1084/retro-mac-clock-four-alarm-modes-knob-morning-dusk-time-order.webp',
-    alt: 'Maclock brightness adjustment graphic with glowing slider',
-    description:
-      'A tactile side dial gives you ten detented steps of glow—late-night dim or daylight bright—without menus or apps.',
-  },
-  {
-    title: 'System disk ceremony',
-    prefix: 'Hello1084/retro-mac-clock-crt-screen-pixel-level-tribute-lcd-classic-design.webp',
-    alt: 'Maclock displaying the retro system disk animation during boot',
-    description:
-      'The disk icon glides in, hands off to the clock, and plays a warm chime that has been remastered for today’s speakers.',
-  },
-  {
-    title: 'Alarm studio',
-    prefix: 'Hello1084/retro-mac-clock-put-1984-design-on-your-desk-classic-hello-1984.webp',
-    alt: 'Maclock showing multiple alarm modes on the display',
-    description:
-      "Set weekday alarms, weekend slow starts, or focus timers with their own tones. Every schedule lives on-device, so Wi-Fi never matters.",
+      'Switch colors with the remote. Purple for focus, green for vibes, warm orange for bedtime. Or just leave it on rainbow.',
   },
 ]
 
@@ -78,11 +44,11 @@ export function FeaturesGrid() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="text-center mb-8 sm:mb-10 lg:mb-12"
         >
-          <h2 className="text-apple-display font-apple-semibold mb-4 sm:mb-6 text-[#1d1d1f]">
-            Feels like a Mac.<br /> Works like a clock.
+          <h2 className="text-apple-display font-display mb-4 sm:mb-6 text-ghost-text-primary">
+            Your desk needs<br />a ghost friend
           </h2>
-          <p className="text-apple-subtitle font-apple-normal text-[#424245] max-w-3xl mx-auto">
-            From the system disk and CRT-style display to backlight, alarms, and stickers, every control turns keeping time into a small 1984 ritual.
+          <p className="text-apple-subtitle font-body text-ghost-text-secondary max-w-3xl mx-auto">
+            Big tank, quiet motor, RGB lights that actually look good. Built for people who work late.
           </p>
         </motion.div>
 
@@ -116,6 +82,8 @@ function FeatureCard({
   isVisible: boolean
   priority?: boolean
 }) {
+  const { playHoverSound } = useGBASound()
+  
   // All cards: full-bleed image with no text
   if (index === 0 || index === 1 || index === 2 || index === 3 || index === 4 || index === 5 || index === 6) {
     return (
@@ -124,12 +92,13 @@ function FeatureCard({
         animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
         whileHover={prefersReducedMotion ? {} : { y: -4, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } }}
-        className="group relative aspect-[3/4] rounded-apple sm:rounded-apple-lg overflow-hidden shadow-medium hover:shadow-deep transition-all duration-500 ease-apple-smooth border border-black/[0.06]"
+        onMouseEnter={playHoverSound}
+        className="group relative aspect-square rounded-apple sm:rounded-apple-lg overflow-hidden shadow-glass-dark hover:shadow-glass-dark-hover transition-all duration-500 ease-apple-smooth border border-ghost-purple-primary/30"
       >
         <OptimizedImage
           prefix={feature.prefix}
           fill
-          fit="cover"
+          fit="contain"
           sizes="(max-width: 768px) 100vw, 50vw"
           alt={feature.alt}
           priority={priority}
@@ -146,9 +115,10 @@ function FeatureCard({
       animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
       whileHover={prefersReducedMotion ? {} : { y: -4, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } }}
+      onMouseEnter={playHoverSound}
       className="glass-card rounded-apple p-6 lg:p-8 overflow-hidden"
     >
-      <div className="relative aspect-[3/4] mb-6 overflow-hidden image-container-text">
+      <div className="relative aspect-square mb-6 overflow-hidden image-container-text">
         <OptimizedImage
           prefix={feature.prefix}
           fill
@@ -158,8 +128,8 @@ function FeatureCard({
           priority={priority}
         />
       </div>
-      <h3 className="text-apple-title font-apple-semibold mb-4 text-gray-900">{feature.title}</h3>
-      <p className="text-apple-body font-apple-normal text-gray-600">{feature.description}</p>
+      <h3 className="text-apple-title font-display mb-4 text-ghost-text-primary">{feature.title}</h3>
+      <p className="text-apple-body font-body text-ghost-text-secondary">{feature.description}</p>
     </motion.div>
   )
 }

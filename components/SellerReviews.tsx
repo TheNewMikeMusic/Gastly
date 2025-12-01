@@ -117,14 +117,14 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
       className={
         isDashboard
           ? 'glass rounded-2xl p-6 sm:p-8'
-          : 'relative rounded-[2rem] sm:rounded-[2.5rem] border border-black/[0.06] bg-white p-6 sm:p-8 lg:p-10 xl:p-12 shadow-[0_4px_20px_rgba(0,0,0,0.08)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] w-full'
+                  : 'relative rounded-[2rem] sm:rounded-[2.5rem] border border-ghost-purple-primary/30 bg-ghost-bg-card p-6 sm:p-8 lg:p-10 xl:p-12 shadow-glass-dark hover:shadow-glass-dark-hover transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] w-full'
       }
     >
       {!isDashboard && (
         <>
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-white rounded-2xl sm:rounded-3xl z-0"
+            className="pointer-events-none absolute inset-0 bg-ghost-bg-card rounded-2xl sm:rounded-3xl z-0"
           />
           <div
             aria-hidden="true"
@@ -153,35 +153,35 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
             <h2
               className={
                 isDashboard
-                  ? 'text-apple-headline-sm font-apple-semibold text-gray-900'
-                  : 'text-apple-display font-apple-semibold text-[#1d1d1f]'
+                  ? 'text-apple-headline-sm font-display text-ghost-text-primary'
+                  : 'text-apple-display font-display text-ghost-text-primary'
               }
             >
-              Loved by collectors worldwide
+              Loved by users worldwide
             </h2>
             <p
               className={
                 isDashboard
                   ? 'text-apple-caption font-apple-normal text-gray-600 mt-3 max-w-2xl'
-                  : 'text-apple-subtitle font-apple-normal text-[#424245] mt-4 sm:mt-6 max-w-3xl'
+                  : 'text-apple-subtitle font-body text-ghost-text-secondary mt-4 sm:mt-6 max-w-3xl'
               }
             >
-              Real customers share how Hello1984 fits into their daily lives. Each review highlights 
-              the thoughtful design, quality craftsmanship, and the personal attention we give every order.
+              Real customers share how Gastly Humidifier 2.1 fits into their daily lives. Each review highlights 
+              thoughtful design, quality craftsmanship, and the personal attention we give every order.
             </p>
           </div>
           <div className={`${isDashboard ? 'sm:text-right' : 'lg:text-right'} mt-6 lg:mt-0`}>
             <div className="inline-flex flex-col items-start lg:items-end gap-2">
-              <p className="text-apple-footnote font-apple-medium text-gray-500 uppercase tracking-wider">Average Rating</p>
+              <p className="text-apple-footnote font-apple-medium text-ghost-text-muted uppercase tracking-wider">Average Rating</p>
               <div className="flex items-baseline gap-3">
-                <div className="text-apple-headline font-apple-semibold text-gray-900">5.0</div>
-                <div className="flex text-amber-500 gap-0.5">
+                <div className="text-apple-headline font-display text-ghost-text-primary">5.0</div>
+                <div className="flex text-ghost-purple-primary gap-0.5">
                   {Array.from({ length: 5 }).map((_, index) => (
                     <StarIcon key={index} className="h-5 w-5 sm:h-6 sm:w-6" />
                   ))}
                 </div>
               </div>
-              <p className="text-xs text-gray-500 mt-1">Based on verified purchases</p>
+              <p className="text-xs text-ghost-text-muted mt-1">Based on verified purchases</p>
             </div>
           </div>
         </motion.div>
@@ -199,7 +199,7 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
               className={
                 isDashboard
                   ? 'glass-card rounded-apple p-5 sm:p-6 space-y-5'
-                  : 'group relative bg-white rounded-apple sm:rounded-apple-lg p-6 sm:p-8 shadow-medium hover:shadow-deep transition-all duration-500 ease-apple-smooth border border-black/[0.06] overflow-hidden space-y-5 flex flex-col'
+                  : 'group relative bg-ghost-bg-card rounded-apple sm:rounded-apple-lg p-6 sm:p-8 shadow-glass-dark hover:shadow-glass-dark-hover transition-all duration-500 ease-apple-smooth border border-ghost-purple-primary/30 overflow-hidden space-y-5 flex flex-col'
               }
             >
               {/* Decorative gradient overlay */}
@@ -207,24 +207,24 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
                 <div 
                   className="absolute top-0 right-0 w-64 h-64 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                   style={{
-                    background: 'radial-gradient(circle, rgba(0, 122, 255, 0.05) 0%, transparent 70%)',
+                    background: 'radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, transparent 70%)',
                   }}
                 />
               )}
               {/* Header with avatar and rating */}
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center text-gray-600 font-semibold text-lg">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-ghost-purple-primary/30 to-ghost-purple-accent/30 flex items-center justify-center text-ghost-text-primary font-semibold text-lg">
                     {review.customer.charAt(0)}
                   </div>
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-3 mb-2">
                     <div className="min-w-0">
-                      <p className="text-apple-body font-apple-semibold text-gray-900 truncate">{review.customer}</p>
-                      <p className="text-apple-footnote font-apple-normal text-gray-500 mt-0.5">{review.date}</p>
+                      <p className="text-apple-body font-apple-semibold text-ghost-text-primary truncate">{review.customer}</p>
+                      <p className="text-apple-footnote font-body text-ghost-text-muted mt-0.5">{review.date}</p>
                     </div>
-                    <div className="flex text-amber-500 shrink-0 gap-0.5">
+                    <div className="flex text-ghost-purple-primary shrink-0 gap-0.5">
                       {Array.from({ length: review.rating }).map((_, starIndex) => (
                         <StarIcon key={starIndex} className="h-4 w-4" />
                       ))}
@@ -234,7 +234,7 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
                     <svg className="w-3 h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
-                    <p className="text-[10px] uppercase tracking-wider text-gray-500 font-medium">
+                    <p className="text-[10px] uppercase tracking-wider text-ghost-text-muted font-medium">
                       {review.scoreLabel}
                     </p>
                   </div>
@@ -243,8 +243,8 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
 
               {/* Review content */}
               <div className="flex-shrink-0">
-                <h3 className="text-apple-title-sm font-apple-semibold text-gray-900 mb-2">{review.headline}</h3>
-                <p className="text-apple-caption font-apple-normal text-gray-600">{review.body}</p>
+                <h3 className="text-apple-title-sm font-display text-ghost-text-primary mb-2">{review.headline}</h3>
+                <p className="text-apple-caption font-body text-ghost-text-secondary">{review.body}</p>
               </div>
 
               {/* Media gallery */}
@@ -261,16 +261,16 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
               )}
 
               {/* Seller response */}
-              <div className="rounded-xl border border-gray-200/50 bg-gray-50/80 p-4 sm:p-5 flex-shrink-0">
+              <div className="rounded-xl border border-ghost-purple-primary/20 bg-ghost-purple-primary/10 p-4 sm:p-5 flex-shrink-0">
                 <div className="flex items-center gap-2 mb-3">
-                  <div className="w-6 h-6 rounded-full bg-gray-900 flex items-center justify-center">
-                    <span className="text-white text-xs font-semibold">A</span>
+                  <div className="w-6 h-6 rounded-full bg-ghost-purple-primary flex items-center justify-center">
+                    <span className="text-white text-xs font-semibold">G</span>
                   </div>
-                  <p className="text-apple-footnote font-apple-semibold uppercase tracking-wider text-gray-600">
-                    Response from Hello1984
+                  <p className="text-apple-footnote font-apple-semibold uppercase tracking-wider text-ghost-text-secondary">
+                    Response from Gastly Lab
                   </p>
                 </div>
-                <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-line">{review.response}</p>
+                <p className="text-sm text-ghost-text-secondary leading-relaxed whitespace-pre-line">{review.response}</p>
               </div>
             </motion.article>
           ))}
@@ -338,21 +338,21 @@ function ReviewImage({ file, alt }: { file: string; alt: string }) {
 
   // 骨架屏组件
   const SkeletonPlaceholder = () => (
-    <div className="absolute inset-0 bg-gradient-to-br from-gray-200 via-gray-100 to-gray-200 animate-pulse">
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" />
+    <div className="absolute inset-0 bg-gradient-to-br from-ghost-purple-primary/20 via-ghost-purple-soft/10 to-ghost-purple-primary/20 animate-pulse">
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-ghost-purple-primary/10 to-transparent animate-shimmer" />
     </div>
   )
 
   if (imageError) {
     return (
-      <div className="relative aspect-square overflow-hidden rounded-xl border border-gray-200/50 bg-gray-100 flex items-center justify-center min-h-[200px]">
-        <span className="text-xs text-gray-400 text-center px-2">图片加载失败</span>
+      <div className="relative aspect-square overflow-hidden rounded-xl border border-ghost-purple-primary/20 bg-ghost-bg-section flex items-center justify-center min-h-[200px]">
+        <span className="text-xs text-ghost-text-muted text-center px-2">图片加载失败</span>
       </div>
     )
   }
 
   return (
-    <div className="relative w-full aspect-square overflow-hidden rounded-xl border border-gray-200/50 bg-gray-50 group cursor-pointer">
+    <div className="relative w-full aspect-square overflow-hidden rounded-xl border border-ghost-purple-primary/20 bg-ghost-bg-section group cursor-pointer">
       {/* 骨架屏占位符 */}
       {isLoading && <SkeletonPlaceholder />}
       

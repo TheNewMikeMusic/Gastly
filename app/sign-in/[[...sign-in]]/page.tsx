@@ -4,6 +4,7 @@ import { SignIn } from '@clerk/nextjs'
 import { Navigation } from '@/components/Navigation'
 import { useSearchParams } from 'next/navigation'
 import { Suspense, useEffect, useState } from 'react'
+import Link from 'next/link'
 
 function SignInContent() {
   const searchParams = useSearchParams()
@@ -18,7 +19,8 @@ function SignInContent() {
   const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
   const isClerkConfigured = publishableKey && 
     publishableKey !== 'pk_test_dummy' && 
-    !publishableKey.includes('你的Clerk')
+    !publishableKey.includes('你的Clerk') &&
+    (publishableKey.startsWith('pk_test_') || publishableKey.startsWith('pk_live_'))
 
   if (!mounted) {
     return (
@@ -60,7 +62,7 @@ function SignInContent() {
     <>
       <Navigation />
       <div className="min-h-screen flex items-center justify-center px-4 pt-24 pb-20 bg-white">
-        <div className="w-full max-w-md" style={{ minHeight: '400px' }}>
+        <div className="w-full max-w-md">
           <SignIn
             appearance={{
               elements: {

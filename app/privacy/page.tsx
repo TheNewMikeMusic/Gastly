@@ -50,7 +50,7 @@ export default function PrivacyPage() {
               <h2 className="text-2xl font-semibold mb-4 text-gray-900">Your Rights</h2>
               <p className="text-gray-700 leading-relaxed">
                 You have the right to access, update, or delete your personal information at any time. 
-                Contact us at <a href="mailto:support@hello1984.com" className="text-gray-900 hover:text-gray-700 underline transition-colors">support@hello1984.com</a> to exercise these rights.
+                Contact us at <a href="mailto:mikeshyu@proton.me" className="text-gray-900 hover:text-gray-700 underline transition-colors">mikeshyu@proton.me</a> to exercise these rights.
               </p>
             </section>
           </div>
