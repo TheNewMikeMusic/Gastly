@@ -3,6 +3,7 @@
 import { useReducedMotion, useIntersectionObserver } from '@/lib/hooks'
 import { motion } from 'framer-motion'
 import { useRef } from 'react'
+import { createEnterAnimation, createTapAnimation, EASE_APPLE } from '@/lib/animations'
 
 const trustItems = [
   {
@@ -84,34 +85,40 @@ export function TrustStrip() {
   return (
     <motion.section
       ref={sectionRef as React.RefObject<HTMLElement>}
-      initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
-      animate={prefersReducedMotion || isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      {...createEnterAnimation('listItem', 0)}
+      initial={prefersReducedMotion ? {} : createEnterAnimation('listItem', 0).initial}
+      animate={prefersReducedMotion || isVisible ? createEnterAnimation('listItem', 0).animate : createEnterAnimation('listItem', 0).initial}
+      transition={prefersReducedMotion ? {} : createEnterAnimation('listItem', 0).transition}
       className="pt-8 sm:pt-12 lg:pt-16 pb-16 sm:pb-20 lg:pb-16 px-4 sm:px-6 lg:px-8"
     >
-      <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-12 lg:gap-16">
+      <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 items-stretch">
         {trustItems.map((item, index) => (
           <motion.div
             key={item.title}
-            initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 20 }}
-            animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
-            className="text-center flex-1 max-w-[280px] sm:max-w-none"
+            {...createEnterAnimation('listItem', index, 'staggered')}
+            initial={prefersReducedMotion || !isVisible ? {} : createEnterAnimation('listItem', index, 'staggered').initial}
+            animate={prefersReducedMotion || !isVisible ? {} : createEnterAnimation('listItem', index, 'staggered').animate}
+            transition={prefersReducedMotion ? {} : createEnterAnimation('listItem', index, 'staggered').transition}
+            whileTap={prefersReducedMotion ? {} : createTapAnimation()}
+            className="text-center glass-neon rounded-2xl p-5 sm:p-6 border border-ghost-purple-primary/30 shadow-glass-dark mobile-card touch-manipulation transition-all duration-300 flex flex-col h-full"
+            style={{
+              transitionTimingFunction: `cubic-bezier(${EASE_APPLE.join(',')})`,
+            }}
           >
             {/* Icon */}
-            <div className="mb-4 flex items-center justify-center">
-              <div className="text-ghost-purple-primary">
+            <div className="mb-4 flex items-center justify-center flex-shrink-0">
+              <div className="text-ghost-purple-primary pulse-glow">
                 {iconMap[item.icon]}
               </div>
             </div>
             
             {/* Title */}
-            <h3 className="text-apple-title font-display mb-2 text-ghost-text-primary">
+            <h3 className="text-apple-title-sm sm:text-apple-title font-display mb-3 text-ghost-text-primary text-glow-purple flex-shrink-0">
               {item.title}
             </h3>
             
             {/* Description */}
-            <p className="text-apple-body font-body text-ghost-text-secondary">
+            <p className="text-apple-body-sm sm:text-apple-body font-body text-ghost-text-secondary leading-relaxed flex-grow">
               {item.description}
             </p>
           </motion.div>

@@ -117,8 +117,9 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
       className={
         isDashboard
           ? 'glass rounded-2xl p-6 sm:p-8'
-                  : 'relative rounded-[2rem] sm:rounded-[2.5rem] border border-ghost-purple-primary/30 bg-ghost-bg-card p-6 sm:p-8 lg:p-10 xl:p-12 shadow-glass-dark hover:shadow-glass-dark-hover transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] w-full'
+                  : 'relative rounded-[2rem] sm:rounded-[2.5rem] border bg-ghost-bg-card p-6 sm:p-8 lg:p-10 xl:p-12 shadow-glass-dark hover:shadow-glass-dark-hover transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] w-full'
       }
+      style={!isDashboard ? { borderColor: 'rgba(124, 58, 237, 0.3)' } : undefined}
     >
       {!isDashboard && (
         <>
@@ -199,8 +200,9 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
               className={
                 isDashboard
                   ? 'glass-card rounded-apple p-5 sm:p-6 space-y-5'
-                  : 'group relative bg-ghost-bg-card rounded-apple sm:rounded-apple-lg p-6 sm:p-8 shadow-glass-dark hover:shadow-glass-dark-hover transition-all duration-500 ease-apple-smooth border border-ghost-purple-primary/30 overflow-hidden space-y-5 flex flex-col'
+                  : 'group relative bg-ghost-bg-card rounded-apple sm:rounded-apple-lg p-6 sm:p-8 shadow-glass-dark hover:shadow-glass-dark-hover transition-all duration-500 ease-apple-smooth border overflow-hidden space-y-5 flex flex-col'
               }
+              style={!isDashboard ? { borderColor: 'rgba(124, 58, 237, 0.3)' } : undefined}
             >
               {/* Decorative gradient overlay */}
               {!isDashboard && (
@@ -293,40 +295,26 @@ export function SellerReviews({ variant = 'marketing' }: SellerReviewsProps) {
 
 function ReviewImage({ file, alt }: { file: string; alt: string }) {
   const [imageError, setImageError] = useState(false)
-  const [imageSrc, setImageSrc] = useState(`/${file}`)
   const [isLoading, setIsLoading] = useState(true)
-  const [retryCount, setRetryCount] = useState(0)
+  const [currentFormat, setCurrentFormat] = useState<'webp' | 'avif'>('webp')
+  const [hasTriedAvif, setHasTriedAvif] = useState(false)
   
-  // 检测是否为PC视图（非移动端）
-  const [isPC, setIsPC] = useState(false)
-  
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setIsPC(window.innerWidth >= 768) // md断点以上为PC
-      
-      const handleResize = () => {
-        setIsPC(window.innerWidth >= 768)
-      }
-      
-      window.addEventListener('resize', handleResize)
-      return () => window.removeEventListener('resize', handleResize)
-    }
-  }, [])
+  // 确保路径以 / 开头，移除已有的扩展名
+  const getImageSrc = (format: 'webp' | 'avif' = currentFormat) => {
+    const baseFile = file.replace(/\.(webp|avif)$/, '')
+    return `/${baseFile}.${format}`
+  }
 
-  const handleError = () => {
-    // 尝试不同的路径格式
-    const alternatives = [
-      `/${file}`,
-      `/${file.replace('.webp', '.avif')}`, // 尝试avif格式
-      `/${file.replace('.webp', '.jpg')}`, // 尝试jpg格式
-    ]
-    
-    if (retryCount < alternatives.length - 1) {
-      const nextIndex = retryCount + 1
-      setImageSrc(alternatives[nextIndex])
-      setRetryCount(nextIndex)
-      setIsLoading(true) // 重试时重置加载状态
+  const handleError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    // 如果当前是 webp 且还没尝试过 avif，尝试 avif
+    if (currentFormat === 'webp' && !hasTriedAvif) {
+      setCurrentFormat('avif')
+      setHasTriedAvif(true)
+      setIsLoading(true)
+      // 重置错误状态，准备尝试新格式
+      setImageError(false)
     } else {
+      // 如果已经尝试过两种格式都失败，显示错误
       setImageError(true)
       setIsLoading(false)
     }
@@ -334,7 +322,15 @@ function ReviewImage({ file, alt }: { file: string; alt: string }) {
 
   const handleLoad = () => {
     setIsLoading(false)
+    setImageError(false)
   }
+
+  // 当格式改变时，重置加载状态
+  useEffect(() => {
+    if (currentFormat === 'avif' && hasTriedAvif) {
+      setIsLoading(true)
+    }
+  }, [currentFormat, hasTriedAvif])
 
   // 骨架屏组件
   const SkeletonPlaceholder = () => (
@@ -345,32 +341,38 @@ function ReviewImage({ file, alt }: { file: string; alt: string }) {
 
   if (imageError) {
     return (
-      <div className="relative aspect-square overflow-hidden rounded-xl border border-ghost-purple-primary/20 bg-ghost-bg-section flex items-center justify-center min-h-[200px]">
+      <div className="relative aspect-square overflow-hidden rounded-xl border bg-ghost-bg-section flex items-center justify-center min-h-[200px]" style={{ borderColor: 'rgba(124, 58, 237, 0.2)' }}>
         <span className="text-xs text-ghost-text-muted text-center px-2">图片加载失败</span>
       </div>
     )
   }
 
   return (
-    <div className="relative w-full aspect-square overflow-hidden rounded-xl border border-ghost-purple-primary/20 bg-ghost-bg-section group cursor-pointer">
+    <div className="relative w-full aspect-square overflow-hidden rounded-xl border bg-ghost-bg-section group cursor-pointer" style={{ borderColor: 'rgba(124, 58, 237, 0.2)' }}>
       {/* 骨架屏占位符 */}
       {isLoading && <SkeletonPlaceholder />}
       
-      {/* 使用普通img标签以支持动态src切换 */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={imageSrc}
-        alt={alt}
-        className={`absolute inset-0 w-full h-full object-cover transition-all duration-300 group-hover:scale-105 ${
-          isLoading ? 'opacity-0' : 'opacity-100'
-        }`}
-        onError={handleError}
-        onLoad={handleLoad}
-        loading={isPC ? 'eager' : 'lazy'}
-        fetchPriority={isPC ? 'high' : 'auto'}
-        decoding={isPC ? 'sync' : 'async'}
-      />
-      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
+      {/* 使用 Next.js Image 组件以获得更好的性能和错误处理 */}
+      {!imageError && (
+        <Image
+          key={`${file}-${currentFormat}`}
+          src={getImageSrc()}
+          alt={alt}
+          fill
+          sizes="(max-width: 768px) 50vw, 33vw"
+          className={`object-cover transition-all duration-300 group-hover:scale-105 ${
+            isLoading ? 'opacity-0' : 'opacity-100'
+          }`}
+          style={{ border: 'none', outline: 'none' }}
+          onError={handleError}
+          onLoad={handleLoad}
+          onLoadingComplete={handleLoad}
+          loading="lazy"
+          quality={85}
+          unoptimized={false}
+        />
+      )}
+      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300 pointer-events-none" />
     </div>
   )
 }

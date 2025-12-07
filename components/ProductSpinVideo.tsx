@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { useReducedMotion } from '@/lib/hooks'
 
 // 图片序列总数
@@ -42,82 +42,142 @@ export function ProductSpinVideo() {
   // 预加载的图片缓存（使用Map存储Image对象，确保已加载和解码）
   const imageCacheRef = useRef<Map<number, HTMLImageElement>>(new Map())
   const decodedFramesRef = useRef<Set<number>>(new Set()) // 跟踪已解码的帧
+  const loadingFramesRef = useRef<Set<number>>(new Set()) // 跟踪正在加载的帧
   const isIOSRef = useRef<boolean>(false)
+  const isVisibleRef = useRef<boolean>(false)
 
-  // 全量预加载：预加载所有60帧图片到缓存，iOS上跳过预解码
+  // 按需加载图片帧
+  const loadFrame = useCallback(async (frameIndex: number): Promise<HTMLImageElement | undefined> => {
+    // 如果已经在缓存中，直接返回
+    if (imageCacheRef.current.has(frameIndex)) {
+      return imageCacheRef.current.get(frameIndex)
+    }
+
+    // 如果正在加载，等待加载完成
+    if (loadingFramesRef.current.has(frameIndex)) {
+      return new Promise<HTMLImageElement | undefined>((resolve) => {
+        const checkInterval = setInterval(() => {
+          if (imageCacheRef.current.has(frameIndex)) {
+            clearInterval(checkInterval)
+            resolve(imageCacheRef.current.get(frameIndex))
+          } else if (!loadingFramesRef.current.has(frameIndex)) {
+            clearInterval(checkInterval)
+            resolve(undefined)
+          }
+        }, 50)
+      })
+    }
+
+    // 开始加载
+    loadingFramesRef.current.add(frameIndex)
+    const img = new Image()
+    
+    return new Promise((resolve) => {
+      img.onload = async () => {
+        imageCacheRef.current.set(frameIndex, img)
+        loadingFramesRef.current.delete(frameIndex)
+        
+        // iOS上跳过预解码（性能问题），其他平台预解码
+        if (!isIOSRef.current) {
+          try {
+            if (img.decode) {
+              await img.decode()
+              decodedFramesRef.current.add(frameIndex)
+            } else {
+              decodedFramesRef.current.add(frameIndex)
+            }
+          } catch (e) {
+            decodedFramesRef.current.add(frameIndex)
+          }
+        } else {
+          decodedFramesRef.current.add(frameIndex)
+        }
+        
+        resolve(img)
+      }
+      img.onerror = () => {
+        loadingFramesRef.current.delete(frameIndex)
+        resolve(undefined)
+      }
+      img.src = getImagePath(frameIndex)
+    })
+  }, [])
+
+  // 预加载关键帧：当前帧和前后各5帧
+  const preloadNearbyFrames = useCallback(async (currentFrame: number) => {
+    const preloadRange = 5
+    const framesToLoad: number[] = []
+    
+    for (let i = -preloadRange; i <= preloadRange; i++) {
+      const frameIndex = (currentFrame + i + TOTAL_FRAMES) % TOTAL_FRAMES
+      if (!imageCacheRef.current.has(frameIndex) && !loadingFramesRef.current.has(frameIndex)) {
+        framesToLoad.push(frameIndex)
+      }
+    }
+    
+    // 批量加载，但限制并发数
+    const concurrentLimit = 3
+    for (let i = 0; i < framesToLoad.length; i += concurrentLimit) {
+      const batch = framesToLoad.slice(i, i + concurrentLimit)
+      await Promise.all(batch.map(frame => loadFrame(frame)))
+    }
+  }, [loadFrame])
+
+  // 初始加载：只加载起始帧和附近几帧
   useEffect(() => {
     isIOSRef.current = isIOS()
     
-    const preloadAllImages = async () => {
-      const imagesToLoad: Promise<void>[] = []
-      let loadedCount = 0
-
-      // 预加载所有60帧到缓存
-      for (let i = 0; i < TOTAL_FRAMES; i++) {
-        const img = new Image()
-        const promise = new Promise<void>(async (resolve) => {
-          img.onload = async () => {
-            // 图片加载完成后存入缓存
-            imageCacheRef.current.set(i, img)
-            
-            // iOS上跳过预解码（性能问题），其他平台预解码
-            if (!isIOSRef.current) {
-              try {
-                if (img.decode) {
-                  await img.decode()
-                  decodedFramesRef.current.add(i)
-                } else {
-                  decodedFramesRef.current.add(i)
-                }
-              } catch (e) {
-                decodedFramesRef.current.add(i)
-              }
-            } else {
-              // iOS上直接标记为已解码（使用图片本身）
-              decodedFramesRef.current.add(i)
-            }
-            
-            loadedCount++
-            setLoadProgress(Math.floor((loadedCount / TOTAL_FRAMES) * 100))
-            
-            // 第一帧（第9帧，150%141=9）加载完成后立即显示
-            const START_FRAME_INDEX = 150 % TOTAL_FRAMES
-            if (i === START_FRAME_INDEX && imageRef1.current && imageRef2.current) {
-              imageRef1.current.src = img.src
-              imageRef2.current.src = img.src
-              setIsLoaded(true)
-              setHasError(false)
-            }
-            resolve()
-          }
-          img.onerror = () => {
-            loadedCount++
-            setLoadProgress(Math.floor((loadedCount / TOTAL_FRAMES) * 100))
-            resolve() // 即使失败也继续
-          }
-        })
-        img.src = getImagePath(i)
-        imagesToLoad.push(promise)
+    const initialLoad = async () => {
+      const START_FRAME_INDEX = 150 % TOTAL_FRAMES
+      
+      // 加载起始帧
+      const startImg = await loadFrame(START_FRAME_INDEX)
+      if (startImg && imageRef1.current && imageRef2.current) {
+        imageRef1.current.src = startImg.src
+        imageRef2.current.src = startImg.src
+        setIsLoaded(true)
+        setHasError(false)
+        setLoadProgress(10)
       }
-
-      await Promise.all(imagesToLoad)
-      setIsLoaded(true)
-      setLoadProgress(100)
+      
+      // 预加载附近帧
+      await preloadNearbyFrames(START_FRAME_INDEX)
+      setLoadProgress(30)
     }
 
     // 确保在客户端执行
     if (typeof window !== 'undefined') {
-      preloadAllImages()
+      initialLoad()
+    }
+  }, [loadFrame, preloadNearbyFrames])
+
+  // 使用 Intersection Observer 检测组件可见性
+  useEffect(() => {
+    if (!containerRef.current) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isVisibleRef.current = entry.isIntersecting
+        })
+      },
+      { threshold: 0.1, rootMargin: '50px' }
+    )
+
+    observer.observe(containerRef.current)
+
+    return () => {
+      observer.disconnect()
     }
   }, [])
 
-  // 滚动驱动的图片帧更新 - iOS优化版本
+  // 滚动驱动的图片帧更新 - iOS优化版本，按需加载
   useEffect(() => {
     if (prefersReducedMotion || !isLoaded) return
 
-    const updateImageFrame = () => {
+    const updateImageFrame = async () => {
       try {
-        if (!containerRef.current) return
+        if (!containerRef.current || !isVisibleRef.current) return
 
         const rect = containerRef.current.getBoundingClientRect()
         const viewportHeight = window.innerHeight
@@ -147,8 +207,18 @@ export function ProductSpinVideo() {
         if (clampedFrame !== lastFrameRef.current) {
           lastFrameRef.current = clampedFrame
           
-          // 获取缓存的图片
-          const cachedImg = imageCacheRef.current.get(clampedFrame)
+          // 按需加载当前帧（如果还未加载）
+          let cachedImg = imageCacheRef.current.get(clampedFrame)
+          if (!cachedImg) {
+            cachedImg = await loadFrame(clampedFrame)
+            // 预加载附近帧（后台进行，不阻塞）
+            if (cachedImg) {
+              preloadNearbyFrames(clampedFrame).catch(() => {})
+            }
+          } else {
+            // 如果已加载，后台预加载附近帧
+            preloadNearbyFrames(clampedFrame).catch(() => {})
+          }
           
           if (cachedImg && imageRef1.current && imageRef2.current) {
             // 双缓冲切换：获取当前激活的图片和下一个图片
@@ -279,7 +349,7 @@ export function ProductSpinVideo() {
         cancelAnimationFrame(rafId)
       }
     }
-  }, [isLoaded, prefersReducedMotion]) // 移除loadedFrames依赖
+  }, [isLoaded, prefersReducedMotion, loadFrame, preloadNearbyFrames])
 
   // 图片加载错误处理
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
@@ -344,15 +414,17 @@ export function ProductSpinVideo() {
             aria-hidden="true"
           />
           
-          {/* 加载进度指示 */}
+          {/* 加载进度指示 - 使用骨架屏 */}
           {!isLoaded && !hasError && (
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-ghost-bg-card z-10">
-              <div className="text-ghost-text-secondary text-sm mb-2">Loading... {loadProgress}%</div>
-              <div className="w-48 h-1 bg-ghost-purple-soft/30 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-ghost-purple-primary transition-all duration-300 ease-out"
-                  style={{ width: `${loadProgress}%` }}
-                />
+              <div className="w-full max-w-md px-4">
+                <div className="text-ghost-text-secondary text-sm mb-4 text-center">Loading... {loadProgress}%</div>
+                <div className="w-full h-1 bg-ghost-purple-soft/30 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-purple-500 via-purple-600 to-purple-500 transition-all duration-300 ease-out animate-shimmer"
+                    style={{ width: `${loadProgress}%` }}
+                  />
+                </div>
               </div>
             </div>
           )}

@@ -4,6 +4,7 @@ import { SectionBackground } from '@/components/SectionBackground'
 import { useReducedMotion, useIntersectionObserver } from '@/lib/hooks'
 import { motion } from 'framer-motion'
 import { useRef, useState } from 'react'
+import { createEnterAnimation, EASE_APPLE, DURATION } from '@/lib/animations'
 
 const faqs = [
   {
@@ -59,9 +60,10 @@ export function FAQ() {
       <SectionBackground variant="subtle" />
       <div className="max-w-5xl mx-auto relative z-10">
         <motion.div
-          initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 30 }}
-          animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          {...createEnterAnimation('title', 0)}
+          initial={prefersReducedMotion || !isVisible ? {} : createEnterAnimation('title', 0).initial}
+          animate={prefersReducedMotion || !isVisible ? {} : createEnterAnimation('title', 0).animate}
+          transition={prefersReducedMotion ? {} : createEnterAnimation('title', 0).transition}
           className="text-center mb-20 sm:mb-24 lg:mb-28"
         >
           <h2 className="text-apple-display font-display mb-4 sm:mb-6 text-ghost-text-primary">
@@ -78,10 +80,15 @@ export function FAQ() {
             return (
               <motion.div
                 key={faq.question}
-                initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 40 }}
-                animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="group relative bg-ghost-bg-card rounded-[2rem] sm:rounded-[2.5rem] overflow-hidden shadow-glass-dark hover:shadow-glass-dark-hover transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] border border-ghost-purple-primary/30"
+                {...createEnterAnimation('card', index, 'standard')}
+                initial={prefersReducedMotion || !isVisible ? {} : createEnterAnimation('card', index, 'standard').initial}
+                animate={prefersReducedMotion || !isVisible ? {} : createEnterAnimation('card', index, 'standard').animate}
+                transition={prefersReducedMotion ? {} : createEnterAnimation('card', index, 'standard').transition}
+                className="group relative bg-ghost-bg-card rounded-2xl overflow-hidden shadow-glass-dark hover:shadow-glass-dark-hover transition-all duration-300 border"
+                style={{
+                  transitionTimingFunction: `cubic-bezier(${EASE_APPLE.join(',')})`,
+                  borderColor: 'rgba(124, 58, 237, 0.3)',
+                }}
               >
                 {/* Decorative gradient overlay */}
                 <div 
@@ -113,7 +120,7 @@ export function FAQ() {
                     open: { height: 'auto', opacity: 1 },
                     collapsed: { height: 0, opacity: 0 },
                   }}
-                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ duration: DURATION.standard, ease: EASE_APPLE }}
                   className="overflow-hidden"
                 >
                   <div className="px-6 sm:px-8 lg:px-10 pb-6 sm:pb-8 lg:pb-10">

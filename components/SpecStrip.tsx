@@ -4,6 +4,7 @@ import { SectionBackground } from '@/components/SectionBackground'
 import { useReducedMotion, useIntersectionObserver } from '@/lib/hooks'
 import { motion } from 'framer-motion'
 import { useRef } from 'react'
+import { createEnterAnimation, EASE_APPLE } from '@/lib/animations'
 
 const specs = [
   {
@@ -51,9 +52,10 @@ export function SpecStrip() {
       <SectionBackground variant="subtle" />
       <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
-          initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 30 }}
-          animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          {...createEnterAnimation('title', 0)}
+          initial={prefersReducedMotion || !isVisible ? {} : createEnterAnimation('title', 0).initial}
+          animate={prefersReducedMotion || !isVisible ? {} : createEnterAnimation('title', 0).animate}
+          transition={prefersReducedMotion ? {} : createEnterAnimation('title', 0).transition}
           className="text-center mb-20 sm:mb-24 lg:mb-28"
         >
           <h2 className="text-apple-display font-display mb-4 sm:mb-6 text-ghost-text-primary">
@@ -73,10 +75,14 @@ export function SpecStrip() {
           {specs.map((category, categoryIndex) => (
             <motion.div
               key={category.category}
-              initial={prefersReducedMotion || !isVisible ? {} : { opacity: 0, y: 40 }}
-              animate={prefersReducedMotion || !isVisible ? {} : { opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: categoryIndex * 0.15, ease: [0.16, 1, 0.3, 1] }}
-              className="group relative bg-ghost-bg-card rounded-apple sm:rounded-apple-lg p-6 sm:p-8 shadow-glass-dark hover:shadow-glass-dark-hover transition-all duration-500 ease-apple-smooth border border-ghost-purple-primary/30 overflow-hidden"
+              {...createEnterAnimation('card', categoryIndex, 'card')}
+              initial={prefersReducedMotion || !isVisible ? {} : createEnterAnimation('card', categoryIndex, 'card').initial}
+              animate={prefersReducedMotion || !isVisible ? {} : createEnterAnimation('card', categoryIndex, 'card').animate}
+              transition={prefersReducedMotion ? {} : createEnterAnimation('card', categoryIndex, 'card').transition}
+              className="group relative bg-ghost-bg-card rounded-2xl p-6 sm:p-8 shadow-glass-dark hover:shadow-glass-dark-hover transition-all duration-300 border border-ghost-purple-primary/30 overflow-hidden"
+              style={{
+                transitionTimingFunction: `cubic-bezier(${EASE_APPLE.join(',')})`,
+              }}
             >
               {/* Decorative gradient overlay */}
               <div 

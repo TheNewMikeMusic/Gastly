@@ -18,7 +18,7 @@ export function useGBASound() {
     return audioContextRef.current
   }, [])
 
-  const playSound = useCallback((frequency: number = 800, duration: number = 50, volume: number = 0.15) => {
+  const playSound = useCallback((frequency: number = 800, duration: number = 50, volume: number = 0.015) => {
     // 节流：防止音效过于频繁
     const now = Date.now()
     if (now - lastPlayTimeRef.current < throttleDelay) {
@@ -65,17 +65,17 @@ export function useGBASound() {
   // 不同场景的音效变体
   const playHoverSound = useCallback(() => {
     // 轻快的 hover 音效：稍高频率，短促
-    playSound(900, 40, 0.12)
+    playSound(900, 40, 0.008)
   }, [playSound])
 
   const playClickSound = useCallback(() => {
     // 点击音效：稍低频率，稍长
-    playSound(600, 60, 0.18)
+    playSound(600, 60, 0.012)
   }, [playSound])
 
   const playSelectSound = useCallback(() => {
     // 选择音效：中等频率
-    playSound(750, 50, 0.15)
+    playSound(750, 50, 0.01)
   }, [playSound])
 
   return {
